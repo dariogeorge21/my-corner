@@ -1,12 +1,23 @@
-import { Button } from "@/components/ui/button";
+import { Header } from "@/components/header";
+import { Hero } from "@/components/hero";
+import { Bio } from "@/components/bio";
+import { TechStack } from "@/components/tech-stack";
+import { FeaturedWork } from "@/components/featured-work";
+import { Contact } from "@/components/contact";
+import { Footer } from "@/components/footer";
 
 export default function Home() {
   return (
-    <main className="min-h-screen grid place-items-center">
-      <div className="space-y-4 text-center">
-        <h1 className="text-2xl font-semibold">shadcn/ui is ready 🚀</h1>
-        <Button>Click me</Button>
-      </div>
-    </main>
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-1">
+        <Hero />
+        <Bio />
+        <TechStack />
+        <FeaturedWork />
+        <Contact />
+      </main>
+      <Footer />
+    </div>
   );
 }
