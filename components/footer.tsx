@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Github, Linkedin, Twitter } from "lucide-react";
+import { FaLinkedin, FaGithub, FaTwitter } from "react-icons/fa";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -32,13 +32,13 @@ export function Footer() {
             <h4 className="font-semibold text-lg text-white">Connect</h4>
             <div className="flex gap-4">
               <Link href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="p-2 bg-white/10 rounded-full hover:bg-muted hover:text-primary transition-colors">
-                <Linkedin className="h-5 w-5" />
+                <FaLinkedin className="h-5 w-5" />
               </Link>
               <Link href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="p-2 bg-white/10 rounded-full hover:bg-muted hover:text-primary transition-colors">
-                <Github className="h-5 w-5" />
+                <FaGithub className="h-5 w-5" />
               </Link>
               <Link href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="p-2 bg-white/10 rounded-full hover:bg-muted hover:text-primary transition-colors">
-                <Twitter className="h-5 w-5" />
+                <FaTwitter className="h-5 w-5" />
               </Link>
             </div>
           </div>
