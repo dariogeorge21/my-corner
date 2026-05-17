@@ -3,6 +3,8 @@
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { useState, useEffect } from "react"
+import { useTheme } from "next-themes"
+import { Moon, Sun } from "lucide-react"
 import Magnetic from "./magnetic" // Adjust path as needed
 import Shuffle from './Shuffle' // Your provided component
 
@@ -13,6 +15,8 @@ export default function Header() {
   const [isEmailHovered, setIsEmailHovered] = useState(false)
   const [navShift, setNavShift] = useState({ x: 0, y: 0 })
   const [hoveredNavItem, setHoveredNavItem] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
+  const { theme, setTheme } = useTheme()
 
   // Global mouse tracker for the whole-nav parallax and the email custom cursor
   useEffect(() => {
@@ -28,6 +32,11 @@ export default function Header() {
 
     window.addEventListener("mousemove", handleMouseMove)
     return () => window.removeEventListener("mousemove", handleMouseMove)
+  }, [])
+
+  // Hydration safety for next-themes
+  useEffect(() => {
+    setMounted(true)
   }, [])
 
   // Handle Hamburger Wobble
@@ -93,8 +102,60 @@ export default function Header() {
           />
         </div>
 
-        {/* RIGHT: Connect Now Link */}
-        <div className="pointer-events-auto">
+        {/* RIGHT: Theme Toggle + Connect Now Link */}
+        <div className="pointer-events-auto flex items-center gap-4 md:gap-6">
+          {/* Theme Toggle Button */}
+          {mounted && (
+            <motion.button
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="group relative p-3 rounded-lg bg-white/5 backdrop-blur-md border border-white/10 hover:border-white/30 transition-all duration-300 flex items-center justify-center"
+              title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            >
+              {/* Animated Background Glow on Hover */}
+              <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-accent/0 via-accent/10 to-accent/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+              
+              {/* Sun/Moon Icon with Morph Animation */}
+              <AnimatePresence mode="wait">
+                {theme === "dark" ? (
+                  <motion.div
+                    key="moon"
+                    initial={{ rotate: -180, opacity: 0, scale: 0.5 }}
+                    animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                    exit={{ rotate: 180, opacity: 0, scale: 0.5 }}
+                    transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
+                    className="relative z-10"
+                  >
+                    <Moon size={18} className="text-accent" strokeWidth={1.5} />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="sun"
+                    initial={{ rotate: 180, opacity: 0, scale: 0.5 }}
+                    animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                    exit={{ rotate: -180, opacity: 0, scale: 0.5 }}
+                    transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
+                    className="relative z-10"
+                  >
+                    <Sun size={18} className="text-accent" strokeWidth={1.5} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Tooltip */}
+              <motion.span
+                initial={{ opacity: 0, y: -8 }}
+                whileHover={{ opacity: 1, y: -32 }}
+                transition={{ duration: 0.2 }}
+                className="absolute -top-8 left-1/2 -translate-x-1/2 px-3 py-1 bg-foreground text-background text-xs font-medium tracking-widest uppercase rounded-sm whitespace-nowrap pointer-events-none z-20"
+              >
+                {theme === "dark" ? "Light" : "Dark"}
+              </motion.span>
+            </motion.button>
+          )}
+
           <Magnetic>
             <Link 
               href="#contact" 
