@@ -27,6 +27,7 @@ export default function Hero() {
   const [softwareWordIndex, setSoftwareWordIndex] = useState(0)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const [hoverState, setHoverState] = useState<'portfolio' | 'projects' | string | null>(null)
+  const [scrollY, setScrollY] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
 
   // Cycle through dynamic words (bottom section) every 2 seconds
@@ -62,6 +63,15 @@ export default function Hero() {
     return () => window.removeEventListener("mousemove", handleMouseMove)
   }, [])
 
+  // Track scroll position for parallax effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY)
+    }
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
   return (
     <section 
       ref={containerRef}
@@ -69,13 +79,13 @@ export default function Hero() {
       style={{ fontFamily: "var(--font-google-sans-flex), sans-serif" }}
     >
       {/* 1. BACKGROUND LAYERS */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 z-10 overflow-hidden pointer-events-none">
         {/* The Magic Rings Component */}
-        <div className="absolute inset-0 w-full h-full opacity-60">
+        <div className="absolute inset-0 w-full h-full opacity-100">
           <MagicRings
             color="#995F2F" // Warm Brown from your palette
             colorTwo="#978F66" // Sage Taupe
-            ringCount={6}
+            ringCount={7}
             speed={1}
             attenuation={10}
             lineThickness={2}
@@ -107,7 +117,7 @@ export default function Hero() {
       {/* 2. CENTER TYPOGRAPHY (Massive Spatial Impact) */}
       <div className="relative z-30 flex flex-col items-start w-full max-w-[90vw] md:max-w-[80vw] 2xl:max-w-[1400px]">
         {/* Line 1: CREATIVE (Dynamic) */}
-        <div className="text-[14vw] md:text-[11vw] font-black leading-[0.8] tracking-tighter uppercase text-foreground relative z-20 h-[1em] flex items-center">
+        <div className="text-[14vw] md:text-[11vw] font-black leading-[0.8] tracking-tighter uppercase text-foreground relative z-20 h-[1em] flex items-center" style={{ transform: `translateX(${-scrollY * 0.5}px)` }}>
           <AnimatePresence mode="wait">
             <motion.div
               key={creativeWords[creativeWordIndex]}
@@ -132,7 +142,7 @@ export default function Hero() {
         </div>
         
         {/* Line 2: SOFTWARE (Dynamic, Small indentation) */}
-        <div className="text-[14vw] md:text-[11vw] font-black leading-[0.8] tracking-tighter uppercase text-foreground/80 ml-[15vw] md:ml-[12vw] relative z-20 mix-blend-difference h-[1em] flex items-center">
+        <div className="text-[14vw] md:text-[11vw] font-black leading-[0.8] tracking-tighter uppercase text-foreground/80 ml-[15vw] md:ml-[12vw] relative z-20 mix-blend-difference h-[1em] flex items-center" style={{ transform: `translateX(${scrollY * 0.5}px)` }}>
           <AnimatePresence mode="wait">
             <motion.div
               key={softwareWords[softwareWordIndex]}
@@ -157,7 +167,7 @@ export default function Hero() {
         </div>
 
         {/* Line 3: DYNAMIC WORD SET (Same indentation as CREATIVE, i.e., 0) */}
-        <div className="text-[14vw] md:text-[11vw] font-black leading-[0.8] tracking-tighter uppercase text-accent h-[1em] relative z-20 mt-2 md:mt-0 flex items-center">
+        <div className="text-[14vw] md:text-[11vw] font-black leading-[0.8] tracking-tighter uppercase text-accent h-[1em] relative z-20 mt-2 md:mt-0 flex items-center" style={{ transform: `translateX(${-scrollY * 0.5}px)` }}>
           <AnimatePresence mode="wait">
             <motion.div
               key={dynamicWords[wordIndex]}
