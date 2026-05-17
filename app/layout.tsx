@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="font-sans min-h-screen relative overflow-x-hidden">
         <SplashCursor />
         <div className="ambient-glow" />
-        <Providers attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+        <Providers attribute="class" enableSystem disableTransitionOnChange>
           <Header />
           <main className="relative z-10">{children}</main>
           <Footer />
