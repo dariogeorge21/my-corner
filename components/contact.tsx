@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { useState, useRef, useEffect } from "react"
 import { ArrowRight, Mail } from "lucide-react"
 import { FaLinkedin, FaTwitter, FaGithub, FaInstagram } from "react-icons/fa"
+import { submitContact } from "@/app/actions/contact"
 
 // --- TYPES & VALIDATION ---
 type FormState = {
@@ -86,6 +87,8 @@ export default function Contact() {
   const [formData, setFormData] = useState<FormState>({ name: "", email: "", subject: "", description: "" })
   const [isValid, setIsValid] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formStatus, setFormStatus] = useState<"idle" | "success" | "error">("idle")
+  const [errorMessage, setErrorMessage] = useState("")
   
   // Mouse Glow State for Form
   const formRef = useRef<HTMLDivElement>(null)
@@ -119,16 +122,28 @@ export default function Contact() {
     if (!isValid) return
     
     setIsSubmitting(true)
+    setFormStatus("idle")
+    setErrorMessage("")
+
     try {
-      // NOTE: Hook up your provided submitContact server action here
-      // await submitContact({ ...formData, turnstileToken: "..." })
+      const response = await submitContact({ 
+        name: formData.name,
+        email: formData.email,
+        subject: formData.subject,
+        description: formData.description,
+        // turnstileToken: yourTurnstileState // Add this if you implement the Turnstile UI component
+      })
       
-      // Simulating network delay
-      await new Promise(res => setTimeout(res, 2000))
-      alert("Message securely transmitted.")
-      setFormData({ name: "", email: "", subject: "", description: "" })
+      if (response.ok) {
+        setFormStatus("success")
+        setFormData({ name: "", email: "", subject: "", description: "" })
+      } else {
+        setFormStatus("error")
+        setErrorMessage(response.error)
+      }
     } catch (err) {
-      console.error(err)
+      setFormStatus("error")
+      setErrorMessage("A critical network failure occurred.")
     } finally {
       setIsSubmitting(false)
     }
