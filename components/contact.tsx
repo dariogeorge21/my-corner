@@ -154,6 +154,8 @@ export default function Contact() {
       if (response.ok) {
         setFormStatus("success")
         setFormData({ name: "", email: "", subject: "", description: "" })
+        setTouched({ name: false, email: false, subject: false, description: false })
+        setTimeout(() => setFormStatus("idle"), 5000)
       } else {
         setFormStatus("error")
         setErrorMessage(response.error)
@@ -427,22 +429,47 @@ export default function Contact() {
                   isValidField={touched.description && isDescValid}
                 />
 
-                {/* Animated Submit Button - Appears only when valid */}
+                {/* Error Display */}
+                <AnimatePresence>
+                  {formStatus === "error" && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="text-red-500 font-mono text-sm tracking-wide p-4 bg-red-500/10 border border-red-500/20"
+                    >
+                      [ERROR]: {errorMessage}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Animated Submit Button & Success State */}
                 <div className="min-h-[60px] flex items-end justify-end mt-4">
-                  <AnimatePresence>
-                    {isValid && (
+                  <AnimatePresence mode="wait">
+                    {formStatus === "success" ? (
+                      <motion.div
+                        key="success"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        className="text-green-500 font-mono uppercase tracking-widest text-sm flex items-center gap-3 px-8 py-4 border border-green-500/30 bg-green-500/10"
+                      >
+                        Transmission Successful
+                      </motion.div>
+                    ) : isValid ? (
                       <motion.button
+                        key="button"
                         initial={{ opacity: 0, y: 20, filter: "blur(5px)" }}
                         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                         exit={{ opacity: 0, y: 10, filter: "blur(5px)" }}
                         transition={{ type: "spring", stiffness: 300, damping: 20 }}
                         disabled={isSubmitting}
-                        className="group relative flex items-center gap-4 bg-foreground text-background px-8 py-4 font-medium tracking-widest uppercase text-sm border border-transparent hover:bg-transparent hover:text-foreground hover:border-foreground transition-colors duration-300"
+                        className="group relative flex items-center gap-4 bg-foreground text-background px-8 py-4 font-medium tracking-widest uppercase text-sm border border-transparent hover:bg-transparent hover:text-foreground hover:border-foreground transition-colors duration-300 disabled:opacity-75 disabled:cursor-wait"
                       >
                         {isSubmitting ? "Transmitting..." : "Send"}
-                        <ArrowRight size={16} className="transform group-hover:translate-x-2 transition-transform duration-300" />
+                        <ArrowRight size={16} className={`transform transition-transform duration-300 ${isSubmitting ? 'translate-x-2 animate-pulse' : 'group-hover:translate-x-2'}`} />
                       </motion.button>
-                    )}
+                    ) : null}
                   </AnimatePresence>
                 </div>
               </motion.form>
