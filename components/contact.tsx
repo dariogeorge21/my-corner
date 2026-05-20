@@ -83,6 +83,10 @@ const AnimatedInput = ({
 
 // --- MAIN CONTACT COMPONENT ---
 export default function Contact() {
+  // Keywords for special styling with rotation
+  const keyWords = ["impact", "stories", "future"]
+  const [currentKeyWordIndex, setCurrentKeyWordIndex] = useState(0)
+  
   // Form State
   const [formData, setFormData] = useState<FormState>({ name: "", email: "", subject: "", description: "" })
   const [isValid, setIsValid] = useState(false)
@@ -93,6 +97,15 @@ export default function Contact() {
   // Mouse Glow State for Form
   const formRef = useRef<HTMLDivElement>(null)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+
+  // --- KEYWORD ROTATION EFFECT ---
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentKeyWordIndex((prev) => (prev + 1) % keyWords.length)
+    }, 2000)
+    
+    return () => clearInterval(interval)
+  }, [keyWords.length])
 
   // --- VALIDATION EFFECT ---
   useEffect(() => {
@@ -149,114 +162,157 @@ export default function Contact() {
     }
   }
 
-  // --- INTERACTIVE TEXT SPLITTER ---
-  const headline = "Let’s create something impact stories future together."
-  const words = headline.split(" ")
-
   return (
-    <section id="contact" className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto w-full relative" style={{ fontFamily: "var(--font-google-sans-flex), sans-serif" }}>
+    <section id="contact" className="py-32 px-6 md:px-12 max-w-[1800px] mx-auto w-full relative" style={{ fontFamily: "var(--font-google-sans-flex)" }}>
       
-      {/* --- INJECTED 3D TILTED GLASS CARDS CSS --- */}
+      {/* --- INJECTED 3D GLASSMORPHIC SOCIAL CARDS CSS --- */}
       <style dangerouslySetInnerHTML={{__html: `
         .glass-card {
           position: relative;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: flex-start;
-          gap: 20px;
-          padding: 32px 36px;
-          width: 240px;
-          height: 100px;
-          background: rgba(255, 255, 255, 0.85);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.3);
-          border-radius: 16px;
+          display: inline-flex;
+          width: 260px;
+          height: 80px;
+          background: #fff;
+          text-decoration: none;
+          padding-left: 20px;
+          transform: rotate(-30deg) skew(25deg) translate(0, 0);
+          transition: all 0.5s;
+          box-shadow: -20px 20px 10px rgba(0, 0, 0, 0.5);
           cursor: pointer;
-          transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
-          transform: perspective(1200px) rotateX(8deg) rotateY(-12deg) rotateZ(-8deg) translateY(0px);
-          box-shadow: 
-            20px 20px 60px rgba(0, 0, 0, 0.25),
-            -5px -5px 15px rgba(255, 255, 255, 0.3),
-            inset -2px -2px 5px rgba(255, 255, 255, 0.5),
-            inset 2px 2px 5px rgba(0, 0, 0, 0.1);
         }
-        .glass-card:nth-child(odd) {
-          transform: perspective(1200px) rotateX(8deg) rotateY(-12deg) rotateZ(-8deg) translateY(-20px);
+        .glass-card::before {
+          content: '';
+          position: absolute;
+          top: 10px;
+          left: -20px;
+          height: 100%;
+          width: 20px;
+          background: #b1b1b1;
+          transform: rotate(0deg) skewY(-45deg);
+          transition: all 0.5s;
         }
-        .glass-card:nth-child(even) {
-          transform: perspective(1200px) rotateX(8deg) rotateY(12deg) rotateZ(8deg) translateY(20px);
+        .glass-card::after {
+          content: '';
+          position: absolute;
+          bottom: -20px;
+          left: -10px;
+          height: 20px;
+          width: 100%;
+          background: #b1b1b1;
+          transform: rotate(0deg) skewX(-45deg);
+          transition: all 0.5s;
         }
         .glass-card:hover {
-          background: rgba(255, 255, 255, 0.95);
-          box-shadow: 
-            25px 25px 80px rgba(0, 0, 0, 0.35),
-            -5px -5px 20px rgba(255, 255, 255, 0.4),
-            inset -2px -2px 8px rgba(255, 255, 255, 0.6),
-            inset 2px 2px 8px rgba(0, 0, 0, 0.15);
-          transform: perspective(1200px) rotateX(12deg) rotateY(-15deg) rotateZ(-10deg) translateY(-30px) translateZ(20px);
-        }
-        .glass-card:nth-child(even):hover {
-          transform: perspective(1200px) rotateX(12deg) rotateY(15deg) rotateZ(10deg) translateY(30px) translateZ(20px);
+          transform: rotate(-30deg) skew(25deg) translate(20px, -15px);
+          box-shadow: -50px 50px 50px rgba(0, 0, 0, 0.5);
         }
         .glass-card-icon {
-          font-size: 48px;
-          color: #333;
-          transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
-          flex-shrink: 0;
+          font-size: 60px;
+          color: #262626;
+          padding-top: 10px;
+          line-height: 80px;
+          transition: all 0.5s;
+          padding-right: 14px;
+          display: inline-block;
         }
         .glass-card:hover .glass-card-icon {
-          color: var(--accent, #60a5fa);
-          transform: scale(1.2) rotate(-5deg);
+          color: #fff;
         }
         .glass-card-name {
-          font-size: 18px;
-          font-weight: 700;
-          letter-spacing: 0.5px;
-          color: #333;
-          transition: all 0.3s ease;
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-          white-space: nowrap;
+          padding: 0;
+          margin: 0;
+          position: absolute;
+          top: 16px;
+          font-family: var(--font-funnel-display), sans-serif;
+          left: 76px;
+          color: #262626;
+          letter-spacing: 4px;
+          transition: all 0.5s;
+          font-weight: 1000;
+          font-size: 24px;
         }
         .glass-card:hover .glass-card-name {
-          color: var(--accent, #60a5fa);
+          color: #fff;
+        }
+        /* LinkedIn */
+        .glass-card.linkedin:hover {
+          background: #0077b5;
+        }
+        .glass-card.linkedin:hover::before {
+          background: #005a87;
+        }
+        .glass-card.linkedin:hover::after {
+          background: #0099e0;
+        }
+        /* GitHub */
+        .glass-card.github:hover {
+          background: #333;
+        }
+        .glass-card.github:hover::before {
+          background: #1a1a1a;
+        }
+        .glass-card.github:hover::after {
+          background: #666;
+        }
+        /* Twitter */
+        .glass-card.twitter:hover {
+          background: #00aced;
+        }
+        .glass-card.twitter:hover::before {
+          background: #097aa5;
+        }
+        .glass-card.twitter:hover::after {
+          background: #53b9e0;
+        }
+        /* Instagram */
+        .glass-card.instagram:hover {
+          background: #e4405f;
+        }
+        .glass-card.instagram:hover::before {
+          background: #d81c3f;
+        }
+        .glass-card.instagram:hover::after {
+          background: #e46880;
+        }
+        /* Email */
+        .glass-card.email:hover {
+          background: #ea4335;
+        }
+        .glass-card.email:hover::before {
+          background: #c5221f;
+        }
+        .glass-card.email:hover::after {
+          background: #f28482;
         }
       `}} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-8 mb-32">
         
         {/* === COLUMN 1: INTERACTIVE TYPOGRAPHY === */}
-        <div className="flex flex-col justify-center">
-          <h2 className="flex flex-wrap gap-x-4 gap-y-2 items-center">
-            {words.map((word, wordIdx) => {
-              // Custom styling for the word "stories"
-              if (word.replace(/[^a-zA-Z]/g, '') === "stories") {
-                return (
-                  <span key={wordIdx} className="font-lobster italic text-4xl md:text-6xl text-accent font-normal mt-2 lowercase">
-                    {word}
-                  </span>
-                )
-              }
-              // Ripple effect on hover for standard words
-              return (
-                <span key={wordIdx} className="flex overflow-hidden">
-                  {word.split("").map((char, charIdx) => (
-                    <motion.span
-                      key={charIdx}
-                      whileHover={{ y: -8, color: "var(--accent)" }}
-                      transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                      className="text-4xl md:text-6xl font-bold text-foreground cursor-crosshair"
-                    >
-                      {char}
-                    </motion.span>
-                  ))}
-                </span>
-              )
-            })}
+        <div className="flex flex-col justify-center gap-y-8">
+          <h2 className="flex flex-col gap-y-2 font-bold text-foreground tracking-tight leading-tight">
+            <span className="text-7xl md:text-9xl font-bold text-foreground tracking-tight leading-tight">Let's</span>
+            <span className="text-7xl md:text-9xl font-bold text-foreground tracking-tight leading-tight">create</span>
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={currentKeyWordIndex}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.5 }}
+                className="font-lobster italic text-7xl md:text-9xl text-accent font-normal tracking-tight leading-tight"
+              >
+                {keyWords[currentKeyWordIndex]}
+              </motion.span>
+            </AnimatePresence>
+            <span className="text-7xl md:text-9xl font-bold text-foreground tracking-tight leading-tight">together</span>
           </h2>
-          <p className="mt-8 text-foreground/50 font-mono text-sm tracking-widest uppercase">
-            [ Encrypted transmission channel ]
-          </p>
+          <div className="mt-12 pt-8 border-t border-foreground/20">
+            <p className="text-foreground/60 font-mono text-xs tracking-widest uppercase mb-3">Contact us</p>
+            <a href="mailto:contact@dariogeorge.in" className="text-foreground text-2xl md:text-4xl font-bold hover:text-accent transition-colors duration-300 border-b-2 border-foreground/30 hover:border-accent pb-1 inline-block">
+              contact@dariogeorge.in
+            </a>
+          </div>
         </div>
 
         {/* === COLUMN 2: GLASS FORM === */}
@@ -284,8 +340,8 @@ export default function Contact() {
             />
 
             <div className="relative z-10">
-              <h3 className="font-mono text-sm tracking-[0.3em] uppercase text-foreground/80 mb-12 border-b border-white/10 pb-4 inline-block">
-                CONTACT US
+              <h3 className="font-google-sans-flex text-4xl tracking-[0.3em] uppercase text-foreground/80 mb-12 border-b border-white/10 pb-4 inline-block">
+                CONTACT
               </h3>
 
               <form onSubmit={handleSubmit} className="flex flex-col gap-10">
@@ -342,47 +398,31 @@ export default function Contact() {
         </div>
       </div>
 
-      {/* === ROW 2: 3D TILTED GLASS SOCIAL CARDS === */}
+      {/* === ROW 2: 3D SKEWED SOCIAL CARDS === */}
       <div className="w-full border-t border-foreground/10 pt-24 pb-12 mt-12 relative">
         <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-foreground/20 font-mono text-xs">+</span>
         
-        <div className="flex flex-wrap justify-center items-center gap-6 max-w-6xl mx-auto px-4 md:px-0" style={{ perspective: "1000px" }}>
+        <div className="flex flex-wrap justify-between items-center gap-12 max-w-9xl mx-auto px-4 md:px-0" style={{ perspective: "1200px" }}>
           
-          <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="glass-card">
-            <div className="glass-card-icon">
-              <FaLinkedin />
-            </div>
-            <div className="glass-card-name">LinkedIn</div>
+          <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="glass-card linkedin">
+            <FaLinkedin className="glass-card-icon" />
+            <span className="glass-card-name">LinkedIn</span>
           </a>
 
-          <a href="https://github.com" target="_blank" rel="noreferrer" className="glass-card">
-            <div className="glass-card-icon">
-              <FaGithub />
-            </div>
-            <div className="glass-card-name">GitHub</div>
+          <a href="https://github.com" target="_blank" rel="noreferrer" className="glass-card github">
+            <FaGithub className="glass-card-icon" />
+            <span className="glass-card-name">GitHub</span>
           </a>
 
-          <a href="https://twitter.com" target="_blank" rel="noreferrer" className="glass-card">
-            <div className="glass-card-icon">
-              <FaTwitter />
-            </div>
-            <div className="glass-card-name">Twitter</div>
+          <a href="https://twitter.com" target="_blank" rel="noreferrer" className="glass-card twitter">
+            <FaTwitter className="glass-card-icon" />
+            <span className="glass-card-name">Twitter</span>
           </a>
 
-          <a href="https://instagram.com" target="_blank" rel="noreferrer" className="glass-card">
-            <div className="glass-card-icon">
-              <FaInstagram />
-            </div>
-            <div className="glass-card-name">Instagram</div>
+          <a href="https://instagram.com" target="_blank" rel="noreferrer" className="glass-card instagram">
+            <FaInstagram className="glass-card-icon" />
+            <span className="glass-card-name">Instagram</span>
           </a>
-
-          <a href="mailto:edu.dariogeorge21@gmail.com" className="glass-card">
-            <div className="glass-card-icon">
-              <Mail size={48} />
-            </div>
-            <div className="glass-card-name">Email</div>
-          </a>
-
         </div>
       </div>
     </section>
