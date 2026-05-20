@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion"
 import { useState, useEffect, useRef } from "react"
+import { useTheme } from "next-themes"
 import Link from "next/link"
 // Assuming these are in your components directory as requested
 import MagicRings from "./MagicRings"
@@ -22,11 +23,12 @@ const socialLinks = [
 ]
 
 export default function Hero() {
+  const { theme, setTheme } = useTheme()
   const [wordIndex, setWordIndex] = useState(0)
   const [creativeWordIndex, setCreativeWordIndex] = useState(0)
   const [softwareWordIndex, setSoftwareWordIndex] = useState(0)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
-  const [hoverState, setHoverState] = useState<'portfolio' | 'projects' | string | null>(null)
+  const [hoverState, setHoverState] = useState<'portfolio' | 'projects' | 'theme' | string | null>(null)
   const [scrollY, setScrollY] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -213,8 +215,27 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* 4. RIGHT WING (Terminal Action Link) */}
-      <div className="absolute right-6 md:right-12 bottom-12 md:bottom-1/4 z-40 pointer-events-auto">
+      {/* 4. RIGHT WING (Terminal Action Links) */}
+      <div className="absolute right-6 md:right-12 bottom-12 md:bottom-1/4 z-40 pointer-events-auto flex flex-col gap-8">
+        {/* Theme Switcher Button */}
+        <button
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+          onMouseEnter={() => setHoverState('theme')}
+          onMouseLeave={() => setHoverState(null)}
+          className="group relative flex items-center justify-center p-6 cursor-none mb-[250px]"
+        >
+          {/* Natural smoke/glow hover effect behind the text */}
+          <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 rounded-full blur-xl transition-all duration-700 ease-out scale-50 group-hover:scale-150" />
+          
+          <span className="font-mono text-xs md:text-sm tracking-[0.3em] uppercase text-foreground relative z-10">
+            [ Switch Theme ]
+          </span>
+          
+          {/* Subtle line that draws through the text on hover */}
+          <span className="absolute top-1/2 left-0 w-full h-[1px] bg-foreground/30 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500 z-20 pointer-events-none" />
+        </button>
+
+        {/* View Portfolio Link */}
         <Link 
           href="https://portfolio.dariogeorge.in/" 
           target="_blank"
@@ -346,7 +367,7 @@ export default function Hero() {
           >
             <div className="bg-surface/80 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] text-foreground px-4 py-2 rounded-sm whitespace-nowrap overflow-hidden">
               <span className="font-mono text-xs tracking-widest uppercase font-medium">
-                {hoverState === 'portfolio' ? 'VISIT PORTFOLIO' : hoverState === 'projects' ? 'SHOW PROJECTS' : `CONNECT VIA ${hoverState}`}
+                {hoverState === 'portfolio' ? 'VISIT PORTFOLIO' : hoverState === 'projects' ? 'SHOW PROJECTS' : hoverState === 'theme' ? 'TOGGLE THEME' : `CONNECT VIA ${hoverState}`}
               </span>
               {/* Internal sweeping light effect */}
               <motion.div 
