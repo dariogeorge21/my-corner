@@ -24,12 +24,16 @@ const AnimatedInput = ({
   value, 
   onChange, 
   isTextArea = false, 
+  isInvalid = false,
+  isValidField = false,
   ...props 
 }: { 
   label: string, 
   value: string, 
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
   isTextArea?: boolean,
+  isInvalid?: boolean,
+  isValidField?: boolean,
   [key: string]: any 
 }) => {
   const [focused, setFocused] = useState(false)
@@ -38,17 +42,17 @@ const AnimatedInput = ({
 
   return (
     <div 
-      className="group relative flex flex-col justify-end min-h-[3rem] border-b border-foreground/10 pb-2 cursor-text transition-colors hover:border-foreground/30"
+      className={`group relative flex flex-col justify-end min-h-[4rem] border-b pb-3 cursor-text transition-colors hover:border-foreground/30 ${isInvalid ? 'border-red-500' : isValidField ? 'border-green-500' : 'border-foreground/10'}`}
       onClick={() => inputRef.current?.focus()}
     >
-      <div className="flex items-end gap-2 w-full">
-        <span className={`font-mono text-xs uppercase tracking-widest text-foreground/60 transition-all duration-300 ${active ? 'text-accent' : ''}`}>
+      <div className="flex items-end gap-3 w-full">
+        <span className={`font-mono text-sm md:text-base uppercase tracking-widest transition-all duration-300 ${isInvalid ? 'text-red-500' : isValidField ? 'text-green-500' : active ? 'text-accent' : 'text-foreground/60'}`}>
           {label}{active ? ':' : ''}
         </span>
         
         {/* The short placeholder underline that disappears when active */}
         {!active && (
-          <div className="h-[1px] w-8 bg-foreground/40 transition-opacity duration-300 group-hover:opacity-30 group-hover:animate-pulse" />
+          <div className={`h-[2px] w-8 transition-opacity duration-300 group-hover:opacity-30 group-hover:animate-pulse ${isInvalid ? 'bg-red-500' : isValidField ? 'bg-green-500' : 'bg-foreground/40'}`} />
         )}
 
         {/* The actual input field */}
@@ -59,7 +63,7 @@ const AnimatedInput = ({
             onChange={onChange}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            className={`bg-transparent outline-none flex-1 text-foreground transition-all duration-300 resize-none overflow-hidden h-6 leading-tight ${active ? 'opacity-100 w-full' : 'opacity-0 w-0'}`}
+            className={`bg-transparent outline-none flex-1 text-xl md:text-2xl transition-all duration-300 resize-none overflow-hidden h-8 md:h-10 leading-tight ${isInvalid ? 'text-red-500' : isValidField ? 'text-green-500' : 'text-foreground'} ${active ? 'opacity-100 w-full' : 'opacity-0 w-0'}`}
             {...props}
           />
         ) : (
@@ -69,14 +73,14 @@ const AnimatedInput = ({
             onChange={onChange}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            className={`bg-transparent outline-none flex-1 text-foreground transition-all duration-300 h-6 leading-tight ${active ? 'opacity-100 w-full' : 'opacity-0 w-0'}`}
+            className={`bg-transparent outline-none flex-1 text-xl md:text-2xl transition-all duration-300 h-8 md:h-10 leading-tight ${isInvalid ? 'text-red-500' : isValidField ? 'text-green-500' : 'text-foreground'} ${active ? 'opacity-100 w-full' : 'opacity-0 w-0'}`}
             {...props}
           />
         )}
       </div>
 
       {/* Full width underline active state */}
-      <span className={`absolute bottom-0 left-0 w-full h-[1px] bg-accent transition-transform duration-500 origin-left ${active ? 'scale-x-100' : 'scale-x-0'}`} />
+      <span className={`absolute bottom-0 left-0 w-full h-[2px] transition-transform duration-500 origin-left ${isInvalid ? 'bg-red-500' : isValidField ? 'bg-green-500' : 'bg-accent'} ${active ? 'scale-x-100' : 'scale-x-0'}`} />
     </div>
   )
 }
@@ -87,12 +91,22 @@ export default function Contact() {
   const keyWords = ["impact", "stories", "future"]
   const [currentKeyWordIndex, setCurrentKeyWordIndex] = useState(0)
   
+  // Action Tracking & Validation
+  const [touched, setTouched] = useState({ name: false, email: false, subject: false, description: false })
+  const [shakeKey, setShakeKey] = useState(0)
+
   // Form State
   const [formData, setFormData] = useState<FormState>({ name: "", email: "", subject: "", description: "" })
-  const [isValid, setIsValid] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formStatus, setFormStatus] = useState<"idle" | "success" | "error">("idle")
   const [errorMessage, setErrorMessage] = useState("")
+
+  // Form Validation
+  const isNameValid = formData.name.length >= 5 && formData.name.length <= 30 && !XSS_URL_REGEX.test(formData.name)
+  const isEmailValid = EMAIL_REGEX.test(formData.email) && !XSS_URL_REGEX.test(formData.email)
+  const isSubjectValid = formData.subject.length >= 4 && formData.subject.length <= 30 && !XSS_URL_REGEX.test(formData.subject)
+  const isDescValid = formData.description.length >= 10 && formData.description.length <= 100 && !XSS_URL_REGEX.test(formData.description)
+  const isValid = isNameValid && isEmailValid && isSubjectValid && isDescValid
   
   // Mouse Glow State for Form
   const formRef = useRef<HTMLDivElement>(null)
@@ -107,21 +121,11 @@ export default function Contact() {
     return () => clearInterval(interval)
   }, [keyWords.length])
 
-  // --- VALIDATION EFFECT ---
-  useEffect(() => {
-    const { name, email, subject, description } = formData
-    
-    const isNameValid = name.length >= 5 && name.length <= 30 && !XSS_URL_REGEX.test(name)
-    const isEmailValid = EMAIL_REGEX.test(email) && !XSS_URL_REGEX.test(email)
-    const isSubjectValid = subject.length >= 4 && subject.length <= 30 && !XSS_URL_REGEX.test(subject)
-    const isDescValid = description.length >= 10 && description.length <= 100 && !XSS_URL_REGEX.test(description)
-
-    setIsValid(isNameValid && isEmailValid && isSubjectValid && isDescValid)
-  }, [formData])
-
   // --- FORM HANDLERS ---
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, field: keyof FormState) => {
     setFormData(prev => ({ ...prev, [field]: e.target.value }))
+    setTouched(prev => ({ ...prev, [field]: true }))
+    setShakeKey(prev => prev + 1)
   }
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -380,12 +384,19 @@ export default function Contact() {
                 CONTACT
               </h3>
 
-              <form onSubmit={handleSubmit} className="flex flex-col gap-10">
+              <motion.form 
+                onSubmit={handleSubmit} 
+                className="flex flex-col gap-10"
+                animate={shakeKey > 0 ? { x: shakeKey % 2 === 0 ? [-3, 3, -1, 1, 0] : [3, -3, 1, -1, 0] } : { x: 0 }}
+                transition={{ duration: 0.2 }}
+              >
                 <AnimatedInput 
                   label="Name" 
                   value={formData.name} 
                   onChange={(e) => handleChange(e, 'name')}
                   maxLength={30}
+                  isInvalid={touched.name && !isNameValid}
+                  isValidField={touched.name && isNameValid}
                 />
                 
                 <AnimatedInput 
@@ -393,6 +404,8 @@ export default function Contact() {
                   type="email"
                   value={formData.email} 
                   onChange={(e) => handleChange(e, 'email')}
+                  isInvalid={touched.email && !isEmailValid}
+                  isValidField={touched.email && isEmailValid}
                 />
                 
                 <AnimatedInput 
@@ -400,6 +413,8 @@ export default function Contact() {
                   value={formData.subject} 
                   onChange={(e) => handleChange(e, 'subject')}
                   maxLength={30}
+                  isInvalid={touched.subject && !isSubjectValid}
+                  isValidField={touched.subject && isSubjectValid}
                 />
                 
                 <AnimatedInput 
@@ -408,6 +423,8 @@ export default function Contact() {
                   onChange={(e) => handleChange(e, 'description')}
                   isTextArea={true}
                   maxLength={100}
+                  isInvalid={touched.description && !isDescValid}
+                  isValidField={touched.description && isDescValid}
                 />
 
                 {/* Animated Submit Button - Appears only when valid */}
@@ -422,13 +439,13 @@ export default function Contact() {
                         disabled={isSubmitting}
                         className="group relative flex items-center gap-4 bg-foreground text-background px-8 py-4 font-medium tracking-widest uppercase text-sm border border-transparent hover:bg-transparent hover:text-foreground hover:border-foreground transition-colors duration-300"
                       >
-                        {isSubmitting ? "Transmitting..." : "Initialize Sequence"}
+                        {isSubmitting ? "Transmitting..." : "Send"}
                         <ArrowRight size={16} className="transform group-hover:translate-x-2 transition-transform duration-300" />
                       </motion.button>
                     )}
                   </AnimatePresence>
                 </div>
-              </form>
+              </motion.form>
             </div>
           </motion.div>
         </div>
@@ -440,22 +457,22 @@ export default function Contact() {
         
         <div className="flex flex-wrap justify-between items-center gap-12 max-w-9xl mx-auto px-4 md:px-0" style={{ perspective: "1200px" }}>
           
-          <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="glass-card linkedin">
+          <a href="https://linkedin.com/in/dariogeorge21" target="_blank" rel="noreferrer" className="glass-card linkedin">
             <FaLinkedin className="glass-card-icon" />
             <span className="glass-card-name">LinkedIn</span>
           </a>
 
-          <a href="https://github.com" target="_blank" rel="noreferrer" className="glass-card github">
+          <a href="https://github.com/dariogeorge21" target="_blank" rel="noreferrer" className="glass-card github">
             <FaGithub className="glass-card-icon" />
             <span className="glass-card-name">GitHub</span>
           </a>
 
-          <a href="https://twitter.com" target="_blank" rel="noreferrer" className="glass-card twitter">
+          <a href="https://twitter.com/dariogeorge21" target="_blank" rel="noreferrer" className="glass-card twitter">
             <FaTwitter className="glass-card-icon" />
             <span className="glass-card-name">Twitter</span>
           </a>
 
-          <a href="https://instagram.com" target="_blank" rel="noreferrer" className="glass-card instagram">
+          <a href="https://instagram.com/dariogeorge21" target="_blank" rel="noreferrer" className="glass-card instagram">
             <FaInstagram className="glass-card-icon" />
             <span className="glass-card-name">Instagram</span>
           </a>
