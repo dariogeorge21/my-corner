@@ -16,7 +16,7 @@ const googleSansFlex = Google_Sans_Flex({ subsets: ["latin"], weight: ["300", "4
 
 export const metadata: Metadata = {
   title: "Dario's Corner | Web Developer & Software Architect",
-  description: "I'm Dario, a web developer specializing in crafting scalable, performant web applications.",
+  description: "I'm Dario, a web developer specializing in crafting scalable, performant web applications. Mastering in web design, development, and architecture, I create seamless user experiences. With a passion for innovation and a commitment to excellence, I bring ideas to life through code. Explore my portfolio and let's build something amazing together.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
