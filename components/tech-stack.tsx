@@ -1,3 +1,7 @@
+'use client';
+
+import { motion } from 'framer-motion';
+import { useState } from 'react';
 import LogoLoop from './LogoLoop';
 import {
   SiReact,
@@ -56,20 +60,71 @@ const techLogos = [
 ];
 
 export default function TechStack() {
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Extract tech names for the text scroller
+  const techNames = techLogos.map(tech => tech.title);
+  const scrollText = techNames.join(' • ') + ' • ';
+
   return (
-    <div style={{ height: '200px', position: 'relative', overflow: 'hidden' }}>
-      <LogoLoop
-        logos={techLogos}
-        speed={200}
-        direction="left"
-        logoHeight={60}
-        gap={60}
-        hoverSpeed={20}
-        scaleOnHover
-        fadeOut
-        fadeOutColor="#ffffff"
-        ariaLabel="My tech stack"
-      />
+    <div className="w-full flex flex-col">
+      {/* Logo Loop Section */}
+      <div style={{ height: '200px', position: 'relative', overflow: 'hidden' }}>
+        <LogoLoop
+          logos={techLogos}
+          speed={200}
+          direction="left"
+          logoHeight={60}
+          gap={60}
+          hoverSpeed={20}
+          scaleOnHover
+          fadeOut
+          fadeOutColor="#ffffff"
+          ariaLabel="My tech stack"
+        />
+      </div>
+
+      {/* Tech Stack Text Scroller */}
+      <div className="border-t mt-[-100px] border-b border-foreground/10 py-6 overflow-hidden">
+        <motion.div
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          className="flex items-center w-max"
+          animate={{
+            x: [0, -2000],
+            scale: isHovered ? 1 : 1,
+          }}
+          transition={{
+            x: {
+              duration: isHovered ? 100 : 20,
+              repeat: Infinity,
+              ease: 'linear',
+              repeatType: 'loop',
+            },
+            scale: {
+              duration: 0.3,
+              ease: 'easeOut',
+            },
+          }}
+        >
+          {/* Render text twice for seamless loop */}
+          {[0, 1].map((index) => (
+            <div
+              key={index}
+              className="flex items-center gap-6 whitespace-nowrap px-4"
+            >
+              <span className="font-mono text-5xl md:text-4xl tracking-[0.2em] uppercase font-medium text-foreground/60 transition-all duration-300"
+                style={{
+                  opacity: isHovered ? 0.9 : 0.6,
+                  color: isHovered ? 'var(--accent)' : 'inherit',
+                }}
+              >
+                {scrollText}
+              </span>
+            </div>
+          ))}
+        </motion.div>
+      </div>
     </div>
   );
 }
