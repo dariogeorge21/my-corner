@@ -4,6 +4,7 @@ import { motion, AnimatePresence, useMotionValue, useSpring, useMotionTemplate, 
 import { useState, useRef, useEffect, useCallback } from "react"
 import { ArrowRight, ArrowUpRight, Mail } from "lucide-react"
 import { FaLinkedin, FaTwitter, FaGithub, FaInstagram } from "react-icons/fa"
+import { Turnstile } from "@marsidev/react-turnstile"
 import { submitContact } from "@/app/actions/contact"
 
 // --- TYPES & VALIDATION ---
@@ -159,6 +160,7 @@ export default function Contact() {
   const [touched, setTouched] = useState({ name: false, email: false, subject: false, description: false })
   const [shakeKey, setShakeKey] = useState(0)
   const [formData, setFormData] = useState<FormState>({ name: "", email: "", subject: "", description: "" })
+  const [turnstileToken, setTurnstileToken] = useState<string>("")  
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formStatus, setFormStatus] = useState<"idle" | "success" | "error">("idle")
   const [errorMessage, setErrorMessage] = useState("")
@@ -169,7 +171,8 @@ export default function Contact() {
   const isEmailValid = EMAIL_REGEX.test(formData.email) && !XSS_URL_REGEX.test(formData.email)
   const isSubjectValid = formData.subject.length >= 4 && formData.subject.length <= 30 && !XSS_URL_REGEX.test(formData.subject)
   const isDescValid = formData.description.length >= 10 && formData.description.length <= 100 && !XSS_URL_REGEX.test(formData.description)
-  const isValid = isNameValid && isEmailValid && isSubjectValid && isDescValid
+  const isTurnstileValid = turnstileToken.length > 0
+  const isValid = isNameValid && isEmailValid && isSubjectValid && isDescValid && isTurnstileValid
 
   // --- GPU ACCELERATED MOUSE TRACKING FOR FORM GLOW & TILT ---
   const mouseX = useMotionValue(0)
@@ -225,16 +228,23 @@ export default function Contact() {
         email: formData.email,
         subject: formData.subject,
         description: formData.description,
+        turnstileToken: turnstileToken,
       })
       
-      if (response.ok) {
+      if (response.ok && response.whatsappUrl) {
         setFormStatus("success")
         setFormData({ name: "", email: "", subject: "", description: "" })
         setTouched({ name: false, email: false, subject: false, description: false })
-        setTimeout(() => setFormStatus("idle"), 5000)
+        setTurnstileToken("")
+        
+        // Redirect to WhatsApp after a short delay
+        setTimeout(() => {
+          window.open(response.whatsappUrl, "_blank")
+          setFormStatus("idle")
+        }, 1000)
       } else {
         setFormStatus("error")
-        setErrorMessage(response.error)
+        setErrorMessage(response.error || "Failed to send message")
       }
     } catch (err) {
       setFormStatus("error")
@@ -525,6 +535,29 @@ export default function Contact() {
                   isInvalid={touched.description && !isDescValid}
                   isValidField={touched.description && isDescValid}
                 />
+
+                {/* Turnstile Verification */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex justify-center py-4"
+                >
+                  <Turnstile
+                    siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
+                    onSuccess={(token) => {
+                      setTurnstileToken(token)
+                      setShakeKey(prev => prev + 1)
+                    }}
+                    onError={() => {
+                      setTurnstileToken("")
+                      setErrorMessage("Verification failed. Please try again.")
+                    }}
+                    options={{
+                      size: "normal",
+                      appearance: "always",
+                    }}
+                  />
+                </motion.div>
 
                 <AnimatePresence>
                   {formStatus === "error" && (
