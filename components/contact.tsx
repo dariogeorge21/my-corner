@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion"
 import { useState, useRef, useEffect } from "react"
-import { ArrowRight, Mail } from "lucide-react"
+import { ArrowRight, ArrowUpRight, Mail } from "lucide-react"
 import { FaLinkedin, FaTwitter, FaGithub, FaInstagram } from "react-icons/fa"
 import { submitContact } from "@/app/actions/contact"
 
@@ -284,6 +284,15 @@ export default function Contact() {
         .glass-card.email:hover::after {
           background: #f28482;
         }
+        
+        @keyframes pulse-scale {
+          0%, 100% { transform: scale(1) translate(0, 0); filter: drop-shadow(0 0 0px rgba(96, 165, 250, 0)); }
+          50% { transform: scale(1.15) translate(3px, -3px); filter: drop-shadow(0 0 12px rgba(96, 165, 250, 0.8)); }
+        }
+        .animate-pulse-scale {
+          animation: pulse-scale 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+          animation-delay: 1.5s;
+        }
       `}} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-8 mb-32">
@@ -309,8 +318,35 @@ export default function Contact() {
           </h2>
           <div className="mt-12 pt-8 border-t border-foreground/20">
             <p className="text-foreground/60 font-mono text-xs tracking-widest uppercase mb-3">Contact us</p>
-            <a href="mailto:contact@dariogeorge.in" className="text-foreground text-2xl md:text-4xl font-bold hover:text-accent transition-colors duration-300 border-b-2 border-foreground/30 hover:border-accent pb-1 inline-block">
-              contact@dariogeorge.in
+            <a 
+              href="mailto:contact@dariogeorge.in" 
+              className="group relative inline-flex items-center text-foreground text-2xl md:text-4xl font-bold pb-2 overflow-hidden"
+            >
+              {/* Thin default underline */}
+              <span className="absolute left-0 bottom-0 w-full h-[2px] bg-foreground/20" />
+              {/* Thick exponentially growing underline */}
+              <span className="absolute left-0 bottom-0 w-full h-[4px] bg-accent origin-left scale-x-0 transition-transform duration-[2000ms] ease-[cubic-bezier(0.85,0,0.15,1)] group-hover:scale-x-100" />
+
+              <span className="flex items-center overflow-hidden">
+                {/* Prefix Text that slides in */}
+                <span className="inline-flex items-center overflow-hidden max-w-0 opacity-0 group-hover:max-w-[400px] group-hover:opacity-100 transition-all duration-[2000ms] ease-[cubic-bezier(0.85,0,0.15,1)] whitespace-nowrap text-accent">
+                  <span className="pr-3">Email:</span>
+                </span>
+                
+                {/* Original Email Text */}
+                <span className="transition-colors duration-[2000ms] ease-[cubic-bezier(0.85,0,0.15,1)] group-hover:text-accent">
+                  contact@dariogeorge.in
+                </span>
+                
+                {/* Diagonal Arrow with continuous glowing scale animation */}
+                <span className="inline-flex items-center mr-5 justify-center opacity-0 -translate-x-8 group-hover:opacity-100 group-hover:translate-x-4 transition-all duration-[2000ms] ease-[cubic-bezier(0.85,0,0.15,1)] whitespace-nowrap">
+                  <ArrowUpRight 
+                    size={36} 
+                    strokeWidth={3}
+                    className="text-accent group-hover:animate-pulse-scale" 
+                  />
+                </span>
+              </span>
             </a>
           </div>
         </div>
