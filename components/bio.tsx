@@ -1,74 +1,121 @@
-import Image from "next/image";
-import Link from "next/link";
-import { X, Mail } from "lucide-react";
-import { FaLinkedin, FaGithub } from "react-icons/fa";
-import { Button } from "@/components/ui/button";
+"use client"
 
-export function Bio() {
+import { motion, useScroll, useTransform } from "framer-motion"
+import { useRef } from "react"
+import { MapPin, Cpu, Code2, GitMerge } from "lucide-react"
+import BorderGlow from "./BorderGlow" // Adjust path based on your folder structure
+
+export default function Bio() {
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  // Framer Motion Parallax Logic
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  })
+
+  // Staggered parallax for the right-side cards to create a 3D depth effect
+  const yCard1 = useTransform(scrollYProgress, [0, 1], ["10%", "-10%"])
+  const yCard2 = useTransform(scrollYProgress, [0, 1], ["20%", "-20%"])
+
   return (
-    <section id="about" className="w-full py-20 lg:py-32">
-      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+    <section 
+      id="about" 
+      ref={containerRef}
+      className="py-32 px-6 md:px-12 max-w-[1800px] w-full mx-auto relative overflow-hidden" 
+      style={{ fontFamily: "var(--font-google-sans-flex)" }}
+    >
+      {/* Architectural Background Grid */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(228,214,169,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(228,214,169,0.03)_1px,transparent_1px)] bg-[size:4rem_4rem] z-0 [mask-image:radial-gradient(ellipse_60%_100%_at_50%_50%,#000_10%,transparent_100%)] pointer-events-none" />
+
+      <div className="flex flex-col lg:flex-row gap-16 lg:gap-8 relative z-10 w-full">
+        
+        {/* === LEFT COLUMN: Sticky Typographic Anchor === */}
+        <div className="w-full lg:w-5/12 relative">
+          <div className="lg:sticky lg:top-40 flex flex-col items-start h-fit">
+            
+            {/* Technical Label */}
+            <div className="flex items-center gap-4 mb-6">
+              <span className="w-8 h-[1px] bg-accent" />
+              <span className="font-mono text-xs tracking-[0.3em] text-accent uppercase font-medium">
+                [ Core Identity ]
+              </span>
+            </div>
+
+            {/* Massive Awwwards-style stacked typography */}
+            <h2 className="text-[12vw] lg:text-[6vw] font-black leading-[0.85] tracking-tighter uppercase text-foreground mb-8">
+              THE <br /> 
+              <span className="text-transparent bg-clip-text bg-gradient-to-br from-foreground via-foreground/80 to-muted">
+                ARCHITECT
+              </span>
+            </h2>
+
+            {/* Supplemental Text */}
+            <p className="text-foreground/50 max-w-sm text-sm md:text-base leading-relaxed mb-8">
+              Operating at the intersection of technical precision and premium design. I engineer digital spaces that respect the user's time and attention.
+            </p>
+
+            {/* Animated Scroll Indicator (Abstract) */}
+            <div className="w-[1px] h-24 bg-gradient-to-b from-accent to-transparent relative overflow-hidden hidden lg:block">
+              <motion.div 
+                animate={{ y: ["-100%", "200%"] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                className="absolute top-0 left-0 w-full h-8 bg-white"
+              />
+            </div>
+
+          </div>
+        </div>
+
+
+        {/* === RIGHT COLUMN: Parallax Glow Cards === */}
+        <div className="w-full lg:w-7/12 flex flex-col gap-12 lg:gap-24 pt-0 lg:pt-32">
           
-          <div className="w-full lg:w-1/2 flex justify-center lg:justify-end">
-            <div className="relative w-64 h-64 sm:w-80 sm:h-80 lg:w-[400px] lg:h-[400px] rounded-2xl overflow-hidden shadow-2xl border-4 border-muted">
-              {/* Fallback avatar block if image is not present */}
-              <div className="absolute inset-0 bg-accent/20 flex items-center justify-center text-primary font-bold text-4xl">
-                {/* <Image src="/avatar.jpg" alt="Dario" fill className="object-cover" /> */}
-                Dario
+          {/* --- CARD 1: The Narrative --- */}
+          <motion.div style={{ y: yCard1 }} className="relative z-20 w-full group">
+            {/* Architectural structural corner */}
+            <span className="absolute -top-3 -left-3 text-foreground/40 font-mono text-xs z-30 opacity-0 group-hover:opacity-100 transition-opacity">+</span>
+            
+            <BorderGlow  
+              edgeSensitivity={40}  
+              glowColor="228 214 169" // Warm Cream RGB 
+              backgroundColor="rgba(20, 16, 14, 0.4)" // Frosted Espresso backdrop  
+              borderRadius={28}  
+              glowRadius={50}  
+              glowIntensity={0.8}  
+              coneSpread={30}  
+              animated={true}
+              // Colors matching your refined luxury palette
+              colors={['#E4D6A9', '#995F2F', '#622B14']}
+            >
+              <div className="p-8 md:p-14 relative backdrop-blur-[12px] h-full rounded-[28px] shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),0_10px_40px_rgba(0,0,0,0.3)] overflow-hidden">
+                
+                {/* Background topographic/data texture */}
+                <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_center,var(--accent)_1px,transparent_1px)] bg-[length:16px_16px]" />
+
+                <div className="relative z-10">
+                                      <Code2 size={48} strokeWidth={1} />
+
+                  <div className="absolute top-8 right-8 text-foreground/10">
+                  </div>
+                  <div className="m-2"></div>
+                  
+                  <div className="space-y-6 text-foreground/80 text-base md:text-lg leading-relaxed font-light">
+                    <p>
+                      I am an enthusiastic developer who thrives on building practical, high-performance projects. With a deeply builder-oriented mindset, I love transforming complex problems into elegant software solutions and consistently pushing my boundaries with new paradigms.
+                    </p>
+                    <p>
+                      Whether it's crafting highly scalable backends or choreographing engaging, cinematic user interfaces, I approach every project as an opportunity to build something extraordinary.
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          
-          <div className="w-full lg:w-1/2 space-y-6 text-center lg:text-left">
-            <div className="space-y-2">
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-primary">About Me</h2>
-              <div className="w-20 h-1 bg-secondary mx-auto lg:mx-0 rounded-full"></div>
-            </div>
-            
-            <div className="space-y-4 text-foreground/80 text-lg leading-relaxed">
-              <p>
-                Hi, I'm Dario. I'm a passionate developer and designer dedicated to crafting elegant, 
-                user-centric digital experiences. I believe that complexity should operate quietly under 
-                the surface, leaving users with intuitive, seamless interfaces.
-              </p>
-              <p>
-                My professional journey has been focused on bridging the gap between sophisticated 
-                minimalism and approachable warmth. From robust web applications to engaging landing pages, 
-                I thrive on transforming ideas into impactful digital realities.
-              </p>
-            </div>
-            
-            <div className="flex flex-wrap justify-center lg:justify-start gap-4 pt-4">
-              <Button asChild variant="outline" size="icon" className="rounded-full rounded-full border-accent hover:bg-accent hover:text-white transition-colors">
-                <Link href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                  <FaLinkedin className="h-5 w-5" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="icon" className="rounded-full border-accent hover:bg-accent hover:text-white transition-colors">
-                <Link href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                  <FaGithub className="h-5 w-5" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="icon" className="rounded-full border-accent hover:bg-accent hover:text-white transition-colors">
-                <Link href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-                  <X className="h-5 w-5" />
-                </Link>
-              </Button>
-            </div>
-            
-            <div className="pt-6">
-              <Button asChild variant="link" className="text-secondary hover:text-primary pl-0 text-lg group">
-                <Link href="#work" className="flex items-center gap-2">
-                  View Full Portfolio 
-                  <span className="group-hover:translate-x-1 transition-transform">→</span>
-                </Link>
-              </Button>
-            </div>
-          </div>
+            </BorderGlow>
+          </motion.div>
+
           
         </div>
       </div>
     </section>
-  );
+  )
 }
