@@ -26,6 +26,13 @@ import {
   SiEslint,
   SiPostcss,
 } from 'react-icons/si';
+import { 
+  FaDatabase, 
+  FaWindows, 
+  FaDesktop,
+  FaLaptop,
+  FaMicrochip,
+  FaHdd } from 'react-icons/fa';
 
 const techLogos = [
   { node: <SiNextdotjs />, title: 'Next.js', href: 'https://nextjs.org' },
@@ -49,7 +56,13 @@ const techLogos = [
   { node: <SiHtml5 />, title: 'HTML5', href: 'https://developer.mozilla.org/en-US/docs/Web/HTML' },
   { node: <SiCss />, title: 'CSS3', href: 'https://developer.mozilla.org/en-US/docs/Web/CSS' },
   { node: <SiNodedotjs />, title: 'Node.js', href: 'https://nodejs.org' },
-];
+  { node: <FaDatabase />, title: 'Databases', href: 'https://en.wikipedia.org/wiki/Database' },
+  { node: <FaWindows />, title: 'Windows', href: 'https://www.microsoft.com/windows' },
+  { node: <FaDesktop />, title: 'Desktop', href: 'https://en.wikipedia.org/wiki/Desktop_computer' },
+  { node: <FaLaptop />, title: 'Laptop', href: 'https://en.wikipedia.org/wiki/Laptop' },
+  { node: <FaMicrochip />, title: 'Hardware', href: 'https://en.wikipedia.org/wiki/Microchip' },
+  { node: <FaHdd />, title: 'Storage', href: 'https://en.wikipedia.org/wiki/Hard_disk_drive' },
+  ];
 
 export default function TechStack() {
   const [isHovered, setIsHovered] = useState(false);
@@ -66,7 +79,7 @@ export default function TechStack() {
   const skewX = useTransform(smoothVelocity, [-800, 800], [4, -4]);
 
   // Base speed for text marquee (pixels per second)
-  const baseSpeed = 120;
+  const baseSpeed = 150;
   // Direction: negative = left
   const direction = -1;
 
