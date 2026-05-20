@@ -28,7 +28,7 @@ export default function Bio() {
       {/* Architectural Background Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(228,214,169,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(228,214,169,0.03)_1px,transparent_1px)] bg-[size:4rem_4rem] z-0 [mask-image:radial-gradient(ellipse_60%_100%_at_50%_50%,#000_10%,transparent_100%)] pointer-events-none" />
 
-      <div className="flex flex-col lg:flex-row gap-16 lg:gap-8 relative z-10 w-full">
+      <div className="flex flex-row lg:flex-row gap-16 lg:gap-8 relative z-10 w-full">
         
         {/* === LEFT COLUMN: Sticky Typographic Anchor === */}
         <div className="w-full lg:w-5/12 relative">
@@ -67,7 +67,7 @@ export default function Bio() {
           </div>
         </div>
 
-
+<br />
         {/* === RIGHT COLUMN: Parallax Glow Cards === */}
         <div className="w-full lg:w-7/12 flex flex-col gap-12 lg:gap-24 pt-0 lg:pt-32">
           
@@ -94,13 +94,16 @@ export default function Bio() {
                 <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_center,var(--accent)_1px,transparent_1px)] bg-[length:16px_16px]" />
 
                 <div className="relative z-10">
-                                      <Code2 size={48} strokeWidth={1} />
-
-                  <div className="absolute top-8 right-8 text-foreground/10">
+                  <div className="flex justify-between items-start mb-8">
+                    <h3 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
+                      Builder-Oriented
+                    </h3>
+                    <div className="text-foreground/15">
+                      <Code2 size={56} strokeWidth={1.2} />
+                    </div>
                   </div>
-                  <div className="m-2"></div>
                   
-                  <div className="space-y-6 text-foreground/80 text-base md:text-lg leading-relaxed font-light">
+                  <div className="space-y-5 text-foreground/80 text-lg md:text-xl leading-relaxed font-light text-right">
                     <p>
                       I am an enthusiastic developer who thrives on building practical, high-performance projects. With a deeply builder-oriented mindset, I love transforming complex problems into elegant software solutions and consistently pushing my boundaries with new paradigms.
                     </p>
