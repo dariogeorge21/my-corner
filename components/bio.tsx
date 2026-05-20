@@ -1,12 +1,44 @@
 "use client"
 
 import { motion, useScroll, useTransform } from "framer-motion"
-import { useRef } from "react"
+import { useRef, useMemo, useState, useEffect } from "react"
+import { useTheme } from "next-themes"
 import { MapPin, Cpu, Code2, GitMerge } from "lucide-react"
 import BorderGlow from "./BorderGlow" // Adjust path based on your folder structure
 
 export default function Bio() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const { theme, systemTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  // Wait for hydration before using theme
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Determine actual theme (handle system theme)
+  const actualTheme = mounted ? (theme === "system" ? systemTheme : theme) : "dark"
+
+  // Theme-aware color palettes
+  const themeColors = useMemo(() => {
+    if (actualTheme === "dark") {
+      return {
+        glowColor: "228 214 169", // Warm Cream RGB (dark theme foreground)
+        backgroundColor: "rgba(20, 16, 14, 0.4)", // Frosted Espresso backdrop
+        gridColor: "rgba(228, 214, 169, 0.03)", // Light grid for dark theme
+        palette: ["#E4D6A9", "#995F2F", "#622B14"], // Dark theme colors
+        scrollIndicator: "rgba(255, 255, 255, 1)" // White for dark theme
+      }
+    } else {
+      return {
+        glowColor: "153 95 47", // Warm Brown RGB (light theme accent)
+        backgroundColor: "rgba(250, 249, 246, 0.5)", // Alabaster Cream backdrop
+        gridColor: "rgba(153, 95, 47, 0.03)", // Warm brown grid for light theme
+        palette: ["#995F2F", "#E4D6A9", "#2A1D17"], // Light theme colors
+        scrollIndicator: "rgba(42, 29, 23, 0.7)" // Dark indicator for light theme
+      }
+    }
+  }, [actualTheme])
 
   // Framer Motion Parallax Logic
   const { scrollYProgress } = useScroll({
@@ -25,8 +57,14 @@ export default function Bio() {
       className="py-32 px-6 md:px-12 max-w-[1800px] w-full mx-auto relative overflow-hidden" 
       style={{ fontFamily: "var(--font-google-sans-flex)" }}
     >
-      {/* Architectural Background Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(228,214,169,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(228,214,169,0.03)_1px,transparent_1px)] bg-[size:4rem_4rem] z-0 [mask-image:radial-gradient(ellipse_60%_100%_at_50%_50%,#000_10%,transparent_100%)] pointer-events-none" />
+      {/* Architectural Background Grid - Theme Aware */}
+      <div 
+        suppressHydrationWarning
+        className="absolute inset-0 bg-[size:4rem_4rem] z-0 [mask-image:radial-gradient(ellipse_60%_100%_at_50%_50%,#000_10%,transparent_100%)] pointer-events-none"
+        style={{
+          backgroundImage: mounted ? `linear-gradient(to right, ${themeColors.gridColor} 1px, transparent 1px), linear-gradient(to bottom, ${themeColors.gridColor} 1px, transparent 1px)` : undefined
+        }}
+      />
 
       <div className="flex flex-row lg:flex-row gap-16 lg:gap-8 relative z-10 w-full">
         
@@ -60,7 +98,9 @@ export default function Bio() {
               <motion.div 
                 animate={{ y: ["-100%", "200%"] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                className="absolute top-0 left-0 w-full h-8 bg-white"
+                suppressHydrationWarning
+                style={{ backgroundColor: mounted ? themeColors.scrollIndicator : undefined }}
+                className="absolute top-0 left-0 w-full h-8"
               />
             </div>
 
@@ -72,21 +112,20 @@ export default function Bio() {
         <div className="w-full lg:w-7/12 flex flex-col gap-12 lg:gap-24 pt-0 lg:pt-32">
           
           {/* --- CARD 1: The Narrative --- */}
-          <motion.div style={{ y: yCard1 }} className="relative z-20 w-full group">
+          <motion.div style={{ y: yCard1 }} suppressHydrationWarning className="relative z-20 w-full group">
             {/* Architectural structural corner */}
             <span className="absolute -top-3 -left-3 text-foreground/40 font-mono text-xs z-30 opacity-0 group-hover:opacity-100 transition-opacity">+</span>
             
             <BorderGlow  
               edgeSensitivity={40}  
-              glowColor="228 214 169" // Warm Cream RGB 
-              backgroundColor="rgba(20, 16, 14, 0.4)" // Frosted Espresso backdrop  
+              glowColor={mounted ? themeColors.glowColor : "228 214 169"}
+              backgroundColor={mounted ? themeColors.backgroundColor : "rgba(20, 16, 14, 0.4)"}
               borderRadius={28}  
               glowRadius={50}  
               glowIntensity={0.8}  
               coneSpread={30}  
               animated={true}
-              // Colors matching your refined luxury palette
-              colors={['#E4D6A9', '#995F2F', '#622B14']}
+              colors={mounted ? themeColors.palette : ["#E4D6A9", "#995F2F", "#622B14"]}
             >
               <div className="p-8 md:p-14 relative backdrop-blur-[12px] h-full rounded-[28px] shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),0_10px_40px_rgba(0,0,0,0.3)] overflow-hidden">
                 
