@@ -193,11 +193,12 @@ export default function Hero() {
           onMouseLeave={() => setHoverState(null)}
         >
           {["PLAN", "CODE", "DEPLOY"].map((text, i) => (
-            <div key={text} className="relative group flex items-center py-2 px-6 border-b border-l border-foreground/10 bg-surface/10 backdrop-blur-sm transition-all duration-500 hover:bg-surface/30">
+            <div key={text} className="relative group flex items-center py-2 px-6 border-b border-l border-t border-r border-foreground/10 bg-surface/10 backdrop-blur-sm transition-all duration-500 hover:bg-surface/30">
               {/* The "+" architectural corners */}
               <span className="absolute -left-1.5 -bottom-2 text-foreground/40 font-mono text-xs">+</span>
               <span className="absolute -right-1.5 -bottom-2 text-foreground/40 font-mono text-xs">+</span>
               <span className="absolute -left-1.5 -top-2 text-foreground/40 font-mono text-xs opacity-0 group-first:opacity-100">+</span>
+              <span className="absolute -right-1.5 -top-2 text-foreground/40 font-mono text-xs opacity-0 group-first:opacity-100">+</span>
               
               <span className="text-sm md:text-base tracking-widest uppercase font-medium text-foreground/80 group-hover:text-accent transition-colors">
                 {text}
