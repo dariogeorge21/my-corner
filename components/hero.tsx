@@ -1,18 +1,15 @@
 "use client"
 
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue, useReducedMotion } from "framer-motion"
 import { useState, useEffect, useRef } from "react"
 import { useTheme } from "next-themes"
 import Link from "next/link"
-// Assuming these are in your components directory as requested
 import MagicRings from "./MagicRings"
 import VariableProximity from "./VariableProximity"
 
 const dynamicWords = ["DEVELOPER", "ARCHITECT", "DESIGNER", "BUILDER"]
-
 const creativeWords = ["CREATIVE", "INNOVATIVE", "VISIONARY"]
-
-const softwareWords = ["SOFTWARE","DESKTOP"]
+const softwareWords = ["SOFTWARE", "DESKTOP"]
 
 const socialLinks = [
   { label: "LinkedIn", url: "https://www.linkedin.com/in/dariogeorge21/" },
@@ -22,17 +19,66 @@ const socialLinks = [
   { label: "Email", url: "mailto:edu.dariogeorge21@gmail.com" },
 ]
 
+// Staggered entrance variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.3,
+    },
+  },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30, filter: "blur(10px)" },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
+  },
+}
+
 export default function Hero() {
   const { theme, setTheme } = useTheme()
   const [wordIndex, setWordIndex] = useState(0)
   const [creativeWordIndex, setCreativeWordIndex] = useState(0)
   const [softwareWordIndex, setSoftwareWordIndex] = useState(0)
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
-  const [hoverState, setHoverState] = useState<'portfolio' | 'projects' | 'theme' | string | null>(null)
-  const [scrollY, setScrollY] = useState(0)
+  const [hoverState, setHoverState] = useState<string | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Cycle through dynamic words (bottom section) every 2 seconds
+  const shouldReduceMotion = useReducedMotion()
+
+  // --- GPU-Accelerated Motion Values (replaces useState) ---
+  const { scrollY } = useScroll()
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+
+  // Smooth spring physics for the custom cursor
+  const smoothCursorX = useSpring(mouseX, { stiffness: 500, damping: 28 })
+  const smoothCursorY = useSpring(mouseY, { stiffness: 500, damping: 28 })
+
+  // Scroll-driven transforms for typography (cinematic exit)
+  const creativeX = useTransform(scrollY, [0, 800], [0, -250])
+  const softwareX = useTransform(scrollY, [0, 800], [0, 250])
+  const dynamicX = useTransform(scrollY, [0, 800], [0, -150])
+  const creativeOpacity = useTransform(scrollY, [0, 600], [1, 0.4])
+  const softwareOpacity = useTransform(scrollY, [0, 600], [1, 0.4])
+  const dynamicOpacity = useTransform(scrollY, [0, 600], [1, 0.4])
+  const creativeScale = useTransform(scrollY, [0, 600], [1, 0.85])
+  const softwareScale = useTransform(scrollY, [0, 600], [1, 0.85])
+  const dynamicScale = useTransform(scrollY, [0, 600], [1, 0.85])
+
+  // Mouse parallax for background grid (subtle Z-depth)
+  const gridParallaxX = useTransform(mouseX, [-500, 500], [15, -15])
+  const gridParallaxY = useTransform(mouseY, [-300, 300], [10, -10])
+
+  // Cursor appearance/disappearance on window enter/leave
+  const [isMouseInside, setIsMouseInside] = useState(false)
+
+  // --- Word cycling intervals (unchanged, but performant) ---
   useEffect(() => {
     const interval = setInterval(() => {
       setWordIndex((prev) => (prev + 1) % dynamicWords.length)
@@ -40,7 +86,6 @@ export default function Hero() {
     return () => clearInterval(interval)
   }, [])
 
-  // Cycle through creative words (Line 1) every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCreativeWordIndex((prev) => (prev + 1) % creativeWords.length)
@@ -48,7 +93,6 @@ export default function Hero() {
     return () => clearInterval(interval)
   }, [])
 
-  // Cycle through software words (Line 2) every 8 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setSoftwareWordIndex((prev) => (prev + 1) % softwareWords.length)
@@ -56,37 +100,44 @@ export default function Hero() {
     return () => clearInterval(interval)
   }, [])
 
-  // Track global mouse position for the custom glass tooltip cursor
+  // --- Track mouse position for parallax and cursor, but with passive event for performance ---
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY })
+      mouseX.set(e.clientX)
+      mouseY.set(e.clientY)
     }
-    window.addEventListener("mousemove", handleMouseMove)
-    return () => window.removeEventListener("mousemove", handleMouseMove)
-  }, [])
+    const handleMouseEnter = () => setIsMouseInside(true)
+    const handleMouseLeave = () => setIsMouseInside(false)
 
-  // Track scroll position for parallax effect
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY)
+    window.addEventListener("mousemove", handleMouseMove, { passive: true })
+    window.addEventListener("mouseenter", handleMouseEnter)
+    window.addEventListener("mouseleave", handleMouseLeave)
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove)
+      window.removeEventListener("mouseenter", handleMouseEnter)
+      window.removeEventListener("mouseleave", handleMouseLeave)
     }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+  }, [mouseX, mouseY])
 
   return (
-    <section 
+    <motion.section
       ref={containerRef}
-      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-background select-none cursor-default"
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-background select-none cursor-none"
       style={{ fontFamily: "var(--font-google-sans-flex), sans-serif" }}
     >
-      {/* 1. BACKGROUND LAYERS */}
-      <div className="absolute inset-0 z-10 overflow-hidden pointer-events-none">
-        {/* The Magic Rings Component */}
+      {/* 1. BACKGROUND LAYERS (with subtle mouse parallax) */}
+      <motion.div
+        className="absolute inset-0 z-10 overflow-hidden pointer-events-none"
+        style={{ x: gridParallaxX, y: gridParallaxY }}
+      >
         <div className="absolute inset-0 w-full h-full opacity-100">
           <MagicRings
-            color="#995F2F" // Warm Brown from your palette
-            colorTwo="#978F66" // Sage Taupe
+            color="#995F2F"
+            colorTwo="#978F66"
             ringCount={7}
             speed={1}
             attenuation={10}
@@ -108,75 +159,99 @@ export default function Hero() {
             clickBurst={false}
           />
         </div>
-        
-        {/* Soft blur + Dark Shade overlay to pull Rings into the background */}
+
         <div className="absolute inset-0 bg-background/70 backdrop-blur-[12px] z-10" />
 
-        {/* Architectural Grid (Subtle Brown/Black) replacing DotGrid */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(153,95,47,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(153,95,47,0.05)_1px,transparent_1px)] bg-[size:3rem_3rem] z-20 [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,#000_20%,transparent_100%)]" />
-      </div>
+      </motion.div>
 
-      {/* 2. CENTER TYPOGRAPHY (Massive Spatial Impact) */}
+      {/* 2. CENTER TYPOGRAPHY (Massive Spatial Impact with scroll-driven transforms) */}
       <div className="relative z-30 flex flex-col items-start w-full max-w-[90vw] md:max-w-[80vw] 2xl:max-w-[1400px]">
         {/* Line 1: CREATIVE (Dynamic) */}
-        <div className="text-[14vw] md:text-[11vw] font-black leading-[0.8] tracking-tighter uppercase text-foreground relative z-20 h-[1em] flex items-center" style={{ transform: `translateX(${-scrollY * 0.5}px)` }}>
+        <motion.div
+          style={{
+            x: creativeX,
+            opacity: creativeOpacity,
+            scale: creativeScale,
+            filter: shouldReduceMotion ? "none" : undefined,
+          }}
+          transition={{ type: "tween", ease: [0.16, 1, 0.3, 1] }}
+          className="text-[14vw] md:text-[11vw] font-black leading-[0.8] tracking-tighter uppercase text-foreground relative z-20 h-[1em] flex items-center will-change-transform"
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={creativeWords[creativeWordIndex]}
-              initial={{ opacity: 0, y: 40, rotateX: -60, filter: "blur(20px)" }}
+              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 40, rotateX: -60, filter: "blur(20px)" }}
               animate={{ opacity: 1, y: 0, rotateX: 0, filter: "blur(0px)" }}
-              exit={{ opacity: 0, y: -40, rotateX: 60, filter: "blur(20px)" }}
+              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -40, rotateX: 60, filter: "blur(20px)" }}
               transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
               style={{ transformOrigin: "center center -50px", transformStyle: "preserve-3d" }}
               className="absolute left-0 whitespace-nowrap"
             >
-              <VariableProximity 
-                label={creativeWords[creativeWordIndex]} 
-                className="variable-proximity-demo" 
-                fromFontVariationSettings="'wght' 400, 'opsz' 9" 
-                toFontVariationSettings="'wght' 1000, 'opsz' 40" 
-                containerRef={containerRef} 
-                radius={200} 
-                falloff="linear" 
+              <VariableProximity
+                label={creativeWords[creativeWordIndex]}
+                className="variable-proximity-demo"
+                fromFontVariationSettings="'wght' 400, 'opsz' 9"
+                toFontVariationSettings="'wght' 1000, 'opsz' 40"
+                containerRef={containerRef}
+                radius={200}
+                falloff="linear"
               />
             </motion.div>
           </AnimatePresence>
-        </div>
-        
-        {/* Line 2: SOFTWARE (Dynamic, Small indentation) */}
-        <div className="text-[14vw] md:text-[11vw] font-black leading-[0.8] tracking-tighter uppercase text-foreground/80 ml-[15vw] md:ml-[12vw] relative z-20 mix-blend-difference h-[1em] flex items-center" style={{ transform: `translateX(${scrollY * 0.5}px)` }}>
+        </motion.div>
+
+        {/* Line 2: SOFTWARE (Dynamic, indented) */}
+        <motion.div
+          style={{
+            x: softwareX,
+            opacity: softwareOpacity,
+            scale: softwareScale,
+            filter: shouldReduceMotion ? "none" : undefined,
+          }}
+          transition={{ type: "tween", ease: [0.16, 1, 0.3, 1] }}
+          className="text-[14vw] md:text-[11vw] font-black leading-[0.8] tracking-tighter uppercase text-foreground/80 ml-[15vw] md:ml-[12vw] relative z-20 mix-blend-difference h-[1em] flex items-center will-change-transform"
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={softwareWords[softwareWordIndex]}
-              initial={{ opacity: 0, y: 40, rotateX: -60, filter: "blur(20px)" }}
+              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 40, rotateX: -60, filter: "blur(20px)" }}
               animate={{ opacity: 1, y: 0, rotateX: 0, filter: "blur(0px)" }}
-              exit={{ opacity: 0, y: -40, rotateX: 60, filter: "blur(20px)" }}
+              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -40, rotateX: 60, filter: "blur(20px)" }}
               transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
               style={{ transformOrigin: "center center -50px", transformStyle: "preserve-3d" }}
               className="absolute left-0 whitespace-nowrap"
             >
-              <VariableProximity 
-                label={softwareWords[softwareWordIndex]} 
-                className="variable-proximity-demo" 
-                fromFontVariationSettings="'wght' 400, 'opsz' 9" 
-                toFontVariationSettings="'wght' 1000, 'opsz' 40" 
-                containerRef={containerRef} 
-                radius={200} 
-                falloff="linear" 
+              <VariableProximity
+                label={softwareWords[softwareWordIndex]}
+                className="variable-proximity-demo"
+                fromFontVariationSettings="'wght' 400, 'opsz' 9"
+                toFontVariationSettings="'wght' 1000, 'opsz' 40"
+                containerRef={containerRef}
+                radius={200}
+                falloff="linear"
               />
             </motion.div>
           </AnimatePresence>
-        </div>
+        </motion.div>
 
-        {/* Line 3: DYNAMIC WORD SET (Same indentation as CREATIVE, i.e., 0) */}
-        <div className="text-[14vw] md:text-[11vw] font-black leading-[0.8] tracking-tighter uppercase text-accent h-[1em] relative z-20 mt-2 md:mt-0 flex items-center" style={{ transform: `translateX(${-scrollY * 0.5}px)` }}>
+        {/* Line 3: DYNAMIC WORD SET */}
+        <motion.div
+          style={{
+            x: dynamicX,
+            opacity: dynamicOpacity,
+            scale: dynamicScale,
+            filter: shouldReduceMotion ? "none" : undefined,
+          }}
+          transition={{ type: "tween", ease: [0.16, 1, 0.3, 1] }}
+          className="text-[14vw] md:text-[11vw] font-black leading-[0.8] tracking-tighter uppercase text-accent h-[1em] relative z-20 mt-2 md:mt-0 flex items-center will-change-transform"
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={dynamicWords[wordIndex]}
-              // Advanced Blur + 3D Rotate reveal pattern
-              initial={{ opacity: 0, y: 40, rotateX: -60, filter: "blur(20px)" }}
+              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 40, rotateX: -60, filter: "blur(20px)" }}
               animate={{ opacity: 1, y: 0, rotateX: 0, filter: "blur(0px)" }}
-              exit={{ opacity: 0, y: -40, rotateX: 60, filter: "blur(20px)" }}
+              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -40, rotateX: 60, filter: "blur(20px)" }}
               transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
               style={{ transformOrigin: "center center -50px", transformStyle: "preserve-3d" }}
               className="absolute left-0 whitespace-nowrap"
@@ -184,84 +259,81 @@ export default function Hero() {
               {dynamicWords[wordIndex]}
             </motion.div>
           </AnimatePresence>
-        </div>
+        </motion.div>
       </div>
 
-      {/* 3. LEFT WING (Architectural Menu) */}
-      <div className="absolute left-6 md:left-12 bottom-12 md:bottom-1/4 z-40 flex flex-col gap-8 pointer-events-auto">
-        <div 
-          className="flex flex-col cursor-none"
-          onMouseEnter={() => setHoverState('projects')}
+      {/* 3. LEFT WING (Architectural Menu) - Staggered Entrance */}
+      <motion.div
+        variants={itemVariants}
+        className="absolute left-6 md:left-12 bottom-12 md:bottom-1/4 z-40 flex flex-col gap-8 pointer-events-auto"
+      >
+        <div
+          className="flex flex-col"
+          onMouseEnter={() => setHoverState("projects")}
           onMouseLeave={() => setHoverState(null)}
         >
           {["PLAN", "CODE", "DEPLOY"].map((text, i) => (
-            <div key={text} className="relative group flex items-center py-2 px-6 border-b border-l border-t border-r border-foreground/10 bg-surface/10 backdrop-blur-sm transition-all duration-500 hover:bg-surface/30">
-              {/* The "+" architectural corners */}
+            <div
+              key={text}
+              className="relative group flex items-center py-2 px-6 border-b border-l border-t border-r border-foreground/10 bg-surface/10 backdrop-blur-sm transition-all duration-500 hover:bg-surface/30"
+            >
               <span className="absolute -left-1.5 -bottom-2 text-foreground/40 font-mono text-xs">+</span>
               <span className="absolute -right-1.5 -bottom-2 text-foreground/40 font-mono text-xs">+</span>
               <span className="absolute -left-1.5 -top-2 text-foreground/40 font-mono text-xs opacity-0 group-first:opacity-100">+</span>
               <span className="absolute -right-1.5 -top-2 text-foreground/40 font-mono text-xs opacity-0 group-first:opacity-100">+</span>
-              
               <span className="text-sm md:text-base tracking-widest uppercase font-medium text-foreground/80 group-hover:text-accent transition-colors">
                 {text}
               </span>
             </div>
           ))}
         </div>
-        
-        {/* Since 2024 (Italic Signature) */}
-        <div className="text-foreground/40 text-sm italic font-serif tracking-widest pl-2">
-          Since 2024
-        </div>
-      </div>
+        <div className="text-foreground/40 text-sm italic font-serif tracking-widest pl-2">Since 2024</div>
+      </motion.div>
 
-      {/* 4. RIGHT WING (Terminal Action Links) */}
-      <div className="absolute right-6 md:right-12 bottom-12 md:bottom-1/4 z-40 pointer-events-auto flex flex-col gap-8">
-        {/* Theme Switcher Button */}
+      {/* 4. RIGHT WING (Terminal Action Links) - Staggered Entrance */}
+      <motion.div
+        variants={itemVariants}
+        className="absolute right-6 md:right-12 bottom-12 md:bottom-1/4 z-40 pointer-events-auto flex flex-col gap-8"
+      >
         <button
-          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          onMouseEnter={() => setHoverState('theme')}
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          onMouseEnter={() => setHoverState("theme")}
           onMouseLeave={() => setHoverState(null)}
-          className="group relative flex items-center justify-center p-6 cursor-none mb-[250px]"
+          className="group relative flex items-center justify-center p-6 mb-[250px] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
         >
-          {/* Natural smoke/glow hover effect behind the text */}
           <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 rounded-full blur-xl transition-all duration-700 ease-out scale-50 group-hover:scale-150" />
-          
           <span className="font-mono text-xs md:text-sm tracking-[0.3em] uppercase text-foreground relative z-10">
             [ Switch Theme ]
           </span>
-          
-          {/* Subtle line that draws through the text on hover */}
           <span className="absolute top-1/2 left-0 w-full h-[1px] bg-foreground/30 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500 z-20 pointer-events-none" />
         </button>
 
-        {/* View Portfolio Link */}
-        <Link 
-          href="https://portfolio.dariogeorge.in/" 
+        <Link
+          href="https://portfolio.dariogeorge.in/"
           target="_blank"
-          onMouseEnter={() => setHoverState('portfolio')}
+          onMouseEnter={() => setHoverState("portfolio")}
           onMouseLeave={() => setHoverState(null)}
-          className="group relative flex items-center justify-center p-6 cursor-none"
+          className="group relative flex items-center justify-center p-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
         >
-          {/* Natural smoke/glow hover effect behind the text */}
           <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 rounded-full blur-xl transition-all duration-700 ease-out scale-50 group-hover:scale-150" />
-          
           <span className="font-mono text-xs md:text-sm tracking-[0.3em] uppercase text-foreground relative z-10">
             [ View Portfolio ]
           </span>
-          
-          {/* Subtle line that draws through the text on hover */}
           <span className="absolute top-1/2 left-0 w-full h-[1px] bg-foreground/30 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500 z-20 pointer-events-none" />
         </Link>
-      </div>
+      </motion.div>
 
-      {/* 5. SOCIAL LINKS (Bottom Center Terminal Style - Full Width Spread) */}
-      <div className="absolute bottom-8 md:bottom-12 left-6 md:left-12 right-6 md:right-12 z-40 pointer-events-auto">
+      {/* 5. SOCIAL LINKS (Bottom Center Terminal Style) - Staggered Entrance */}
+      <motion.div
+        variants={itemVariants}
+        className="absolute bottom-8 md:bottom-12 left-6 md:left-12 right-6 md:right-12 z-40 pointer-events-auto"
+      >
         <div className="flex w-full justify-between gap-2 md:gap-4 items-center">
           {socialLinks.map((link, index) => {
             const isHovered = hoverState === link.label
-            const isOtherHovered = hoverState && hoverState !== link.label && socialLinks.some(l => l.label === hoverState)
-            
+            const isOtherHovered =
+              hoverState && hoverState !== link.label && socialLinks.some((l) => l.label === hoverState)
+
             return (
               <motion.a
                 key={link.label}
@@ -272,74 +344,45 @@ export default function Hero() {
                 onMouseLeave={() => setHoverState(null)}
                 animate={{
                   scale: isHovered ? 1.05 : 1,
-                  x: isOtherHovered ? (index < socialLinks.findIndex(l => l.label === hoverState) ? -8 : 8) : 0,
+                  x: isOtherHovered ? (index < socialLinks.findIndex((l) => l.label === hoverState) ? -8 : 8) : 0,
                   opacity: hoverState && !isHovered ? 0.6 : 1,
                 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
-                className="group relative px-2 md:px-3 py-1.5 md:py-2 font-mono text-[10px] md:text-xs tracking-widest uppercase text-foreground/80 cursor-none flex-1 text-center"
+                className="group relative px-2 md:px-3 py-1.5 md:py-2 font-mono text-[10px] md:text-xs tracking-widest uppercase text-foreground/80 flex-1 text-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
               >
-                {/* Architectural Corners + Lines */}
                 <div className="absolute inset-0 pointer-events-none">
-                  {/* Top-left corner */}
                   <span className="absolute -left-2 -top-2 text-foreground/30 font-mono text-xs">+</span>
-                  {/* Top-right corner */}
                   <span className="absolute -right-2 -top-2 text-foreground/30 font-mono text-xs">+</span>
-                  {/* Bottom-left corner */}
                   <span className="absolute -left-2 -bottom-2 text-foreground/30 font-mono text-xs">+</span>
-                  {/* Bottom-right corner */}
                   <span className="absolute -right-2 -bottom-2 text-foreground/30 font-mono text-xs">+</span>
-                  
-                  {/* Top and bottom lines */}
                   <motion.div
-                    animate={{
-                      opacity: isHovered ? 0.8 : 0.2,
-                      backgroundColor: isHovered ? "#a0a0a0" : "transparent"
-                    }}
+                    animate={{ opacity: isHovered ? 0.8 : 0.2, backgroundColor: isHovered ? "#a0a0a0" : "transparent" }}
                     transition={{ duration: 0.3 }}
                     className="absolute top-0 left-1 right-1 h-[1px] bg-foreground/20"
                   />
                   <motion.div
-                    animate={{
-                      opacity: isHovered ? 0.8 : 0.2,
-                      backgroundColor: isHovered ? "#a0a0a0" : "transparent"
-                    }}
+                    animate={{ opacity: isHovered ? 0.8 : 0.2, backgroundColor: isHovered ? "#a0a0a0" : "transparent" }}
                     transition={{ duration: 0.3 }}
                     className="absolute bottom-0 left-1 right-1 h-[1px] bg-foreground/20"
                   />
-                  
-                  {/* Left and right lines */}
                   <motion.div
-                    animate={{
-                      opacity: isHovered ? 0.8 : 0.2,
-                      backgroundColor: isHovered ? "#a0a0a0" : "transparent"
-                    }}
+                    animate={{ opacity: isHovered ? 0.8 : 0.2, backgroundColor: isHovered ? "#a0a0a0" : "transparent" }}
                     transition={{ duration: 0.3 }}
                     className="absolute left-0 top-1 bottom-1 w-[1px] bg-foreground/20"
                   />
                   <motion.div
-                    animate={{
-                      opacity: isHovered ? 0.8 : 0.2,
-                      backgroundColor: isHovered ? "#a0a0a0" : "transparent"
-                    }}
+                    animate={{ opacity: isHovered ? 0.8 : 0.2, backgroundColor: isHovered ? "#a0a0a0" : "transparent" }}
                     transition={{ duration: 0.3 }}
                     className="absolute right-0 top-1 bottom-1 w-[1px] bg-foreground/20"
                   />
-                  
-                  {/* Hover background */}
                   <motion.div
-                    animate={{
-                      opacity: isHovered ? 0.15 : 0,
-                    }}
+                    animate={{ opacity: isHovered ? 0.15 : 0 }}
                     transition={{ duration: 0.3 }}
                     className="absolute inset-0 bg-white/5 rounded-sm"
                   />
                 </div>
-
-                {/* Link Content */}
                 <motion.div
-                  animate={{
-                    color: isHovered ? "#a0a0a0" : "inherit"
-                  }}
+                  animate={{ color: isHovered ? "#a0a0a0" : "inherit" }}
                   transition={{ duration: 0.3 }}
                   className="relative z-10"
                 >
@@ -349,29 +392,36 @@ export default function Hero() {
             )
           })}
         </div>
-      </div>
+      </motion.div>
 
-      {/* CUSTOM HARDWARE ACCELERATED GLASS CURSOR */}
+      {/* 6. CUSTOM HARDWARE ACCELERATED GLASS CURSOR (spring-driven, appears only when mouse is inside window) */}
       <AnimatePresence>
-        {hoverState && (
+        {isMouseInside && hoverState && (
           <motion.div
             initial={{ scale: 0.5, opacity: 0, filter: "blur(10px)" }}
             animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
             exit={{ scale: 0.5, opacity: 0, filter: "blur(10px)" }}
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
-            className="fixed top-0 left-0 pointer-events-none z-[100] flex items-center justify-center"
-            style={{ 
-              x: mousePos.x + 20, 
-              y: mousePos.y + 20,
+            className="fixed top-0 left-0 pointer-events-none z-[100] flex items-center justify-center will-change-transform"
+            style={{
+              x: smoothCursorX,
+              y: smoothCursorY,
+              translateX: 20,
+              translateY: 20,
             }}
           >
             <div className="bg-surface/80 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.3)] text-foreground px-4 py-2 rounded-sm whitespace-nowrap overflow-hidden">
               <span className="font-mono text-xs tracking-widest uppercase font-medium">
-                {hoverState === 'portfolio' ? 'VISIT PORTFOLIO' : hoverState === 'projects' ? 'SHOW PROJECTS' : hoverState === 'theme' ? 'TOGGLE THEME' : `CONNECT VIA ${hoverState}`}
+                {hoverState === "portfolio"
+                  ? "VISIT PORTFOLIO"
+                  : hoverState === "projects"
+                    ? "SHOW PROJECTS"
+                    : hoverState === "theme"
+                      ? "TOGGLE THEME"
+                      : `CONNECT VIA ${hoverState}`}
               </span>
-              {/* Internal sweeping light effect */}
-              <motion.div 
-                animate={{ x: ["-100%", "200%"] }} 
+              <motion.div
+                animate={{ x: ["-100%", "200%"] }}
                 transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
                 className="absolute top-0 bottom-0 w-8 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-20deg]"
               />
@@ -379,7 +429,6 @@ export default function Hero() {
           </motion.div>
         )}
       </AnimatePresence>
-
-    </section>
+    </motion.section>
   )
 }
