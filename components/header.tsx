@@ -47,7 +47,9 @@ export default function Header() {
   }
 
   const copyEmail = () => {
-    navigator.clipboard.writeText("edu.dariogeorge21@gmail.com")
+    // navigator.clipboard.writeText("contact@dariogeorge.in")
+    //open the email client with a mailto link (optional)
+    window.location.href = "mailto:edu.dariogeorge21@gmail.com";
     // Optionally trigger a toast notification here
   }
 
@@ -84,78 +86,26 @@ export default function Header() {
         </div>
 
         {/* CENTER: Name with Shuffle Component */}
-        <div className="pointer-events-auto font-sans font-medium tracking-tight text-xl hidden md:block">
+        <div className="pointer-events-auto font-sans tracking-tight text-xl hidden md:block font-medium" style={{ fontFamily: "var(--font-agbalumo)" }}>
           <Shuffle 
             text="Dario George"  
             shuffleDirection="right"  
-            duration={0.35}  
+            duration={5.95}  
             animationMode="evenodd"  
             shuffleTimes={1}  
             ease="power3.out"  
             stagger={0.03}  
-            threshold={0.1}  
+            threshold={0.4}  
             triggerOnce={true}  
             triggerOnHover  
             respectReducedMotion={true}  
             loop={false}  
-            loopDelay={0}
+            loopDelay={4}
           />
         </div>
 
         {/* RIGHT: Theme Toggle + Connect Now Link */}
         <div className="pointer-events-auto flex items-center gap-4 md:gap-6">
-          {/* Theme Toggle Button */}
-          {mounted && (
-            <motion.button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="group relative p-3 rounded-lg bg-white/5 backdrop-blur-md border border-white/10 hover:border-white/30 transition-all duration-300 flex items-center justify-center"
-              title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
-            >
-              {/* Animated Background Glow on Hover */}
-              <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-accent/0 via-accent/10 to-accent/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-              
-              {/* Sun/Moon Icon with Morph Animation */}
-              <AnimatePresence mode="wait">
-                {theme === "dark" ? (
-                  <motion.div
-                    key="moon"
-                    initial={{ rotate: -180, opacity: 0, scale: 0.5 }}
-                    animate={{ rotate: 0, opacity: 1, scale: 1 }}
-                    exit={{ rotate: 180, opacity: 0, scale: 0.5 }}
-                    transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
-                    className="relative z-10"
-                  >
-                    <Moon size={18} className="text-accent" strokeWidth={1.5} />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="sun"
-                    initial={{ rotate: 180, opacity: 0, scale: 0.5 }}
-                    animate={{ rotate: 0, opacity: 1, scale: 1 }}
-                    exit={{ rotate: -180, opacity: 0, scale: 0.5 }}
-                    transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
-                    className="relative z-10"
-                  >
-                    <Sun size={18} className="text-accent" strokeWidth={1.5} />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {/* Tooltip */}
-              <motion.span
-                initial={{ opacity: 0, y: -8 }}
-                whileHover={{ opacity: 1, y: -32 }}
-                transition={{ duration: 0.2 }}
-                className="absolute -top-8 left-1/2 -translate-x-1/2 px-3 py-1 bg-foreground text-background text-xs font-medium tracking-widest uppercase rounded-sm whitespace-nowrap pointer-events-none z-20"
-              >
-                {theme === "dark" ? "Light" : "Dark"}
-              </motion.span>
-            </motion.button>
-          )}
-
           <Magnetic>
             <Link 
               href="#contact" 
@@ -231,6 +181,60 @@ export default function Header() {
                   </motion.div>
                 </div>
               ))}
+
+              {/* Theme Toggle on Right Side */}
+              <div className="absolute right-8 md:right-24 top-1/2 -translate-y-1/2 pointer-events-auto">
+                {mounted && (
+                  <motion.button
+                    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                    whileHover={{ scale: 1.15 }}
+                    whileTap={{ scale: 0.9 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    className="group relative p-4 rounded-lg backdrop-blur-md transition-all duration-300 flex items-center justify-center"
+                    title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+                  >
+                    {/* Animated Background Glow on Hover */}
+                    <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-accent/0 via-accent/20 to-accent/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                    
+                    {/* Sun/Moon Icon with Morph Animation */}
+                    <AnimatePresence mode="wait">
+                      {theme === "dark" ? (
+                        <motion.div
+                          key="moon-sidebar"
+                          initial={{ rotate: -180, opacity: 0, scale: 0.5 }}
+                          animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                          exit={{ rotate: 180, opacity: 0, scale: 0.5 }}
+                          transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
+                          className="relative z-10"
+                        >
+                          <Moon size={48} className="text-accent" strokeWidth={1.5} />
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="sun-sidebar"
+                          initial={{ rotate: 180, opacity: 0, scale: 0.5 }}
+                          animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                          exit={{ rotate: -180, opacity: 0, scale: 0.5 }}
+                          transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
+                          className="relative z-10"
+                        >
+                          <Sun size={48} className="text-accent" strokeWidth={1.5} />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Tooltip */}
+                    <motion.span
+                      initial={{ opacity: 0, x: 8 }}
+                      whileHover={{ opacity: 1, x: -32 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute left-full -ml-2 top-1/2 -translate-y-1/2 px-3 py-1 bg-foreground text-background text-xs font-medium tracking-widest uppercase rounded-sm whitespace-nowrap pointer-events-none z-20"
+                    >
+                      {theme === "dark" ? "Light" : "Dark"}
+                    </motion.span>
+                  </motion.button>
+                )}
+              </div>
             </nav>
 
             {/* Bottom Email Section */}
@@ -238,7 +242,7 @@ export default function Header() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8, duration: 1 }}
-              className="absolute bottom-10 left-8 md:left-24 font-sans text-center"
+              className="absolute bottom-10 left-1/2 -translate-x-1/2 font-sans text-center"
             >
               <div 
                 className="text-lg md:text-2xl font-medium tracking-tight cursor-none text-center hover:text-accent transition-colors"
@@ -246,7 +250,7 @@ export default function Header() {
                 onMouseLeave={() => setIsEmailHovered(false)}
                 onClick={copyEmail}
               >
-                edu.dariogeorge21@gmail.com
+                contact@dariogeorge.in
               </div>
             </motion.div>
 
@@ -261,7 +265,7 @@ export default function Header() {
                   className="fixed pointer-events-none z-[80] bg-foreground text-background px-4 py-2 rounded-full text-xs font-medium tracking-wide whitespace-nowrap shadow-xl"
                   style={{ left: mousePos.x + 20, top: mousePos.y + 20 }} // Offset slightly from pointer
                 >
-                  Copy to Clipboard
+                  Click to Mail
                 </motion.div>
               )}
             </AnimatePresence>
