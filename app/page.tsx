@@ -9,7 +9,7 @@ export default function Home() {
     <div className="flex flex-col gap-24 md:gap-32">
       <Hero />
       <Bio />
-      <FeaturedWork />
+      {/* <FeaturedWork /> */}
       <TechStack />
       <Contact />
 
