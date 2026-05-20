@@ -18,6 +18,28 @@ export default function Header() {
   const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
 
+  const scrollToHash = (hash: string) => {
+    if (typeof window === "undefined") return
+    if (!hash.startsWith("#")) return
+
+    const id = hash.slice(1)
+    if (!id) return
+
+    const element = document.getElementById(id)
+    if (!element) return
+
+    element.scrollIntoView({ behavior: "smooth", block: "start" })
+    window.history.pushState(null, "", hash)
+  }
+
+  const handleNavClick = (href: string, closeSidebar?: boolean) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!href.startsWith("#")) return
+
+    e.preventDefault()
+    if (closeSidebar) setIsSidebarOpen(false)
+    window.setTimeout(() => scrollToHash(href), closeSidebar ? 50 : 0)
+  }
+
   // Global mouse tracker for the whole-nav parallax and the email custom cursor
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -96,7 +118,7 @@ export default function Header() {
             ease="power3.out"  
             stagger={0.03}  
             threshold={0.4}  
-            triggerOnce={true}  
+            triggerOnce={true}
             triggerOnHover  
             respectReducedMotion={true}  
             loop={false}  
@@ -109,6 +131,7 @@ export default function Header() {
           <Magnetic>
             <Link 
               href="#contact" 
+              onClick={handleNavClick("#contact")}
               className="group relative px-4 py-2 font-sans font-medium text-sm tracking-wide text-foreground"
             >
               Connect Now
@@ -143,11 +166,16 @@ export default function Header() {
 
             {/* Navigation Items */}
             <nav className="flex flex-col gap-8 w-full max-w-4xl mt-12">
-              {['HOME', 'WORK', 'ABOUT', 'CONTACT'].map((item, index) => (
+              {[
+                { label: "HOME", href: "#home" },
+                { label: "ABOUT", href: "#about" },
+                { label: "SERVICES", href: "#services" },
+                { label: "CONTACT", href: "#contact" },
+              ].map((item, index) => (
                 <div 
-                  key={item} 
+                  key={item.label} 
                   className="relative border-b border-foreground/20 pb-4 group w-full text-center"
-                  onMouseEnter={() => setHoveredNavItem(item)}
+                  onMouseEnter={() => setHoveredNavItem(item.label)}
                   onMouseLeave={() => setHoveredNavItem(null)}
                 >
                   {/* The '+' Corners */}
@@ -158,8 +186,8 @@ export default function Header() {
                   <motion.div
                     initial={{ scaleX: 0, opacity: 0 }}
                     animate={{ 
-                      scaleX: hoveredNavItem === item ? 1 : 0, 
-                      opacity: hoveredNavItem === item ? 1 : 0 
+                      scaleX: hoveredNavItem === item.label ? 1 : 0, 
+                      opacity: hoveredNavItem === item.label ? 1 : 0 
                     }}
                     transition={{ duration: 0.4, ease: "easeOut" }}
                     className="absolute inset-0 -mx-4 md:-mx-8 bg-white/10 backdrop-blur-sm rounded-lg origin-center z-0"
@@ -172,11 +200,11 @@ export default function Header() {
                     className="relative z-10"
                   >
                     <Link 
-                      href={item === 'Home' ? '/' : `#${item.toLowerCase()}`}
-                      onClick={() => setIsSidebarOpen(false)}
+                      href={item.href}
+                      onClick={handleNavClick(item.href, true)}
                       className="text-5xl md:text-8xl font-sans font-medium tracking-tighter hover:text-accent transition-colors duration-500"
                     >
-                      {item}
+                      {item.label}
                     </Link>
                   </motion.div>
                 </div>
