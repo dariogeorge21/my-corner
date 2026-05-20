@@ -122,6 +122,7 @@ export default function Hero() {
 
   return (
     <motion.section
+      id="home"
       ref={containerRef}
       variants={containerVariants}
       initial="hidden"
