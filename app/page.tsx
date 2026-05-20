@@ -3,13 +3,14 @@ import Bio from "@/components/bio"
 import FeaturedWork from "@/components/featured-work"
 import TechStack from "@/components/tech-stack"
 import Contact from "@/components/contact"
+import Services from "@/components/services"
 
 export default function Home() {
   return (
     <div className="flex flex-col gap-24 md:gap-32">
       <Hero />
       <Bio />
-      {/* <FeaturedWork /> */}
+      <Services />
       <TechStack />
       <Contact />
 
