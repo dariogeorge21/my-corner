@@ -42,7 +42,7 @@ export default function Hero() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCreativeWordIndex((prev) => (prev + 1) % creativeWords.length)
-    }, 3000)
+    }, 4000)
     return () => clearInterval(interval)
   }, [])
 
@@ -50,7 +50,7 @@ export default function Hero() {
   useEffect(() => {
     const interval = setInterval(() => {
       setSoftwareWordIndex((prev) => (prev + 1) % softwareWords.length)
-    }, 8000)
+    }, 12000)
     return () => clearInterval(interval)
   }, [])
 
