@@ -13,13 +13,14 @@ const ContactFormSchema = z.object({
 type ContactFormData = z.infer<typeof ContactFormSchema>
 
 /**
+ * 
  * Generate WhatsApp message and redirect URL
  * Phone number should be in format: +1234567890 (country code + number without +)
  */
 function generateWhatsAppLink(formData: ContactFormData): string {
   const whatsappNumber = "7560977040" // WhatsApp number without +
   const message = encodeURIComponent(
-    `Hello! 👋\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nSubject: ${formData.subject}\n\nMessage: ${formData.description}`
+    `🙋 *Hey, I'm ${formData.name}!*\n\n📧 *Email:* ${formData.email}\n\n💬 *Subject:* ${formData.subject}\n\n📄 *Details:*\n${formData.description}\n\n`
   )
   return `https://wa.me/${whatsappNumber}?text=${message}`
 }
