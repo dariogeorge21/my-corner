@@ -1,8 +1,7 @@
 "use client"
 
 import { ReactLenis } from 'lenis/react'
-import { ThemeProvider as NextThemesProvider } from "next-themes"
-import { type ThemeProviderProps } from "next-themes/dist/types"
+import { ThemeProvider as NextThemesProvider, type ThemeProviderProps } from "next-themes"
 
 export function Providers({ children, ...props }: ThemeProviderProps) {
   return (

@@ -29,7 +29,7 @@ const containerVariants = {
       delayChildren: 0.3,
     },
   },
-}
+} as const
 
 const itemVariants = {
   hidden: { opacity: 0, y: 30, filter: "blur(10px)" },
@@ -39,7 +39,7 @@ const itemVariants = {
     filter: "blur(0px)",
     transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
   },
-}
+} as const
 
 export default function Hero() {
   const { theme, setTheme } = useTheme()
@@ -47,6 +47,7 @@ export default function Hero() {
   const [creativeWordIndex, setCreativeWordIndex] = useState(0)
   const [softwareWordIndex, setSoftwareWordIndex] = useState(0)
   const [hoverState, setHoverState] = useState<string | null>(null)
+  const [isMouseInside, setIsMouseInside] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
   const shouldReduceMotion = useReducedMotion()
@@ -76,8 +77,6 @@ export default function Hero() {
   const gridParallaxY = useTransform(mouseY, [-300, 300], [10, -10])
 
   // Cursor appearance/disappearance on window enter/leave
-  const [isMouseInside, setIsMouseInside] = useState(false)
-
   // --- Word cycling intervals (unchanged, but performant) ---
   useEffect(() => {
     const interval = setInterval(() => {
@@ -352,7 +351,7 @@ export default function Hero() {
                   x: isOtherHovered ? (index < socialLinks.findIndex((l) => l.label === hoverState) ? -8 : 8) : 0,
                   opacity: hoverState && !isHovered ? 0.6 : 1,
                 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
+                transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="group relative px-2 md:px-3 py-1.5 md:py-2 font-mono text-[10px] md:text-xs tracking-widest uppercase text-foreground/80 flex-1 text-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
               >
                 <div className="absolute inset-0 pointer-events-none">
@@ -427,7 +426,7 @@ export default function Hero() {
               </span>
               <motion.div
                 animate={{ x: ["-100%", "200%"] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: [0.0, 0.0, 1.0, 1.0] }}
                 className="absolute top-0 bottom-0 w-8 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-20deg]"
               />
             </div>

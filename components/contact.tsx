@@ -261,27 +261,27 @@ export default function Contact() {
       opacity: 1,
       transition: { staggerChildren: 0.2, delayChildren: 0.1 },
     },
-  }
+  } as const
 
   const leftColumnVariants = {
     hidden: { opacity: 0, x: -40 },
     visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
-  }
+  } as const
 
   const rightColumnVariants = {
     hidden: { opacity: 0, x: 40 },
     visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 } },
-  }
+  } as const
 
   const wordVariants = {
     hidden: { opacity: 0, y: 30, clipPath: "inset(0 0 100% 0)" },
     visible: { opacity: 1, y: 0, clipPath: "inset(0 0 0% 0)", transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
-  }
+  } as const
 
   const socialCardVariants = {
     hidden: { opacity: 0, scale: 0.8, rotateX: 15 },
     visible: { opacity: 1, scale: 1, rotateX: 0, transition: { type: "spring", stiffness: 300, damping: 20 } },
-  }
+  } as const
 
   return (
     <motion.section

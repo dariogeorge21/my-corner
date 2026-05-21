@@ -13,7 +13,7 @@ const containerVariants = {
     opacity: 1,
     transition: { staggerChildren: 0.2, delayChildren: 0.1 },
   },
-}
+} as const
 
 const titleVariants = {
   hidden: { opacity: 0, y: 80, rotateX: -45, filter: "blur(12px)" },
@@ -24,16 +24,16 @@ const titleVariants = {
     filter: "blur(0px)",
     transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] },
   },
-}
+} as const
 
 const subtitleVariants = {
   hidden: { opacity: 0, x: -20 },
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: 0.8, ease: "easeOut", delay: 0.4 },
+    transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.4 },
   },
-}
+} as const
 
 const cardVariants = {
   hidden: { opacity: 0, y: 60, scale: 0.95, filter: "blur(8px)" },
@@ -44,7 +44,7 @@ const cardVariants = {
     filter: "blur(0px)",
     transition: { duration: 1, ease: [0.16, 1, 0.3, 1] },
   },
-}
+} as const
 
 const textStaggerVariants = {
   hidden: { opacity: 0 },
@@ -52,12 +52,12 @@ const textStaggerVariants = {
     opacity: 1,
     transition: { staggerChildren: 0.1, delayChildren: 0.2 },
   },
-}
+} as const
 
 const textItemVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-}
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } },
+} as const
 
 export default function Bio() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -141,7 +141,7 @@ export default function Bio() {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={isInView}
-        transition={{ duration: 1.5, ease: "easeOut" }}
+        transition={{ duration: 1.5, ease: [0.25, 0.46, 0.45, 0.94] }}
         className="absolute inset-0 bg-[size:4rem_4rem] z-0 [mask-image:radial-gradient(ellipse_60%_100%_at_50%_50%,#000_10%,transparent_100%)] pointer-events-none"
         style={{
           backgroundImage: mounted
@@ -190,9 +190,8 @@ export default function Bio() {
             {/* Animated Scroll Indicator (now linked to scroll progress) */}
             <div className="w-[2px] h-32 bg-foreground/10 rounded-full overflow-hidden hidden lg:block relative">
               <motion.div
-                style={{ height: indicatorHeight }}
+                style={{ height: indicatorHeight, backgroundColor: themeColors.scrollIndicatorFill }}
                 className="absolute bottom-0 left-0 w-full rounded-full"
-                style={{ backgroundColor: themeColors.scrollIndicatorFill }}
               />
             </div>
           </div>

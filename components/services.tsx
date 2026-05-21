@@ -69,7 +69,7 @@ const ServiceRow = ({ service, index, isActive, onHover, onFocus }: ServiceRowPr
   const rowVariants = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: index * 0.05 } },
-  }
+  } as const
 
   return (
     <motion.div
@@ -139,7 +139,7 @@ const ServiceRow = ({ service, index, isActive, onHover, onFocus }: ServiceRowPr
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
+            transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="md:hidden overflow-hidden px-4 pb-6"
           >
             <p className="text-foreground/70 text-sm leading-relaxed mb-4">{service.details}</p>
@@ -206,10 +206,13 @@ const FloatingPortal = ({ activeService, mouseX, mouseY }: FloatingPortalProps) 
   const relativeX = useTransform(mouseX, [0, windowSize.width], [8, -8])
   const relativeY = useTransform(mouseY, [0, windowSize.height], [8, -8])
 
-  const finalRotateY = useSpring(shouldReduceMotion ? 0 : tiltX, { stiffness: 300, damping: 20 })
-  const finalRotateX = useSpring(shouldReduceMotion ? 0 : tiltY, { stiffness: 300, damping: 20 })
-  const backgroundRotateY = useSpring(shouldReduceMotion ? 0 : relativeX, { stiffness: 200, damping: 25 })
-  const backgroundRotateX = useSpring(shouldReduceMotion ? 0 : relativeY, { stiffness: 200, damping: 25 })
+  // Use MotionValue for reduced motion case to maintain type consistency
+  const zeroRotation = useMotionValue(0)
+  
+  const finalRotateY = useSpring(shouldReduceMotion ? zeroRotation : tiltX, { stiffness: 300, damping: 20 })
+  const finalRotateX = useSpring(shouldReduceMotion ? zeroRotation : tiltY, { stiffness: 300, damping: 20 })
+  const backgroundRotateY = useSpring(shouldReduceMotion ? zeroRotation : relativeX, { stiffness: 200, damping: 25 })
+  const backgroundRotateX = useSpring(shouldReduceMotion ? zeroRotation : relativeY, { stiffness: 200, damping: 25 })
 
   if (!activeService) return null
 
@@ -279,12 +282,12 @@ export default function Services() {
   const leftVariants = {
     hidden: { opacity: 0, x: -30 },
     visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
-  }
+  } as const
 
   const rightVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
-  }
+  } as const
 
   return (
     <section
