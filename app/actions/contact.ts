@@ -8,41 +8,9 @@ const ContactFormSchema = z.object({
   email: z.string().email(),
   subject: z.string().min(4).max(30),
   description: z.string().min(10).max(100),
-  turnstileToken: z.string().min(1, "Turnstile verification required"),
 })
 
 type ContactFormData = z.infer<typeof ContactFormSchema>
-
-/**
- * Verify Turnstile token with Cloudflare
- */
-async function verifyTurnstile(token: string): Promise<boolean> {
-  const secretKey = process.env.TURNSTILE_SECRET_KEY
-
-  if (!secretKey) {
-    console.error("Turnstile secret key not configured")
-    return false
-  }
-
-  try {
-    const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        secret: secretKey,
-        response: token,
-      }),
-    })
-
-    const data = await response.json()
-    return data.success === true && data.error_codes?.length === 0
-  } catch (error) {
-    console.error("Turnstile verification failed:", error)
-    return false
-  }
-}
 
 /**
  * Generate WhatsApp message and redirect URL
@@ -60,20 +28,11 @@ function generateWhatsAppLink(formData: ContactFormData): string {
  * Main contact submission handler
  */
 export async function submitContact(
-  formData: ContactFormData & { turnstileToken: string }
+  formData: ContactFormData
 ): Promise<{ ok: boolean; error?: string; whatsappUrl?: string }> {
   try {
     // Validate form data
     const validatedData = ContactFormSchema.parse(formData)
-
-    // Verify Turnstile token
-    const isValidTurnstile = await verifyTurnstile(validatedData.turnstileToken)
-    if (!isValidTurnstile) {
-      return {
-        ok: false,
-        error: "Verification failed. Please try again.",
-      }
-    }
 
     // Generate WhatsApp link
     const whatsappLink = generateWhatsAppLink(validatedData)
