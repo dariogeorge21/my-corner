@@ -48,6 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${jetbrainsMono.variable} ${agbalumo.variable} ${funnelDisplay.variable} ${lobster.variable} ${googleSansFlex.variable}`}>
       <head>
+      <meta name="apple-mobile-web-app-title" content="Dario" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
