@@ -6,10 +6,8 @@ const nextConfig: NextConfig = {
       test: /\.(glb|gltf)$/,
       type: "asset/resource",
     });
-    config.module.rules.push({
-      test: /\.(png|jpg|jpeg|gif)$/,
-      type: "asset/resource",
-    });
+    // Removed the custom rule for (png|jpg|jpeg|gif) 
+    // Next.js handles images automatically, and overriding it breaks metadata icons
     return config;
   },
 };
