@@ -22,6 +22,15 @@ export const metadata: Metadata = {
   }
 };
 
+// Explicit viewport meta for correct mobile scaling
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5, // Allow user zoom for accessibility
+  viewportFit: "cover", // Handles iPhone notch/safe areas
+};
+
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   // JSON-LD Structured Data for Local/Professional Service SEO
   const jsonLd = {

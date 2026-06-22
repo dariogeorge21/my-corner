@@ -29,6 +29,7 @@
   body {
     @apply bg-background text-foreground antialiased selection:bg-accent selection:text-white;
     font-feature-settings: "rlig" 1, "calt" 1;
+    touch-action: manipulation; /* Eliminates 300ms tap delay on mobile */
   }
 }
 
@@ -59,4 +60,57 @@ html.lenis {
   filter: blur(100px);
   z-index: -1;
   pointer-events: none;
+}
+
+/* =========================================================
+   TOUCH / POINTER: Disable custom cursor styles on touch devices.
+   cursor-none is only meaningful on pointer:fine (mouse) devices.
+   ========================================================= */
+@media (pointer: coarse) {
+  .cursor-none {
+    cursor: auto !important;
+  }
+}
+
+/* =========================================================
+   GLASS-CARD SOCIAL LINKS — Mobile flat layout override
+   The 3D skew effect (rotate/skew) is desktop-only.
+   On mobile (<768px) cards become flat, full-width rows.
+   ========================================================= */
+@media (max-width: 767px) {
+  .glass-card {
+    transform: none !important;
+    width: 100% !important;
+    height: 64px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+    border-radius: 8px;
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    display: flex !important;
+    align-items: center;
+    padding-left: 16px !important;
+    gap: 12px;
+    margin-bottom: 8px;
+    transition: background 0.3s, box-shadow 0.3s;
+  }
+  .glass-card::before,
+  .glass-card::after {
+    display: none !important;
+  }
+  .glass-card:hover {
+    transform: none !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+  }
+  .glass-card-icon {
+    font-size: 28px !important;
+    padding-top: 0 !important;
+    line-height: 1 !important;
+    padding-right: 0 !important;
+  }
+  .glass-card-name {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    font-size: 16px !important;
+    letter-spacing: 2px !important;
+  }
 }

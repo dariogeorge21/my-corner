@@ -133,7 +133,7 @@ export default function Bio() {
       initial="hidden"
       whileInView="visible"
       viewport={isInView}
-      className="py-24 md:py-32 px-6 md:px-12 max-w-[1800px] w-full mx-auto relative overflow-hidden"
+      className="py-14 md:py-24 xl:py-32 px-6 md:px-12 max-w-[1800px] w-full mx-auto relative overflow-hidden"
       style={{ fontFamily: "var(--font-google-sans-flex)" }}
     >
       {/* Architectural Background Grid - Theme Aware with fade-in */}
@@ -221,7 +221,7 @@ export default function Bio() {
               animated={true}
               colors={mounted ? themeColors.palette : ["#E4D6A9", "#995F2F", "#622B14"]}
             >
-              <article className="p-8 md:p-14 relative backdrop-blur-[12px] h-full rounded-[28px] shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),0_10px_40px_rgba(0,0,0,0.3)] overflow-hidden">
+              <article className="p-5 sm:p-8 md:p-14 relative backdrop-blur-[12px] h-full rounded-[28px] shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),0_10px_40px_rgba(0,0,0,0.3)] overflow-hidden">
                 {/* Background topographic/data texture */}
                 <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_center,var(--accent)_1px,transparent_1px)] bg-[length:16px_16px]" />
 
@@ -240,7 +240,7 @@ export default function Bio() {
                     initial="hidden"
                     whileInView="visible"
                     viewport={isInView}
-                    className="space-y-5 text-foreground/80 text-lg md:text-xl leading-relaxed font-light text-right"
+                    className="space-y-5 text-foreground/80 text-base md:text-xl leading-relaxed font-light text-left sm:text-right"
                   >
                     <motion.p variants={textItemVariants}>
                       I am an enthusiastic developer who thrives on building practical,

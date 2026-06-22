@@ -97,7 +97,7 @@ const ServiceRow = ({ service, index, isActive, onHover, onFocus }: ServiceRowPr
           </span>
           <div>
             <h3
-              className={`text-3xl md:text-5xl font-bold tracking-tight transition-colors duration-300 ${
+              className={`text-xl sm:text-2xl md:text-5xl font-bold tracking-tight transition-colors duration-300 ${
                 isActive ? "text-foreground" : "text-foreground/40 group-hover:text-foreground/80"
               }`}
             >
@@ -293,7 +293,7 @@ export default function Services() {
     <section
       ref={sectionRef}
       id="services"
-      className="relative py-32 px-6 md:px-12 max-w-[1800px] mx-auto w-full overflow-hidden"
+      className="relative py-16 sm:py-24 md:py-32 px-6 md:px-12 max-w-[1800px] mx-auto w-full overflow-hidden"
       style={{ fontFamily: "var(--font-google-sans-flex)" }}
       onMouseEnter={handleMouseEnterSection}
       onMouseLeave={handleMouseLeaveSection}
@@ -316,7 +316,7 @@ export default function Services() {
               [ CAPABILITIES ]
             </span>
           </div>
-          <h2 className="text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[1.1] text-foreground">
+          <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[1.1] text-foreground">
             What I<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-foreground/80 to-muted">deliver</span>
           </h2>

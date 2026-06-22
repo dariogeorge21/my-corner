@@ -173,7 +173,7 @@ export default function Footer() {
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
       variants={containerVariants}
-      className="relative w-full max-w-none overflow-x-clip overflow-y-hidden bg-background pt-32 pb-8 border-t border-foreground/10 box-border"
+      className="relative w-full max-w-none overflow-x-clip overflow-y-hidden bg-background pt-16 sm:pt-24 md:pt-32 pb-8 border-t border-foreground/10 box-border"
       style={{ fontFamily: "var(--font-google-sans-flex), sans-serif" }}
     >
       {/* Architectural '+' marks with entrance spin */}

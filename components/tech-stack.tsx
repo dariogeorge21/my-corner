@@ -66,10 +66,21 @@ const techLogos = [
 
 export default function TechStack() {
   const [isHovered, setIsHovered] = useState(false);
+  const [logoHeight, setLogoHeight] = useState(60);
   const textContainerRef = useRef<HTMLDivElement>(null);
   const textContentRef = useRef<HTMLDivElement>(null);
   const [contentWidth, setContentWidth] = useState(0);
   const shouldReduceMotion = useReducedMotion();
+
+  // Responsive logo height based on viewport width
+  useEffect(() => {
+    const updateLogoHeight = () => {
+      setLogoHeight(window.innerWidth < 640 ? 36 : window.innerWidth < 768 ? 46 : 60);
+    };
+    updateLogoHeight();
+    window.addEventListener('resize', updateLogoHeight);
+    return () => window.removeEventListener('resize', updateLogoHeight);
+  }, []);
 
   // Scroll velocity tracking
   const { scrollY } = useScroll();
@@ -142,13 +153,13 @@ export default function TechStack() {
       className="w-full flex flex-col perspective-container"
       style={{ perspective: shouldReduceMotion ? 'none' : '1000px' }}
     >
-      {/* Logo Loop Section */}
-      <div style={{ height: '200px', position: 'relative', overflow: 'hidden' }}>
+      {/* Logo Loop Section — responsive height */}
+      <div className="h-[120px] sm:h-[160px] md:h-[200px] relative overflow-hidden">
         <LogoLoop
           logos={techLogos}
           speed={200}
           direction="left"
-          logoHeight={60}
+          logoHeight={logoHeight}
           gap={60}
           hoverSpeed={20}
           scaleOnHover
@@ -194,7 +205,7 @@ export default function TechStack() {
               >
                 <span
                   className={`
-                    font-mono text-5xl md:text-4xl tracking-[0.2em] uppercase font-medium 
+                    font-mono text-xl sm:text-2xl md:text-4xl tracking-[0.2em] uppercase font-medium 
                     transition-all duration-300
                     ${isHovered ? 'text-accent' : 'text-foreground/40'}
                     ${isHovered ? 'drop-shadow-[0_0_8px_rgba(var(--accent-rgb),0.5)]' : ''}

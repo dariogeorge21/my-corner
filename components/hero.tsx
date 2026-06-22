@@ -126,6 +126,7 @@ export default function Hero() {
       variants={containerVariants}
       initial="hidden"
       animate="show"
+      // cursor-none only applies on pointer:fine via globals.css @media override
       className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-background select-none cursor-none"
       style={{ fontFamily: "var(--font-google-sans-flex), sans-serif" }}
     >
@@ -166,7 +167,7 @@ export default function Hero() {
       </motion.div>
 
       {/* 2. CENTER TYPOGRAPHY (Massive Spatial Impact with scroll-driven transforms) */}
-      <h1 className="relative z-30 flex flex-col items-start w-full max-w-[90vw] md:max-w-[80vw] 2xl:max-w-[1400px]">
+      <h1 className="relative z-30 flex flex-col items-start w-full max-w-[90vw] md:max-w-[80vw] 2xl:max-w-[1400px] overflow-hidden">
         
         {/* Visually Hidden SEO Anchor */}
         <span className="sr-only">Dario George - Expert Website Developer, Software Architect, and Hardware Support in Delhi and Kerala, India.</span>
@@ -266,10 +267,10 @@ export default function Hero() {
         </motion.div>
       </h1>
 
-      {/* 3. LEFT WING (Architectural Menu) - Staggered Entrance */}
+      {/* 3. LEFT WING (Architectural Menu) - Hidden on mobile, shown md+ */}
       <motion.div
         variants={itemVariants}
-        className="absolute left-6 md:left-12 bottom-12 md:bottom-1/4 z-40 flex flex-col gap-8 pointer-events-auto"
+        className="hidden md:flex md:absolute left-6 md:left-12 bottom-12 md:bottom-1/4 z-40 flex-col gap-8 pointer-events-auto"
       >
         <div
           className="flex flex-col"
@@ -294,16 +295,16 @@ export default function Hero() {
         <div className="text-foreground/40 text-sm italic font-serif tracking-widest pl-2">Since 2024</div>
       </motion.div>
 
-      {/* 4. RIGHT WING (Terminal Action Links) - Staggered Entrance */}
+      {/* 4. RIGHT WING (Terminal Action Links) - Hidden on mobile, shown md+ */}
       <motion.div
         variants={itemVariants}
-        className="absolute right-6 md:right-12 bottom-12 md:bottom-1/4 z-40 pointer-events-auto flex flex-col gap-8"
+        className="hidden md:flex md:absolute right-6 md:right-12 bottom-12 md:bottom-1/4 z-40 pointer-events-auto flex-col gap-8"
       >
         <button
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           onMouseEnter={() => setHoverState("theme")}
           onMouseLeave={() => setHoverState(null)}
-          className="group relative flex items-center justify-center p-6 mb-[250px] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
+          className="group relative flex items-center justify-center p-6 md:mb-[250px] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
         >
           <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 rounded-full blur-xl transition-all duration-700 ease-out scale-50 group-hover:scale-150" />
           <span className="font-mono text-xs md:text-sm tracking-[0.3em] uppercase text-foreground relative z-10">
@@ -330,9 +331,9 @@ export default function Hero() {
       {/* 5. SOCIAL LINKS (Bottom Center Terminal Style) - Staggered Entrance */}
       <motion.div
         variants={itemVariants}
-        className="absolute bottom-8 md:bottom-12 left-6 md:left-12 right-6 md:right-12 z-40 pointer-events-auto"
+        className="absolute bottom-4 sm:bottom-8 md:bottom-12 left-3 sm:left-6 md:left-12 right-3 sm:right-6 md:right-12 z-40 pointer-events-auto"
       >
-        <div className="flex w-full justify-between gap-2 md:gap-4 items-center">
+        <div className="flex w-full justify-between gap-1 sm:gap-2 md:gap-4 items-center flex-wrap xs:flex-nowrap">
           {socialLinks.map((link, index) => {
             const isHovered = hoverState === link.label
             const isOtherHovered =
@@ -352,13 +353,15 @@ export default function Hero() {
                   opacity: hoverState && !isHovered ? 0.6 : 1,
                 }}
                 transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="group relative px-2 md:px-3 py-1.5 md:py-2 font-mono text-[10px] md:text-xs tracking-widest uppercase text-foreground/80 flex-1 text-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
+                // Min touch target 44px (py-3 = 24px + content, meets WCAG on sm+)
+                className="group relative px-1.5 sm:px-2 md:px-3 py-2.5 sm:py-1.5 md:py-2 font-mono text-[9px] sm:text-[10px] md:text-xs tracking-widest uppercase text-foreground/80 flex-1 text-center focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
               >
+                {/* Corner markers hidden on very small screens to reduce clutter */}
                 <div className="absolute inset-0 pointer-events-none">
-                  <span className="absolute -left-2 -top-2 text-foreground/30 font-mono text-xs">+</span>
-                  <span className="absolute -right-2 -top-2 text-foreground/30 font-mono text-xs">+</span>
-                  <span className="absolute -left-2 -bottom-2 text-foreground/30 font-mono text-xs">+</span>
-                  <span className="absolute -right-2 -bottom-2 text-foreground/30 font-mono text-xs">+</span>
+                  <span className="absolute -left-2 -top-2 text-foreground/30 font-mono text-xs hidden sm:block">+</span>
+                  <span className="absolute -right-2 -top-2 text-foreground/30 font-mono text-xs hidden sm:block">+</span>
+                  <span className="absolute -left-2 -bottom-2 text-foreground/30 font-mono text-xs hidden sm:block">+</span>
+                  <span className="absolute -right-2 -bottom-2 text-foreground/30 font-mono text-xs hidden sm:block">+</span>
                   <motion.div
                     animate={{ opacity: isHovered ? 0.8 : 0.2, backgroundColor: isHovered ? "#a0a0a0" : "transparent" }}
                     transition={{ duration: 0.3 }}

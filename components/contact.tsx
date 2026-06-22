@@ -285,7 +285,7 @@ export default function Contact() {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
-      className="py-32 px-6 md:px-12 max-w-[1800px] mx-auto w-full relative"
+      className="py-16 sm:py-24 md:py-32 px-6 md:px-12 max-w-[1800px] mx-auto w-full relative"
       style={{ fontFamily: "var(--font-google-sans-flex)" }}
     >
      
@@ -418,15 +418,15 @@ export default function Contact() {
           animation-delay: 1.5s;
         }
       `}} />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-8 mb-32">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-8 mb-24 sm:mb-32">
         
         {/* === COLUMN 1: INTERACTIVE TYPOGRAPHY (Staggered words) === */}
         <motion.div variants={leftColumnVariants} className="flex flex-col justify-center gap-y-8">
           <h2 className="flex flex-col gap-y-2 font-bold text-foreground tracking-tight leading-tight">
-            <motion.span variants={wordVariants} className="text-7xl md:text-9xl font-bold text-foreground tracking-tight leading-tight">
+            <motion.span variants={wordVariants} className="text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-bold text-foreground tracking-tight leading-tight">
               Let's
             </motion.span>
-            <motion.span variants={wordVariants} className="text-7xl md:text-9xl font-bold text-foreground tracking-tight leading-tight">
+            <motion.span variants={wordVariants} className="text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-bold text-foreground tracking-tight leading-tight">
               create
             </motion.span>
             <AnimatePresence mode="wait">
@@ -436,12 +436,12 @@ export default function Contact() {
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                 exit={{ opacity: 0, y: -20, filter: "blur(8px)" }}
                 transition={{ duration: 0.5 }}
-                className="font-lobster italic text-7xl md:text-9xl text-accent font-normal tracking-tight leading-tight"
+                className="font-lobster italic text-4xl sm:text-5xl md:text-7xl lg:text-9xl text-accent font-normal tracking-tight leading-tight"
               >
                 {keyWords[currentKeyWordIndex]}
               </motion.span>
             </AnimatePresence>
-            <motion.span variants={wordVariants} className="text-7xl md:text-9xl font-bold text-foreground tracking-tight leading-tight pb-2">
+            <motion.span variants={wordVariants} className="text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-bold text-foreground tracking-tight leading-tight pb-2">
               together
             </motion.span>
           </h2>
@@ -478,7 +478,7 @@ export default function Contact() {
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             style={{ rotateX: shouldReduceMotion ? 0 : rotateX, rotateY: shouldReduceMotion ? 0 : rotateY }}
-            className="w-full max-w-lg bg-surface/5 backdrop-blur-xl border border-white/10 p-10 md:p-14 relative overflow-hidden shadow-2xl will-change-transform"
+            className="w-full max-w-lg bg-surface/5 backdrop-blur-xl border border-white/10 p-5 sm:p-8 md:p-14 relative overflow-hidden shadow-2xl will-change-transform"
           >
             {/* Dynamic Mouse Tracking Glow (GPU accelerated) */}
             <motion.div 
@@ -590,7 +590,8 @@ export default function Contact() {
         
         <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-foreground/20 font-mono text-xs">+</span>
         
-        <div className="flex flex-wrap justify-between items-center gap-12 max-w-9xl mx-auto px-4 md:px-0" style={{ perspective: "1200px" }}>
+        {/* Social cards: flex-col on mobile (flat via globals.css @media), flex-wrap on desktop */}
+        <div className="flex flex-col md:flex-row md:flex-wrap md:justify-between items-stretch md:items-center gap-3 md:gap-12 max-w-9xl mx-auto px-4 md:px-0" style={{ perspective: "1200px" }}>
           
           <a href="https://linkedin.com/in/dariogeorge21" target="_blank" rel="noreferrer" className="glass-card linkedin">
             <FaLinkedin className="glass-card-icon" />
