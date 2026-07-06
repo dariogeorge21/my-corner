@@ -1,6 +1,7 @@
 "use server"
 
 import { z } from "zod"
+import { headers } from "next/headers"
 
 // Validation schema
 const ContactFormSchema = z.object({
@@ -12,51 +13,52 @@ const ContactFormSchema = z.object({
 
 type ContactFormData = z.infer<typeof ContactFormSchema>
 
-/**
- * 
- * Generate WhatsApp message and redirect URL
- * Phone number should be in format: +1234567890 (country code + number without +)
- */
-function generateWhatsAppLink(formData: ContactFormData): string {
-  const whatsappNumber = "7560977040" // WhatsApp number without +
-  const message = encodeURIComponent(
-    `🙋 *Hey, I'm ${formData.name}!*\n\n📧 *Email:* ${formData.email}\n\n💬 *Subject:* ${formData.subject}\n\n📄 *Details:*\n${formData.description}\n\n`
-  )
-  return `https://wa.me/${whatsappNumber}?text=${message}`
-}
+export type ContactResponse =
+  | { ok: true; channel: "email" }
+  | { ok: true; channel: "whatsapp"; whatsappUrl: string; warning?: string }
+  | { ok: false; error: string }
 
 /**
- * Main contact submission handler
+ * Server action — proxies the form submission to the /api/contact route handler.
+ * Business logic (Resend + rate limiting + WhatsApp fallback) lives in the API layer.
  */
-export async function submitContact(
-  formData: ContactFormData
-): Promise<{ ok: boolean; error?: string; whatsappUrl?: string }> {
+export async function submitContact(formData: ContactFormData): Promise<ContactResponse> {
+  // Validate on the server action layer too (defence-in-depth)
+  const parsed = ContactFormSchema.safeParse(formData)
+  if (!parsed.success) {
+    return { ok: false, error: "Invalid form data. Please check your input." }
+  }
+
   try {
-    // Validate form data
-    const validatedData = ContactFormSchema.parse(formData)
+    // Forward the caller's IP so the API route can rate-limit correctly
+    const headersList = await headers()
+    const forwardedFor = headersList.get("x-forwarded-for") ?? ""
+    const realIp = headersList.get("x-real-ip") ?? ""
 
-    // Generate WhatsApp link
-    const whatsappLink = generateWhatsAppLink(validatedData)
+    // Determine the base URL for the internal fetch
+    const baseUrl =
+      process.env.NEXT_PUBLIC_BASE_URL ??
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")
 
-    // Log submission (optional - for analytics/monitoring)
-    console.log(`Contact form submission from ${validatedData.email}`)
+    const res = await fetch(`${baseUrl}/api/contact`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(forwardedFor && { "x-forwarded-for": forwardedFor }),
+        ...(realIp && { "x-real-ip": realIp }),
+      },
+      body: JSON.stringify(parsed.data),
+    })
 
-    return {
-      ok: true,
-      whatsappUrl: whatsappLink,
+    const json = (await res.json()) as ContactResponse
+
+    if (res.status === 429) {
+      return { ok: false, error: (json as { ok: false; error: string }).error }
     }
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return {
-        ok: false,
-        error: "Invalid form data. Please check your input.",
-      }
-    }
 
-    console.error("Contact submission error:", error)
-    return {
-      ok: false,
-      error: "An error occurred. Please try again later.",
-    }
+    return json
+  } catch (err) {
+    console.error("[submitContact] Network error:", err)
+    return { ok: false, error: "A critical network failure occurred." }
   }
 }

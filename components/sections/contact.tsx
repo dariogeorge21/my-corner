@@ -4,7 +4,7 @@ import { motion, AnimatePresence, useMotionValue, useSpring, useMotionTemplate, 
 import { useState, useRef, useEffect, useCallback } from "react"
 import { ArrowRight, ArrowUpRight, Mail } from "lucide-react"
 import { FaLinkedin, FaTwitter, FaGithub, FaInstagram } from "react-icons/fa"
-import { submitContact } from "@/app/actions/contact"
+import { submitContact, type ContactResponse } from "@/app/actions/contact"
 
 // --- TYPES & VALIDATION ---
 type FormState = {
@@ -160,8 +160,9 @@ export default function Contact() {
   const [shakeKey, setShakeKey] = useState(0)
   const [formData, setFormData] = useState<FormState>({ name: "", email: "", subject: "", description: "" })
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [formStatus, setFormStatus] = useState<"idle" | "success" | "error">("idle")
+  const [formStatus, setFormStatus] = useState<"idle" | "success" | "whatsapp" | "error">("idle")
   const [errorMessage, setErrorMessage] = useState("")
+  const [whatsappUrl, setWhatsappUrl] = useState("")
   const shouldReduceMotion = useReducedMotion()
 
   // Form Validation
@@ -214,32 +215,45 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!isValid) return
-    
+
     setIsSubmitting(true)
     setFormStatus("idle")
     setErrorMessage("")
+    setWhatsappUrl("")
 
     try {
-      const response = await submitContact({ 
+      const response: ContactResponse = await submitContact({
         name: formData.name,
         email: formData.email,
         subject: formData.subject,
         description: formData.description,
       })
-      
-      if (response.ok && response.whatsappUrl) {
+
+      if (!response.ok) {
+        setFormStatus("error")
+        setErrorMessage(response.error || "Failed to send message")
+        return
+      }
+
+      // Primary path — email delivered via Resend
+      if (response.channel === "email") {
         setFormStatus("success")
         setFormData({ name: "", email: "", subject: "", description: "" })
         setTouched({ name: false, email: false, subject: false, description: false })
-        
-        // Redirect to WhatsApp after a short delay
+        setTimeout(() => setFormStatus("idle"), 4000)
+        return
+      }
+
+      // Fallback path — open WhatsApp
+      if (response.channel === "whatsapp" && response.whatsappUrl) {
+        setWhatsappUrl(response.whatsappUrl)
+        setFormStatus("whatsapp")
+        setFormData({ name: "", email: "", subject: "", description: "" })
+        setTouched({ name: false, email: false, subject: false, description: false })
         setTimeout(() => {
           window.open(response.whatsappUrl, "_blank")
           setFormStatus("idle")
-        }, 1000)
-      } else {
-        setFormStatus("error")
-        setErrorMessage(response.error || "Failed to send message")
+        }, 1500)
       }
     } catch (err) {
       setFormStatus("error")
@@ -554,7 +568,17 @@ export default function Contact() {
                         exit={{ opacity: 0, scale: 0.95 }}
                         className="text-green-500 font-mono uppercase tracking-widest text-sm flex items-center gap-3 px-8 py-4 border border-green-500/30 bg-green-500/10"
                       >
-                        Transmission Successful
+                        ✓ Transmission Successful
+                      </motion.div>
+                    ) : formStatus === "whatsapp" ? (
+                      <motion.div
+                        key="whatsapp"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        className="text-yellow-400 font-mono uppercase tracking-widest text-xs flex items-center gap-3 px-6 py-4 border border-yellow-400/30 bg-yellow-400/10"
+                      >
+                        ↗ Opening WhatsApp fallback…
                       </motion.div>
                     ) : isValid ? (
                       <motion.button
