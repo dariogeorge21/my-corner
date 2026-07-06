@@ -5,8 +5,8 @@ import Link from "next/link"
 import { useState, useEffect } from "react"
 import { useTheme } from "next-themes"
 import { Moon, Sun } from "lucide-react"
-import Magnetic from "./magnetic" // Adjust path as needed
-import Shuffle from './Shuffle' // Your provided component
+import Magnetic from "../magnetic" // Adjust path as needed
+import Shuffle from '../Shuffle' // Your provided component
 
 export default function Header() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)

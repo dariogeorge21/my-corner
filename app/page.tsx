@@ -1,9 +1,9 @@
-import Hero from "@/components/hero"
-import Bio from "@/components/bio"
-import FeaturedWork from "@/components/featured-work"
-import TechStack from "@/components/tech-stack"
-import Contact from "@/components/contact"
-import Services from "@/components/services"
+import Hero from "@/components/sections/hero"
+import Bio from "@/components/sections/bio"
+import FeaturedWork from "@/components/sections/featured-work"
+import TechStack from "@/components/sections/tech-stack"
+import Contact from "@/components/sections/contact"
+import Services from "@/components/sections/services"
 
 export default function Home() {
   return (

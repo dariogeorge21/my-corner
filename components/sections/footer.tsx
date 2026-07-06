@@ -5,7 +5,7 @@ import { useRef, useEffect, useCallback, useState } from "react"
 import Link from "next/link"
 import { ArrowUpRight, MapPin, Mail } from "lucide-react"
 import { FaInstagram, FaTwitter, FaLinkedin, FaGithub } from "react-icons/fa"
-import CircularText from "./CircularText"
+import CircularText from "../CircularText"
 
 // --- MAGNETIC LINK COMPONENT (Physics-based pull) ---
 const MagneticLink = ({

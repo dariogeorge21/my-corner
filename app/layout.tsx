@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Agbalumo, Funnel_Display, Lobster, Google_Sans_Flex } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
+import Header from "@/components/sections/header";
+import Footer from "@/components/sections/footer";
 import SplashCursor from "@/components/SplashCursor";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });

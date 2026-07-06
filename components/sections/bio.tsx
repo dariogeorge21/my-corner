@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion
 import { useRef, useMemo, useState, useEffect } from "react"
 import { useTheme } from "next-themes"
 import { Code2 } from "lucide-react"
-import BorderGlow from "./BorderGlow"
+import BorderGlow from "../BorderGlow"
 
 // Animation variants for cinematic entrance
 const containerVariants = {

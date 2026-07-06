@@ -4,8 +4,8 @@ import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionV
 import { useState, useEffect, useRef } from "react"
 import { useTheme } from "next-themes"
 import Link from "next/link"
-import MagicRings from "./MagicRings"
-import VariableProximity from "./VariableProximity"
+import MagicRings from "../MagicRings"
+import VariableProximity from "../VariableProximity"
 
 const dynamicWords = ["DEVELOPER", "ARCHITECT", "DESIGNER", "BUILDER"]
 const creativeWords = ["CREATIVE", "INNOVATIVE", "VISIONARY"]
@@ -16,7 +16,7 @@ const socialLinks = [
   { label: "GitHub", url: "https://github.com/dariogeorge21" },
   { label: "LeetCode", url: "http://leetcode.com/dariogeorge21" },
   { label: "Instagram", url: "https://instagram.com/dariogeorge21" },
-  { label: "Email", url: "mailto:edu.dariogeorge21@gmail.com" },
+  { label: "Email", url: "mailto:dariogeorge21@gmail.com" },
 ]
 
 // Staggered entrance variants
