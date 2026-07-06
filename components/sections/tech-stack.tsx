@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useVelocity, useSpring, useTransform, useMotionValue, useAnimationFrame, useReducedMotion } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
-import LogoLoop from './LogoLoop';
+import LogoLoop from '@/components/LogoLoop';
 import {
   SiReact,
   SiNextdotjs,
@@ -26,13 +26,14 @@ import {
   SiEslint,
   SiPostcss,
 } from 'react-icons/si';
-import { 
-  FaDatabase, 
-  FaWindows, 
+import {
+  FaDatabase,
+  FaWindows,
   FaDesktop,
   FaLaptop,
   FaMicrochip,
-  FaHdd } from 'react-icons/fa';
+  FaHdd
+} from 'react-icons/fa';
 
 const techLogos = [
   { node: <SiNextdotjs />, title: 'Next.js', href: 'https://nextjs.org' },
@@ -62,11 +63,11 @@ const techLogos = [
   { node: <FaLaptop />, title: 'Laptop', href: 'https://en.wikipedia.org/wiki/Laptop' },
   { node: <FaMicrochip />, title: 'Hardware', href: 'https://en.wikipedia.org/wiki/Microchip' },
   { node: <FaHdd />, title: 'Storage', href: 'https://en.wikipedia.org/wiki/Hard_disk_drive' },
-  ];
+];
 
 export default function TechStack() {
   const [isHovered, setIsHovered] = useState(false);
-  const [logoHeight, setLogoHeight] = useState(60);
+  const [logoHeight, setLogoHeight] = useState(42);
   const textContainerRef = useRef<HTMLDivElement>(null);
   const textContentRef = useRef<HTMLDivElement>(null);
   const [contentWidth, setContentWidth] = useState(0);
@@ -75,7 +76,7 @@ export default function TechStack() {
   // Responsive logo height based on viewport width
   useEffect(() => {
     const updateLogoHeight = () => {
-      setLogoHeight(window.innerWidth < 640 ? 36 : window.innerWidth < 768 ? 46 : 60);
+      setLogoHeight(window.innerWidth < 640 ? 14 : window.innerWidth < 768 ? 28 : 42);
     };
     updateLogoHeight();
     window.addEventListener('resize', updateLogoHeight);
@@ -176,7 +177,7 @@ export default function TechStack() {
       >
         {/* Glass background with backdrop blur */}
         <div className="absolute inset-0 bg-background/40 dark:bg-background/60 backdrop-blur-md" />
-        
+
         {/* Dividing line that expands on load */}
         <motion.div
           initial={{ scaleX: 0 }}
@@ -185,7 +186,7 @@ export default function TechStack() {
           transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
           className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-accent to-transparent origin-left"
         />
-        
+
         <motion.div
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
@@ -205,7 +206,7 @@ export default function TechStack() {
               >
                 <span
                   className={`
-                    font-mono text-xl sm:text-2xl md:text-4xl tracking-[0.2em] uppercase font-medium 
+                    font-mono text-[10px] sm:text-sm md:text-[26px] tracking-[0.2em] uppercase font-medium 
                     transition-all duration-300
                     ${isHovered ? 'text-accent' : 'text-foreground/40'}
                     ${isHovered ? 'drop-shadow-[0_0_8px_rgba(var(--accent-rgb),0.5)]' : ''}
