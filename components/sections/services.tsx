@@ -15,42 +15,33 @@ interface Service {
 }
 
 const services: Service[] = [
-    {
-        id: "01",
-        title: "Website Development",
-        description: "Business sites, marketing platforms, Web apps",
-        location: "PAN-INDIA",
-        techTags: ["Next.js", "React", "Tailwind", "Framer Motion"],
-        details: "From high-performance corporate websites to full‑stack web applications, I build scalable, accessible, and visually striking digital experiences.",
-        gradient: "from-blue-500/20 to-cyan-500/20",
-    },
-    {
-      id: "02",
-      title: "Reports and Documentation",
-      description: "Technical writing, manuals, SOPs, guides",
-      location: "PAN-INDIA",
-      techTags: ["Markdown", "LaTeX", "PDF Generation", "Documentation"],
-      details: "I create clear, structured, and professional documentation for software, hardware, and business processes, ensuring your information is accessible and actionable.",
-      gradient: "from-purple-500/20 to-pink-500/20",
-    },
-    {
-        id: "03",
-        title: "Hardware Support",
-        description: "PC building, upgrades, repair, networking",
-        location: "DELHI NCR ONLY",
-        techTags: ["Diagnostics", "Assembly", "Optimization", "Consultation", "Customisation"],
-        details: "On‑site hardware services in Delhi – from custom PC builds to network troubleshooting and component upgrades.",
-        gradient: "from-amber-500/20 to-orange-500/20",
-    },
-    {
-        id: "04",
-        title: "Annual Maintenance Contract (AMC)",
-        description: "IT infrastructure, servers, workstations",
-        location: "DELHI NCR ONLY",
-        techTags: ["Monitoring", "Backups", "Security"],
-        details: "Proactive maintenance, 24/7 monitoring, and rapid support to keep your business critical systems running smoothly.",
-        gradient: "from-emerald-500/20 to-teal-500/20",
-    },
+  {
+    id: "01",
+    title: "Website Development",
+    description: "Business sites, marketing platforms, Web apps",
+    location: "PAN-INDIA",
+    techTags: ["Next.js", "React", "Tailwind", "Framer Motion", "Vite", "ShadCN/UI", " Docker"],
+    details: "From high-performance corporate websites to full‑stack web applications, I build scalable, accessible, and visually striking digital experiences.",
+    gradient: "from-blue-500/20 to-cyan-500/20",
+  },
+  {
+    id: "02",
+    title: "Reports and Documentation",
+    description: "Technical reports, project documentation, manuals, SOPs, user guides",
+    location: "PAN-INDIA",
+    techTags: ["Markdown", "Reports", "PDF", "Documentation"],
+    details: "I create clear, structured, and professional documentation for software, hardware, and business processes, ensuring your information is accessible and actionable.",
+    gradient: "from-purple-500/20 to-pink-500/20",
+  },
+  {
+    id: "03",
+    title: "Hardware Support",
+    description: "PC building, upgrades, repair, networking",
+    location: "DELHI NCR ONLY",
+    techTags: ["Diagnostics", "Assembly", "Optimization", "Consultation", "Customisation"],
+    details: "On‑site hardware services in Delhi – from custom PC builds to network troubleshooting and component upgrades.",
+    gradient: "from-amber-500/20 to-orange-500/20",
+  },
 ]
 
 // --- Individual Service Row Component (Desktop & Mobile) ---
@@ -78,9 +69,8 @@ const ServiceRow = ({ service, index, isActive, onHover, onFocus }: ServiceRowPr
       initial="initial"
       whileInView="animate"
       viewport={{ once: true, margin: "-50px" }}
-      className={`group relative border-t border-foreground/10 last:border-b transition-colors duration-300 ${
-        isActive ? "bg-accent/5" : ""
-      }`}
+      className={`group relative border-t border-foreground/10 last:border-b transition-colors duration-300 ${isActive ? "bg-accent/5" : ""
+        }`}
       onMouseEnter={() => onHover(service.id)}
       onMouseLeave={() => onHover(null)}
       onFocus={() => onFocus(service.id)}
@@ -97,9 +87,8 @@ const ServiceRow = ({ service, index, isActive, onHover, onFocus }: ServiceRowPr
           </span>
           <div>
             <h3
-              className={`text-xl sm:text-2xl md:text-5xl font-bold tracking-tight transition-colors duration-300 ${
-                isActive ? "text-foreground" : "text-foreground/40 group-hover:text-foreground/80"
-              }`}
+              className={`text-xl sm:text-2xl md:text-5xl font-bold tracking-tight transition-colors duration-300 ${isActive ? "text-foreground" : "text-foreground/40 group-hover:text-foreground/80"
+                }`}
             >
               {service.title}
             </h3>
@@ -208,7 +197,7 @@ const FloatingPortal = ({ activeService, mouseX, mouseY }: FloatingPortalProps) 
 
   // Use MotionValue for reduced motion case to maintain type consistency
   const zeroRotation = useMotionValue(0)
-  
+
   const finalRotateY = useSpring(shouldReduceMotion ? zeroRotation : tiltX, { stiffness: 300, damping: 20 })
   const finalRotateX = useSpring(shouldReduceMotion ? zeroRotation : tiltY, { stiffness: 300, damping: 20 })
   const backgroundRotateY = useSpring(shouldReduceMotion ? zeroRotation : relativeX, { stiffness: 200, damping: 25 })
@@ -318,7 +307,7 @@ export default function Services() {
           </div>
           <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[1.1] text-foreground">
             What I<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-foreground/80 to-muted">deliver</span>
+            <span className=" bg-clip-text bg-gradient-to-r from-foreground/80 to-muted">deliver</span>
           </h2>
           <p className="text-foreground/50 max-w-sm text-sm md:text-base leading-relaxed mt-6">
             A precise index of professional services – from full‑stack web development to on‑site hardware support.
