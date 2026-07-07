@@ -68,19 +68,23 @@ const techLogos = [
 export default function TechStack() {
   const [isHovered, setIsHovered] = useState(false);
   const [logoHeight, setLogoHeight] = useState(42);
+  const [baseSpeed, setBaseSpeed] = useState(150);
   const textContainerRef = useRef<HTMLDivElement>(null);
   const textContentRef = useRef<HTMLDivElement>(null);
   const [contentWidth, setContentWidth] = useState(0);
   const shouldReduceMotion = useReducedMotion();
 
-  // Responsive logo height based on viewport width
+  // Responsive logo height and marquee speed based on viewport width
   useEffect(() => {
-    const updateLogoHeight = () => {
-      setLogoHeight(window.innerWidth < 640 ? 14 : window.innerWidth < 768 ? 28 : 42);
+    const updateResponsiveValues = () => {
+      const isMobile = window.innerWidth < 640;
+      setLogoHeight(isMobile ? 14 : window.innerWidth < 768 ? 32 : 48);
+      // Reduce speed by 15% on mobile
+      setBaseSpeed(isMobile ? 70 : 120);
     };
-    updateLogoHeight();
-    window.addEventListener('resize', updateLogoHeight);
-    return () => window.removeEventListener('resize', updateLogoHeight);
+    updateResponsiveValues();
+    window.addEventListener('resize', updateResponsiveValues);
+    return () => window.removeEventListener('resize', updateResponsiveValues);
   }, []);
 
   // Scroll velocity tracking
@@ -90,8 +94,6 @@ export default function TechStack() {
   const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 3], { clamp: false });
   const skewX = useTransform(smoothVelocity, [-800, 800], [4, -4]);
 
-  // Base speed for text marquee (pixels per second)
-  const baseSpeed = 150;
   // Direction: negative = left
   const direction = -1;
 
@@ -158,7 +160,7 @@ export default function TechStack() {
       <div className="h-[120px] sm:h-[160px] md:h-[200px] relative overflow-hidden">
         <LogoLoop
           logos={techLogos}
-          speed={200}
+          speed={175}
           direction="left"
           logoHeight={logoHeight}
           gap={60}
@@ -206,7 +208,7 @@ export default function TechStack() {
               >
                 <span
                   className={`
-                    font-mono text-[10px] sm:text-sm md:text-[26px] tracking-[0.2em] uppercase font-medium 
+                    font-mono text-[16px] sm:text-sm md:text-[26px] tracking-[0.2em] uppercase font-medium 
                     transition-all duration-300
                     ${isHovered ? 'text-accent' : 'text-foreground/40'}
                     ${isHovered ? 'drop-shadow-[0_0_8px_rgba(var(--accent-rgb),0.5)]' : ''}
