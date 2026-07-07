@@ -445,9 +445,9 @@ export default function FeaturedWork() {
           <div style={{ perspective: shouldReduceMotion ? "none" : "1000px" }}>
             <motion.h2
               style={{ x: titleX, opacity: titleOpacity }}
-              className="text-[10vw] lg:text-[5.5vw] font-black tracking-tighter leading-[0.88] uppercase text-foreground will-change-transform"
+              className="text-[9vw] lg:text-[4.5vw] font-black tracking-tighter leading-none uppercase text-foreground will-change-transform whitespace-nowrap"
             >
-              FEAT<br />
+              FEAT
               <span className="text-transparent bg-clip-text bg-gradient-to-br from-foreground via-foreground/80 to-muted">
                 URED
               </span>
