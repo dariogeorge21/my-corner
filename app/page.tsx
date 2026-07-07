@@ -11,6 +11,7 @@ export default function Home() {
       <Hero />
       <Bio />
       <Services />
+      <FeaturedWork />
       <TechStack />
       <Contact />
 
