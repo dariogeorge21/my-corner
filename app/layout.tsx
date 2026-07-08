@@ -5,6 +5,7 @@ import { Providers } from "@/components/providers";
 import Header from "@/components/sections/header";
 import Footer from "@/components/sections/footer";
 import SplashCursor from "@/components/SplashCursor";
+import { Analytics } from "@vercel/analytics/next"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
@@ -15,7 +16,7 @@ const googleSansFlex = Google_Sans_Flex({ subsets: ["latin"], weight: ["300", "4
 
 export const metadata: Metadata = {
   title: "Dario George | Website & Software Developer in Delhi & Kerala",
-  description: "Dario George offers custom website development, scalable web apps, and expert PC hardware support for small businesses. Operating in Delhi and Kerala, serving India-wide.",
+  description: "Dario George offers custom website development, scalable web apps, Documentation or Report writing, and expert PC hardware support for small businesses. Operating in Delhi and Kerala, serving India-wide.",
   keywords: ["Website Developer Delhi", "Software Developer Kerala", "PC Repair Delhi", "Custom Web Apps India", "React Developer", "Next.js Expert"],
   alternates: {
     canonical: "https://dariogeorge.in",
@@ -37,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     "name": "Dario George",
-    "description": "Premium Website Development, Web Apps, and Hardware Support services.",
+    "description": "Premium Website Development, Web Apps, Hardware Support services and Documentation or Report writing.",
     "areaServed": [
       { "@type": "City", "name": "Delhi" },
       { "@type": "State", "name": "Kerala" },
@@ -57,7 +58,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${jetbrainsMono.variable} ${agbalumo.variable} ${funnelDisplay.variable} ${lobster.variable} ${googleSansFlex.variable}`}>
       <head>
-      <meta name="apple-mobile-web-app-title" content="Dario" />
+        <Analytics />
+        <meta name="apple-mobile-web-app-title" content="Dario" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
