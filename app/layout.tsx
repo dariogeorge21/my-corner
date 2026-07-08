@@ -17,7 +17,7 @@ const googleSansFlex = Google_Sans_Flex({ subsets: ["latin"], weight: ["300", "4
 export const metadata: Metadata = {
   title: "Dario George | Website & Software Developer in Delhi & Kerala",
   description: "Dario George offers custom website development, scalable web apps, Documentation or Report writing, and expert PC hardware support for small businesses. Operating in Delhi and Kerala, serving India-wide.",
-  keywords: ["Website Developer Delhi", "Software Developer Kerala", "PC Repair Delhi", "Custom Web Apps India", "React Developer", "Next.js Expert"],
+  keywords: ["Website Developer Delhi", "Website Developer Kerala", "PC Repair Delhi", "React Developer", "Next.js Expert", "Documentation", "Report Writing"],
   alternates: {
     canonical: "https://dariogeorge.in",
   }
