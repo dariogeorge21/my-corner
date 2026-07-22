@@ -214,7 +214,10 @@ export default function Header() {
               <div className="absolute right-8 md:right-24 top-1/2 -translate-y-1/2 pointer-events-auto">
                 {mounted && (
                   <motion.button
-                    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                    onClick={() => {
+                      setTheme(theme === "dark" ? "light" : "dark");
+                      setIsSidebarOpen(false);
+                    }}
                     whileHover={{ scale: 1.15 }}
                     whileTap={{ scale: 0.9 }}
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
