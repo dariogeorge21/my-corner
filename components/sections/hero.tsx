@@ -16,7 +16,7 @@ const socialLinks = [
   { label: "GitHub", url: "https://github.com/dariogeorge21" },
   { label: "LeetCode", url: "http://leetcode.com/dariogeorge21" },
   { label: "Instagram", url: "https://instagram.com/dariogeorge21" },
-  { label: "Email", url: "mailto:dariogeorge21@gmail.com" },
+  { label: "Email", url: "mailto:mail.dariogeorge@gmail.com" },
 ]
 
 // Staggered entrance variants
@@ -168,7 +168,7 @@ export default function Hero() {
 
       {/* 2. CENTER TYPOGRAPHY (Massive Spatial Impact with scroll-driven transforms) */}
       <h1 className="relative z-30 flex flex-col items-start w-full max-w-[90vw] md:max-w-[80vw] 2xl:max-w-[1400px] overflow-hidden">
-        
+
         {/* Visually Hidden SEO Anchor */}
         <span className="sr-only">Dario George - Expert Website Developer, Software Architect, and Hardware Support in Delhi and Kerala, India.</span>
 
