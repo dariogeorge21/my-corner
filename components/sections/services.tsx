@@ -55,8 +55,10 @@ interface ServiceRowProps {
   onFocus: (id: string | null) => void
 }
 
+const MotionLink = motion(Link)
+
 const ServiceRow = ({ service, index, isActive, onHover, onFocus }: ServiceRowProps) => {
-  const rowRef = useRef<HTMLDivElement>(null)
+  const rowRef = useRef<HTMLAnchorElement>(null)
   const shouldReduceMotion = useReducedMotion()
 
   const rowVariants = {
@@ -65,21 +67,20 @@ const ServiceRow = ({ service, index, isActive, onHover, onFocus }: ServiceRowPr
   } as const
 
   return (
-    <motion.div
+    <MotionLink
       ref={rowRef}
+      href="/services"
       variants={rowVariants}
       initial="initial"
       whileInView="animate"
       viewport={{ once: true, margin: "-50px" }}
-      className={`group relative border-t border-foreground/10 last:border-b transition-colors duration-300 ${isActive ? "bg-accent/5" : ""
+      className={`group relative border-t border-foreground/10 last:border-b transition-colors duration-300 block ${isActive ? "bg-accent/5" : ""
         }`}
       onMouseEnter={() => onHover(service.id)}
       onMouseLeave={() => onHover(null)}
       onFocus={() => onFocus(service.id)}
       onBlur={() => onFocus(null)}
-      tabIndex={0}
-      role="button"
-      aria-label={`Service: ${service.title}`}
+      aria-label={`View services page — ${service.title}`}
     >
       <div className="py-8 md:py-12 px-4 md:px-8 flex flex-col md:flex-row md:items-center gap-4 cursor-pointer">
         {/* Index + Title Container */}
@@ -161,7 +162,7 @@ const ServiceRow = ({ service, index, isActive, onHover, onFocus }: ServiceRowPr
           )}
         </AnimatePresence>
       </div>
-    </motion.div>
+    </MotionLink>
   )
 }
 
@@ -402,9 +403,7 @@ export default function Services() {
                 strokeWidth={1.5}
               />
             </motion.div>
-            <span className="hidden md:block font-mono text-xs text-foreground/30 tracking-widest uppercase writing-mode-vertical rotate-180">
-              FULL DETAILS
-            </span>
+
           </div>
 
           {/* Bottom animated underline */}
