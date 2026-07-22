@@ -311,7 +311,7 @@ function ServiceModal({ isOpen, onClose, defaultServiceType }: ServiceModalProps
 
           {/* Modal — centered via flex wrapper to avoid Framer Motion transform conflicts */}
           <div
-            className="fixed inset-0 z-[90] flex items-center justify-center p-4 pointer-events-none"
+            className="fixed inset-0 z-[90] flex items-center justify-center w-full h-full p-4 pointer-events-none"
           >
             <motion.div
               ref={modalRef}
