@@ -309,17 +309,20 @@ function ServiceModal({ isOpen, onClose, defaultServiceType }: ServiceModalProps
             aria-hidden="true"
           />
 
-          {/* Modal */}
+          {/* Modal — centered via flex wrapper to avoid Framer Motion transform conflicts */}
+          <div
+            className="fixed inset-0 z-[90] flex items-center justify-center p-4 pointer-events-none"
+          >
           <motion.div
             ref={modalRef}
             role="dialog"
             aria-modal="true"
             aria-labelledby={titleId}
-            initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 60, scale: 0.95, filter: "blur(10px)" }}
+            initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 40, scale: 0.95, filter: "blur(10px)" }}
             animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-            exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 40, scale: 0.97, filter: "blur(5px)" }}
+            exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 20, scale: 0.97, filter: "blur(5px)" }}
             transition={{ type: "spring", stiffness: 300, damping: 28 }}
-            className="fixed inset-x-4 md:inset-x-auto md:left-1/2 md:-translate-x-1/2 top-1/2 -translate-y-1/2 z-[90] w-full md:w-[600px] max-h-[90vh] overflow-y-auto bg-background border border-foreground/10 shadow-2xl"
+            className="relative w-full max-w-[600px] max-h-[90vh] overflow-y-auto bg-background border border-foreground/10 shadow-2xl pointer-events-auto"
             style={{ fontFamily: "var(--font-google-sans-flex, sans-serif)" }}
           >
             {/* Modal Header */}
@@ -476,6 +479,7 @@ function ServiceModal({ isOpen, onClose, defaultServiceType }: ServiceModalProps
               </div>
             </form>
           </motion.div>
+          </div>
         </>
       )}
     </AnimatePresence>
