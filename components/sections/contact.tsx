@@ -227,6 +227,7 @@ export default function Contact() {
         email: formData.email,
         subject: formData.subject,
         description: formData.description,
+        source: "landing",
       })
 
       if (!response.ok) {

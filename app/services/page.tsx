@@ -9,7 +9,7 @@ import {
   useReducedMotion,
 } from "framer-motion"
 import { useState, useRef, useEffect, useCallback, useId } from "react"
-import { ArrowRight, X, CheckCircle, AlertTriangle, Loader2, Globe, Monitor, HardDrive, FileText, ChevronRight } from "lucide-react"
+import { ArrowRight, X, CheckCircle, AlertTriangle, Loader2, Globe, Monitor, HardDrive, FileText, ChevronRight, Wrench, Keyboard, Server } from "lucide-react"
 import { submitContact } from "@/app/actions/contact"
 import type { ContactResponse } from "@/app/actions/contact"
 
@@ -84,16 +84,16 @@ function AnimatedInput({
   const borderColor = isInvalid
     ? "border-red-500"
     : isValid
-    ? "border-green-500"
-    : "border-foreground/10"
+      ? "border-green-500"
+      : "border-foreground/10"
 
   const labelColor = isInvalid
     ? "text-red-500"
     : isValid
-    ? "text-green-500"
-    : active
-    ? "text-accent"
-    : "text-foreground/60"
+      ? "text-green-500"
+      : active
+        ? "text-accent"
+        : "text-foreground/60"
 
   return (
     <div
@@ -313,172 +313,172 @@ function ServiceModal({ isOpen, onClose, defaultServiceType }: ServiceModalProps
           <div
             className="fixed inset-0 z-[90] flex items-center justify-center p-4 pointer-events-none"
           >
-          <motion.div
-            ref={modalRef}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby={titleId}
-            initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 40, scale: 0.95, filter: "blur(10px)" }}
-            animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-            exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 20, scale: 0.97, filter: "blur(5px)" }}
-            transition={{ type: "spring", stiffness: 300, damping: 28 }}
-            className="relative w-full max-w-[600px] max-h-[90vh] overflow-y-auto bg-background border border-foreground/10 shadow-2xl pointer-events-auto"
-            style={{ fontFamily: "var(--font-google-sans-flex, sans-serif)" }}
-          >
-            {/* Modal Header */}
-            <div className="flex items-start justify-between p-6 md:p-10 border-b border-foreground/10">
-              <div>
-                <p className="font-mono text-xs tracking-[0.3em] text-accent uppercase mb-2">[ SERVICE INQUIRY ]</p>
-                <h2 id={titleId} className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
-                  Start a Project
-                </h2>
-              </div>
-              <button
-                ref={firstFocusRef}
-                onClick={onClose}
-                className="p-2 rounded-sm hover:bg-foreground/10 transition-colors focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
-                aria-label="Close dialog"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            {/* Modal Form */}
-            <form
-              id={formId}
-              onSubmit={handleSubmit}
-              noValidate
-              className="flex flex-col gap-8 p-6 md:p-10"
+            <motion.div
+              ref={modalRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby={titleId}
+              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 40, scale: 0.95, filter: "blur(10px)" }}
+              animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 20, scale: 0.97, filter: "blur(5px)" }}
+              transition={{ type: "spring", stiffness: 300, damping: 28 }}
+              className="relative w-full max-w-[600px] max-h-[90vh] overflow-y-auto bg-background border border-foreground/10 shadow-2xl pointer-events-auto"
+              style={{ fontFamily: "var(--font-google-sans-flex, sans-serif)" }}
             >
-              <AnimatedInput
-                id={`${formId}-name`}
-                label="Full Name"
-                value={formData.name}
-                onChange={(e) => handleChange(e, "name")}
-                isInvalid={touched.name && !isNameValid}
-                isValid={touched.name && isNameValid}
-                maxLength={30}
-                autoComplete="name"
-                placeholder="Your full name"
-                aria-describedby={touched.name && !isNameValid ? `${formId}-name-error` : undefined}
-              />
-              {touched.name && !isNameValid && (
-                <p id={`${formId}-name-error`} className="text-red-500 text-xs font-mono mt-1" role="alert">
-                  Name must be 5–30 characters, no URLs or HTML.
-                </p>
-              )}
-
-              <AnimatedInput
-                id={`${formId}-email`}
-                label="Email Address"
-                value={formData.email}
-                onChange={(e) => handleChange(e, "email")}
-                isInvalid={touched.email && !isEmailValid}
-                isValid={touched.email && isEmailValid}
-                type="email"
-                autoComplete="email"
-                aria-describedby={touched.email && !isEmailValid ? `${formId}-email-error` : undefined}
-              />
-              {touched.email && !isEmailValid && (
-                <p id={`${formId}-email-error`} className="text-red-500 text-xs font-mono mt-1" role="alert">
-                  Please enter a valid email address.
-                </p>
-              )}
-
-              <AnimatedInput
-                id={`${formId}-subject`}
-                label="Service Type"
-                value={formData.subject}
-                onChange={(e) => handleChange(e, "subject")}
-                isSelect
-                selectOptions={serviceOptions}
-                isInvalid={touched.subject && !isSubjectValid}
-                isValid={touched.subject && isSubjectValid}
-              />
-
-              <AnimatedInput
-                id={`${formId}-description`}
-                label="Project Details"
-                value={formData.description}
-                onChange={(e) => handleChange(e, "description")}
-                isTextArea
-                isInvalid={touched.description && !isDescValid}
-                isValid={touched.description && isDescValid}
-                maxLength={500}
-                placeholder="Describe your project, requirements, timeline..."
-                aria-describedby={touched.description && !isDescValid ? `${formId}-desc-error` : undefined}
-              />
-              {touched.description && !isDescValid && (
-                <p id={`${formId}-desc-error`} className="text-red-500 text-xs font-mono mt-1" role="alert">
-                  Project details must be 10–500 characters, no URLs or HTML.
-                </p>
-              )}
-
-              {/* Status messages */}
-              <AnimatePresence>
-                {formStatus === "error" && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    className="flex items-center gap-3 text-red-500 font-mono text-sm p-4 bg-red-500/10 border border-red-500/20"
-                    role="alert"
-                    aria-live="assertive"
-                  >
-                    <AlertTriangle size={16} aria-hidden="true" />
-                    [ERROR]: {errorMessage}
-                  </motion.div>
-                )}
-                {formStatus === "success" && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="flex items-center gap-3 text-green-500 font-mono text-sm p-4 bg-green-500/10 border border-green-500/20"
-                    role="alert"
-                    aria-live="polite"
-                  >
-                    <CheckCircle size={16} aria-hidden="true" />
-                    ✓ Message sent! I&apos;ll get back to you soon.
-                  </motion.div>
-                )}
-                {formStatus === "whatsapp" && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="flex items-center gap-3 text-yellow-400 font-mono text-xs p-4 bg-yellow-400/10 border border-yellow-400/20"
-                    role="alert"
-                    aria-live="polite"
-                  >
-                    ↗ Opening WhatsApp fallback…
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {/* Submit Button */}
-              <div className="flex justify-end pt-2">
-                <motion.button
-                  type="submit"
-                  disabled={isSubmitting || formStatus === "success"}
-                  whileHover={!isSubmitting ? { scale: 1.02 } : {}}
-                  whileTap={!isSubmitting ? { scale: 0.98 } : {}}
-                  className="group relative flex items-center gap-3 bg-foreground text-background px-8 py-4 font-medium tracking-widest uppercase text-sm hover:bg-accent hover:text-white transition-colors duration-300 disabled:opacity-60 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
-                  aria-label={isSubmitting ? "Sending your message" : "Send inquiry"}
+              {/* Modal Header */}
+              <div className="flex items-start justify-between p-6 md:p-10 border-b border-foreground/10">
+                <div>
+                  <p className="font-mono text-xs tracking-[0.3em] text-accent uppercase mb-2">[ SERVICE INQUIRY ]</p>
+                  <h2 id={titleId} className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+                    Start a Project
+                  </h2>
+                </div>
+                <button
+                  ref={firstFocusRef}
+                  onClick={onClose}
+                  className="p-2 rounded-sm hover:bg-foreground/10 transition-colors focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+                  aria-label="Close dialog"
                 >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 size={16} className="animate-spin" aria-hidden="true" />
-                      Transmitting…
-                    </>
-                  ) : (
-                    <>
-                      Send Inquiry
-                      <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
-                    </>
-                  )}
-                </motion.button>
+                  <X size={20} />
+                </button>
               </div>
-            </form>
-          </motion.div>
+
+              {/* Modal Form */}
+              <form
+                id={formId}
+                onSubmit={handleSubmit}
+                noValidate
+                className="flex flex-col gap-8 p-6 md:p-10"
+              >
+                <AnimatedInput
+                  id={`${formId}-name`}
+                  label="Full Name"
+                  value={formData.name}
+                  onChange={(e) => handleChange(e, "name")}
+                  isInvalid={touched.name && !isNameValid}
+                  isValid={touched.name && isNameValid}
+                  maxLength={30}
+                  autoComplete="name"
+                  placeholder="Your full name"
+                  aria-describedby={touched.name && !isNameValid ? `${formId}-name-error` : undefined}
+                />
+                {touched.name && !isNameValid && (
+                  <p id={`${formId}-name-error`} className="text-red-500 text-xs font-mono mt-1" role="alert">
+                    Name must be 5–30 characters, no URLs or HTML.
+                  </p>
+                )}
+
+                <AnimatedInput
+                  id={`${formId}-email`}
+                  label="Email Address"
+                  value={formData.email}
+                  onChange={(e) => handleChange(e, "email")}
+                  isInvalid={touched.email && !isEmailValid}
+                  isValid={touched.email && isEmailValid}
+                  type="email"
+                  autoComplete="email"
+                  aria-describedby={touched.email && !isEmailValid ? `${formId}-email-error` : undefined}
+                />
+                {touched.email && !isEmailValid && (
+                  <p id={`${formId}-email-error`} className="text-red-500 text-xs font-mono mt-1" role="alert">
+                    Please enter a valid email address.
+                  </p>
+                )}
+
+                <AnimatedInput
+                  id={`${formId}-subject`}
+                  label="Service Type"
+                  value={formData.subject}
+                  onChange={(e) => handleChange(e, "subject")}
+                  isSelect
+                  selectOptions={serviceOptions}
+                  isInvalid={touched.subject && !isSubjectValid}
+                  isValid={touched.subject && isSubjectValid}
+                />
+
+                <AnimatedInput
+                  id={`${formId}-description`}
+                  label="Project Details"
+                  value={formData.description}
+                  onChange={(e) => handleChange(e, "description")}
+                  isTextArea
+                  isInvalid={touched.description && !isDescValid}
+                  isValid={touched.description && isDescValid}
+                  maxLength={500}
+                  placeholder="Describe your project, requirements, timeline..."
+                  aria-describedby={touched.description && !isDescValid ? `${formId}-desc-error` : undefined}
+                />
+                {touched.description && !isDescValid && (
+                  <p id={`${formId}-desc-error`} className="text-red-500 text-xs font-mono mt-1" role="alert">
+                    Project details must be 10–500 characters, no URLs or HTML.
+                  </p>
+                )}
+
+                {/* Status messages */}
+                <AnimatePresence>
+                  {formStatus === "error" && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="flex items-center gap-3 text-red-500 font-mono text-sm p-4 bg-red-500/10 border border-red-500/20"
+                      role="alert"
+                      aria-live="assertive"
+                    >
+                      <AlertTriangle size={16} aria-hidden="true" />
+                      [ERROR]: {errorMessage}
+                    </motion.div>
+                  )}
+                  {formStatus === "success" && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="flex items-center gap-3 text-green-500 font-mono text-sm p-4 bg-green-500/10 border border-green-500/20"
+                      role="alert"
+                      aria-live="polite"
+                    >
+                      <CheckCircle size={16} aria-hidden="true" />
+                      ✓ Message sent! I&apos;ll get back to you soon.
+                    </motion.div>
+                  )}
+                  {formStatus === "whatsapp" && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="flex items-center gap-3 text-yellow-400 font-mono text-xs p-4 bg-yellow-400/10 border border-yellow-400/20"
+                      role="alert"
+                      aria-live="polite"
+                    >
+                      ↗ Opening WhatsApp fallback…
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Submit Button */}
+                <div className="flex justify-end pt-2">
+                  <motion.button
+                    type="submit"
+                    disabled={isSubmitting || formStatus === "success"}
+                    whileHover={!isSubmitting ? { scale: 1.02 } : {}}
+                    whileTap={!isSubmitting ? { scale: 0.98 } : {}}
+                    className="group relative flex items-center gap-3 bg-foreground text-background px-8 py-4 font-medium tracking-widest uppercase text-sm hover:bg-accent hover:text-white transition-colors duration-300 disabled:opacity-60 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
+                    aria-label={isSubmitting ? "Sending your message" : "Send inquiry"}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+                        Transmitting…
+                      </>
+                    ) : (
+                      <>
+                        Send Inquiry
+                        <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
+                      </>
+                    )}
+                  </motion.button>
+                </div>
+              </form>
+            </motion.div>
           </div>
         </>
       )}
@@ -778,10 +778,10 @@ const softwareOfferings = [
 ]
 
 const hardwareOfferings = [
-  { icon: "💾", label: "SSDs & Storage", desc: "High-performance solid state drives, HDDs, and NVMe storage" },
-  { icon: "🖱️", label: "Computer Peripherals", desc: "Keyboards, mice, monitors, headsets, and all accessories" },
-  { icon: "🖥️", label: "Custom-Built PCs", desc: "Bespoke desktop builds tailored to your workload and budget" },
-  { icon: "🔧", label: "PC Hardware Products", desc: "All PC components — RAM, CPUs, GPUs, motherboards, coolers" },
+  { icon: <Server />, label: "SSDs & Storage", desc: "High-performance solid state drives, HDDs, and NVMe storage" },
+  { icon: <Keyboard />, label: "Computer Peripherals", desc: "Keyboards, mice, monitors, headsets, and all accessories" },
+  { icon: <Monitor />, label: "Custom-Built PCs", desc: "Bespoke desktop builds tailored to your workload and budget" },
+  { icon: <Wrench />, label: "PC Hardware Products", desc: "All PC components — RAM, CPUs, GPUs, motherboards, coolers" },
 ]
 
 interface SoftwareHardwareSectionProps {

@@ -3,15 +3,16 @@
 import { z } from "zod"
 import { headers } from "next/headers"
 
-// Validation schema
+// ─── Validation schema (mirrors the API route) ───────────────────────────────
 const ContactFormSchema = z.object({
-  name: z.string().min(5).max(30),
-  email: z.string().email(),
-  subject: z.string().min(4).max(30),
-  description: z.string().min(10).max(100),
+  name: z.string().min(5).max(60),
+  email: z.string().email().max(254),
+  subject: z.string().min(2).max(80),
+  description: z.string().min(10).max(500),
+  source: z.enum(["landing", "services"]).optional().default("landing"),
 })
 
-type ContactFormData = z.infer<typeof ContactFormSchema>
+type ContactFormData = z.input<typeof ContactFormSchema>
 
 export type ContactResponse =
   | { ok: true; channel: "email" }
@@ -19,8 +20,35 @@ export type ContactResponse =
   | { ok: false; error: string }
 
 /**
- * Server action — proxies the form submission to the /api/contact route handler.
- * Business logic (Resend + rate limiting + WhatsApp fallback) lives in the API layer.
+ * Resolves the base URL for internal API calls.
+ * Priority: NEXT_PUBLIC_BASE_URL > VERCEL_URL > request Host header > localhost:3000
+ */
+async function resolveBaseUrl(): Promise<string> {
+  if (process.env.NEXT_PUBLIC_BASE_URL) {
+    return process.env.NEXT_PUBLIC_BASE_URL.replace(/\/$/, "")
+  }
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`
+  }
+
+  // In development, read the Host header to get the exact port Next is running on
+  try {
+    const headersList = await headers()
+    const host = headersList.get("host") // e.g. "localhost:3001"
+    if (host) {
+      const protocol = host.startsWith("localhost") ? "http" : "https"
+      return `${protocol}://${host}`
+    }
+  } catch {
+    // fallback below
+  }
+
+  return "http://localhost:3000"
+}
+
+/**
+ * Server action — validates, then proxies the form submission to /api/contact.
+ * Business logic (Resend, rate limiting, WhatsApp fallback) lives in the API route.
  */
 export async function submitContact(formData: ContactFormData): Promise<ContactResponse> {
   // Validate on the server action layer too (defence-in-depth)
@@ -30,15 +58,11 @@ export async function submitContact(formData: ContactFormData): Promise<ContactR
   }
 
   try {
-    // Forward the caller's IP so the API route can rate-limit correctly
     const headersList = await headers()
     const forwardedFor = headersList.get("x-forwarded-for") ?? ""
     const realIp = headersList.get("x-real-ip") ?? ""
 
-    // Determine the base URL for the internal fetch
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BASE_URL ??
-      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")
+    const baseUrl = await resolveBaseUrl()
 
     const res = await fetch(`${baseUrl}/api/contact`, {
       method: "POST",
@@ -59,6 +83,6 @@ export async function submitContact(formData: ContactFormData): Promise<ContactR
     return json
   } catch (err) {
     console.error("[submitContact] Network error:", err)
-    return { ok: false, error: "A critical network failure occurred." }
+    return { ok: false, error: "A critical network failure occurred. Please try again." }
   }
 }
