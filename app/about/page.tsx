@@ -336,6 +336,7 @@ export default function AboutPage() {
         const res = await submitContact({
           name: data.name,
           email: data.email,
+          phone: data.phone,
           subject: data.subject,
           description: data.description,
           source: "about",
