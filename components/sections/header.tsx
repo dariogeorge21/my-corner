@@ -169,7 +169,7 @@ export default function Header() {
               {[
                 { label: "HOME", href: "#home" },
                 { label: "ABOUT", href: "#about" },
-                { label: "SERVICES", href: "#services" },
+                { label: "SERVICES", href: "/services" },
                 { label: "CONTACT", href: "#contact" },
               ].map((item, index) => (
                 <div 

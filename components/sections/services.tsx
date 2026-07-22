@@ -2,6 +2,8 @@
 
 import { motion, useMotionValue, useSpring, useTransform, useVelocity, useReducedMotion, AnimatePresence } from "framer-motion"
 import { useState, useRef, useEffect, useCallback } from "react"
+import Link from "next/link"
+import { ArrowUpRight } from "lucide-react"
 
 // --- Service Data Structure ---
 interface Service {
@@ -334,6 +336,86 @@ export default function Services() {
           ))}
         </motion.div>
       </div>
+
+      {/* ── Custom CTA ─────────────────────────────────────────────────────── */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+        className="relative mt-16 md:mt-24"
+      >
+        {/* Top rule with animated draw */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+          className="h-[1px] w-full bg-foreground/15 origin-left mb-8"
+        />
+
+        <Link
+          href="/services"
+          className="group relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 py-10 md:py-14 px-6 md:px-10 border border-dashed border-foreground/15 hover:border-accent/40 transition-colors duration-500 overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+          aria-label="View all services — full services page"
+        >
+          {/* Animated hover sweep background */}
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-accent/5 via-accent/10 to-transparent pointer-events-none"
+            initial={{ x: "-100%" }}
+            whileHover={{ x: "0%" }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          />
+
+          {/* Corner accent marks */}
+          <span className="absolute top-3 left-3 text-accent/30 font-mono text-xs leading-none">┌</span>
+          <span className="absolute top-3 right-3 text-accent/30 font-mono text-xs leading-none">┐</span>
+          <span className="absolute bottom-3 left-3 text-accent/30 font-mono text-xs leading-none">└</span>
+          <span className="absolute bottom-3 right-3 text-accent/30 font-mono text-xs leading-none">┘</span>
+
+          {/* Left: badge + label */}
+          <div className="relative z-10 flex flex-col gap-3">
+            <div className="flex items-center gap-3">
+              <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.25em] text-accent bg-accent/10 border border-accent/20 px-3 py-1">
+                <span className="inline-block w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                {services.length} SERVICES AVAILABLE
+              </span>
+            </div>
+            <p className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter leading-none text-foreground group-hover:text-accent transition-colors duration-500">
+              View All Services
+            </p>
+            <p className="font-mono text-xs text-foreground/40 tracking-widest uppercase mt-1">
+              Web Dev · Hardware · Reports &amp; Docs
+            </p>
+          </div>
+
+          {/* Right: arrow badge */}
+          <div className="relative z-10 shrink-0 flex items-center gap-4">
+            <motion.div
+              className="flex items-center justify-center w-14 h-14 md:w-20 md:h-20 border border-foreground/20 group-hover:border-accent/60 group-hover:bg-accent/10 transition-colors duration-500 rounded-sm"
+              whileHover={{ scale: 1.08 }}
+              transition={{ type: "spring", stiffness: 400, damping: 20 }}
+            >
+              <ArrowUpRight
+                className="text-foreground/50 group-hover:text-accent transition-colors duration-500 group-hover:rotate-12 transition-transform"
+                size={28}
+                strokeWidth={1.5}
+              />
+            </motion.div>
+            <span className="hidden md:block font-mono text-xs text-foreground/30 tracking-widest uppercase writing-mode-vertical rotate-180">
+              FULL DETAILS
+            </span>
+          </div>
+
+          {/* Bottom animated underline */}
+          <motion.span
+            className="absolute bottom-0 left-0 h-[2px] bg-accent origin-left"
+            initial={{ scaleX: 0 }}
+            whileHover={{ scaleX: 1 }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          />
+        </Link>
+      </motion.div>
 
       {/* Floating 3D Glass Portal (only when mouse inside section and service active) */}
       <AnimatePresence>
