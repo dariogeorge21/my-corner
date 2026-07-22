@@ -81,7 +81,7 @@ export default function Header() {
       <motion.header
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: navShift.y, opacity: 1, x: navShift.x }}
-        transition={{ 
+        transition={{
           y: { type: "spring", stiffness: 100, damping: 20 },
           opacity: { duration: 0.5 },
           x: { type: "tween", ease: "linear", duration: 0 },
@@ -92,36 +92,36 @@ export default function Header() {
         {/* LEFT: Hamburger Menu */}
         <div className="pointer-events-auto">
           {/* <Magnetic> */}
-            <motion.button
-              onMouseEnter={triggerWobble}
-              onClick={() => setIsSidebarOpen(true)}
-              animate={isWobbling ? { 
-                rotate: [0, -15, 15, -10, 10, -5, 5, 0] 
-              } : {}}
-              transition={{ duration: 1, ease: "easeInOut" }}
-              className="flex flex-col gap-[6px] p-4 group"
-            >
-              <span className="w-8 h-[2px] bg-foreground block origin-right transition-transform group-hover:scale-x-75" />
-              <span className="w-8 h-[2px] bg-foreground block" />
-            </motion.button>
+          <motion.button
+            onMouseEnter={triggerWobble}
+            onClick={() => setIsSidebarOpen(true)}
+            animate={isWobbling ? {
+              rotate: [0, -15, 15, -10, 10, -5, 5, 0]
+            } : {}}
+            transition={{ duration: 1, ease: "easeInOut" }}
+            className="flex flex-col gap-[6px] p-4 group"
+          >
+            <span className="w-8 h-[2px] bg-foreground block origin-right transition-transform group-hover:scale-x-75" />
+            <span className="w-8 h-[2px] bg-foreground block" />
+          </motion.button>
           {/* </Magnetic> */}
         </div>
 
         {/* CENTER: Name with Shuffle Component */}
         <div className="pointer-events-auto font-sans tracking-tight text-xl hidden md:block font-medium" style={{ fontFamily: "var(--font-agbalumo)" }}>
-          <Shuffle 
-            text="Dario George"  
-            shuffleDirection="right"  
-            duration={5.95}  
-            animationMode="evenodd"  
-            shuffleTimes={1}  
-            ease="power3.out"  
-            stagger={0.03}  
-            threshold={0.4}  
+          <Shuffle
+            text="Dario George"
+            shuffleDirection="right"
+            duration={5.95}
+            animationMode="evenodd"
+            shuffleTimes={1}
+            ease="power3.out"
+            stagger={0.03}
+            threshold={0.4}
             triggerOnce={true}
-            triggerOnHover  
-            respectReducedMotion={true}  
-            loop={false}  
+            triggerOnHover
+            respectReducedMotion={true}
+            loop={false}
             loopDelay={4}
           />
         </div>
@@ -129,8 +129,8 @@ export default function Header() {
         {/* RIGHT: Theme Toggle + Connect Now Link */}
         <div className="pointer-events-auto flex items-center gap-4 md:gap-6">
           <Magnetic>
-            <Link 
-              href="#contact" 
+            <Link
+              href="#contact"
               onClick={handleNavClick("#contact")}
               className="group relative px-4 py-2 font-sans font-medium text-sm tracking-wide text-foreground"
             >
@@ -154,7 +154,7 @@ export default function Header() {
             className="fixed inset-0 z-[70] bg-background text-foreground flex flex-col justify-center px-8 md:px-24"
           >
             {/* Close Button */}
-            <motion.button 
+            <motion.button
               onClick={() => setIsSidebarOpen(false)}
               whileHover={{ scale: 1.4, color: "#ff3333" }}
               whileTap={{ scale: 0.95 }}
@@ -167,13 +167,13 @@ export default function Header() {
             {/* Navigation Items */}
             <nav className="flex flex-col gap-8 w-full max-w-4xl mt-12">
               {[
-                { label: "HOME", href: "#home" },
-                { label: "ABOUT", href: "#about" },
+                { label: "HOME", href: "/" },
+                { label: "ABOUT", href: "/about" },
                 { label: "SERVICES", href: "/services" },
-                { label: "CONTACT", href: "#contact" },
+                { label: "CONTACT", href: "/contact" },
               ].map((item, index) => (
-                <div 
-                  key={item.label} 
+                <div
+                  key={item.label}
                   className="relative border-b border-foreground/20 pb-4 group w-full text-center"
                   onMouseEnter={() => setHoveredNavItem(item.label)}
                   onMouseLeave={() => setHoveredNavItem(null)}
@@ -181,25 +181,25 @@ export default function Header() {
                   {/* The '+' Corners */}
                   <span className="absolute -left-3 -bottom-[10px] text-foreground/40 font-mono">+</span>
                   <span className="absolute -right-3 -bottom-[10px] text-foreground/40 font-mono">+</span>
-                  
+
                   {/* White Rectangle Background on Hover */}
                   <motion.div
                     initial={{ scaleX: 0, opacity: 0 }}
-                    animate={{ 
-                      scaleX: hoveredNavItem === item.label ? 1 : 0, 
-                      opacity: hoveredNavItem === item.label ? 1 : 0 
+                    animate={{
+                      scaleX: hoveredNavItem === item.label ? 1 : 0,
+                      opacity: hoveredNavItem === item.label ? 1 : 0
                     }}
                     transition={{ duration: 0.4, ease: "easeOut" }}
                     className="absolute inset-0 -mx-4 md:-mx-8 bg-white/10 backdrop-blur-sm rounded-lg origin-center z-0"
                   />
-                  
+
                   <motion.div
                     initial={{ y: 40, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.3 + index * 0.1, duration: 0.6, ease: [0.33, 1, 0.68, 1] }}
                     className="relative z-10"
                   >
-                    <Link 
+                    <Link
                       href={item.href}
                       onClick={handleNavClick(item.href, true)}
                       className="text-5xl md:text-8xl font-sans font-medium tracking-tighter hover:text-accent transition-colors duration-500"
@@ -223,7 +223,7 @@ export default function Header() {
                   >
                     {/* Animated Background Glow on Hover */}
                     <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-accent/0 via-accent/20 to-accent/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                    
+
                     {/* Sun/Moon Icon with Morph Animation */}
                     <AnimatePresence mode="wait">
                       {theme === "dark" ? (
@@ -266,13 +266,13 @@ export default function Header() {
             </nav>
 
             {/* Bottom Email Section */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8, duration: 1 }}
               className="absolute bottom-10 left-1/2 -translate-x-1/2 font-sans text-center"
             >
-              <div 
+              <div
                 className="text-lg md:text-2xl font-medium tracking-tight cursor-none text-center hover:text-accent transition-colors"
                 onMouseEnter={() => setIsEmailHovered(true)}
                 onMouseLeave={() => setIsEmailHovered(false)}

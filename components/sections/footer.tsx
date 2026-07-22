@@ -209,10 +209,10 @@ export default function Footer() {
 
           <motion.nav variants={navItemVariants} className="flex w-full md:w-auto flex-col gap-4 md:items-start">
             <span className="text-xs text-foreground/40 uppercase tracking-widest font-mono mb-2">[ NAVIGATION ]</span>
-            <MagneticLink href="#home" label="Home" tooltipText="Go to Top" setHoverState={setHoverState} />
-            <MagneticLink href="#about" label="About" tooltipText="Read My Philosophy" setHoverState={setHoverState} />
+            <MagneticLink href="/" label="Home" tooltipText="Go to Top" setHoverState={setHoverState} />
+            <MagneticLink href="/about" label="About" tooltipText="Read My Philosophy" setHoverState={setHoverState} />
             <MagneticLink href="/services" label="Services" tooltipText="Explore Services" setHoverState={setHoverState} />
-            <MagneticLink href="#contact" label="Contact" tooltipText="Start a Project" setHoverState={setHoverState} />
+            <MagneticLink href="/contact" label="Contact" tooltipText="Start a Project" setHoverState={setHoverState} />
           </motion.nav>
         </div>
 
