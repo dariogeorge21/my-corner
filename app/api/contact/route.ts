@@ -11,7 +11,7 @@ const ContactFormSchema = z.object({
   email: z.string().email().max(254),
   subject: z.string().min(2).max(80),
   description: z.string().min(10).max(500),
-  source: z.enum(["landing", "services"]).optional().default("landing"),
+  source: z.enum(["landing", "services", "about"]).optional().default("landing"),
 })
 
 // ---------------------------------------------------------------------------
@@ -59,6 +59,8 @@ function buildEmailHtml(data: z.infer<typeof ContactFormSchema>): string {
   const sourceBadge =
     data.source === "services"
       ? `<span style="background:#7c3aed;color:#fff;padding:2px 10px;border-radius:999px;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Services Page</span>`
+      : data.source === "about"
+      ? `<span style="background:#059669;color:#fff;padding:2px 10px;border-radius:999px;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">About Page</span>`
       : `<span style="background:#0284c7;color:#fff;padding:2px 10px;border-radius:999px;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Contact Form</span>`
 
   return `

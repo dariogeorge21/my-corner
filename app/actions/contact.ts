@@ -9,7 +9,7 @@ const ContactFormSchema = z.object({
   email: z.string().email().max(254),
   subject: z.string().min(2).max(80),
   description: z.string().min(10).max(500),
-  source: z.enum(["landing", "services"]).optional().default("landing"),
+  source: z.enum(["landing", "services", "about"]).optional().default("landing"),
 })
 
 type ContactFormData = z.input<typeof ContactFormSchema>
