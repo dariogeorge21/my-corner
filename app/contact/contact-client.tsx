@@ -3,7 +3,7 @@
 import { motion, AnimatePresence, useMotionValue, useSpring, useMotionTemplate, useTransform, useReducedMotion } from "framer-motion"
 import { useState, useRef, useEffect, useCallback } from "react"
 import { ArrowRight, Mail } from "lucide-react"
-import { FaLinkedin, FaGithub, FaInstagram } from "react-icons/fa"
+import { FaLinkedin, FaGithub, FaInstagram, FaMailBulk } from "react-icons/fa"
 import { submitContact, type ContactResponse } from "@/app/actions/contact"
 
 // --- TYPES & VALIDATION ---
@@ -18,48 +18,45 @@ const XSS_URL_REGEX = /(https?:\/\/[^\s]+|<[^>]*>)/i
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 // --- ANIMATED INPUT ---
-const AnimatedInput = ({ 
-  label, 
-  value, 
+const AnimatedInput = ({
+  label,
+  value,
   onChange,
-  isTextArea = false, 
+  isTextArea = false,
   isInvalid = false,
   isValidField = false,
-  ...props 
-}: { 
+  ...props
+}: {
   label: string
   value: string
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
   isTextArea?: boolean
   isInvalid?: boolean
   isValidField?: boolean
-  [key: string]: any 
+  [key: string]: any
 }) => {
   const [focused, setFocused] = useState(false)
   const active = focused || value.length > 0
   const inputRef = useRef<any>(null)
 
   return (
-    <motion.div 
-      className={`group relative flex flex-col justify-end min-h-[4rem] border-b pb-3 cursor-text transition-colors hover:border-foreground/30 ${
-        isInvalid ? 'border-red-500' : isValidField ? 'border-green-500' : 'border-foreground/10'
-      }`}
+    <motion.div
+      className={`group relative flex flex-col justify-end min-h-[4rem] border-b pb-3 cursor-text transition-colors hover:border-foreground/30 ${isInvalid ? 'border-red-500' : isValidField ? 'border-green-500' : 'border-foreground/10'
+        }`}
       onClick={() => inputRef.current?.focus()}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 300, damping: 24 }}
     >
       <div className="flex items-end gap-3 w-full">
-        <span className={`font-mono text-sm md:text-base uppercase tracking-widest transition-all duration-300 ${
-          isInvalid ? 'text-red-500' : isValidField ? 'text-green-500' : active ? 'text-accent' : 'text-foreground/60'
-        }`}>
+        <span className={`font-mono text-sm md:text-base uppercase tracking-widest transition-all duration-300 ${isInvalid ? 'text-red-500' : isValidField ? 'text-green-500' : active ? 'text-accent' : 'text-foreground/60'
+          }`}>
           {label}{active ? ':' : ''}
         </span>
-        
+
         {!active && (
-          <div className={`h-[2px] w-8 transition-opacity duration-300 group-hover:opacity-30 group-hover:animate-pulse ${
-            isInvalid ? 'bg-red-500' : isValidField ? 'bg-green-500' : 'bg-foreground/40'
-          }`} />
+          <div className={`h-[2px] w-8 transition-opacity duration-300 group-hover:opacity-30 group-hover:animate-pulse ${isInvalid ? 'bg-red-500' : isValidField ? 'bg-green-500' : 'bg-foreground/40'
+            }`} />
         )}
 
         {isTextArea ? (
@@ -69,9 +66,8 @@ const AnimatedInput = ({
             onChange={onChange}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            className={`bg-transparent outline-none flex-1 text-xl md:text-2xl transition-all duration-300 resize-none overflow-hidden h-8 md:h-10 leading-tight ${
-              isInvalid ? 'text-red-500' : isValidField ? 'text-green-500' : 'text-foreground'
-            } ${active ? 'opacity-100 w-full' : 'opacity-0 w-0'}`}
+            className={`bg-transparent outline-none flex-1 text-xl md:text-2xl transition-all duration-300 resize-none overflow-hidden h-8 md:h-10 leading-tight ${isInvalid ? 'text-red-500' : isValidField ? 'text-green-500' : 'text-foreground'
+              } ${active ? 'opacity-100 w-full' : 'opacity-0 w-0'}`}
             {...props}
           />
         ) : (
@@ -81,15 +77,14 @@ const AnimatedInput = ({
             onChange={onChange}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            className={`bg-transparent outline-none flex-1 text-xl md:text-2xl transition-all duration-300 h-8 md:h-10 leading-tight ${
-              isInvalid ? 'text-red-500' : isValidField ? 'text-green-500' : 'text-foreground'
-            } ${active ? 'opacity-100 w-full' : 'opacity-0 w-0'}`}
+            className={`bg-transparent outline-none flex-1 text-xl md:text-2xl transition-all duration-300 h-8 md:h-10 leading-tight ${isInvalid ? 'text-red-500' : isValidField ? 'text-green-500' : 'text-foreground'
+              } ${active ? 'opacity-100 w-full' : 'opacity-0 w-0'}`}
             {...props}
           />
         )}
       </div>
 
-      <motion.span 
+      <motion.span
         layoutId={`underline-${label}`}
         className={`absolute bottom-0 left-0 w-full h-[2px] origin-left ${isInvalid ? 'bg-red-500' : isValidField ? 'bg-green-500' : 'bg-accent'}`}
         initial={{ scaleX: 0 }}
@@ -222,7 +217,8 @@ export default function ContactClient() {
       className="min-h-screen pt-32 pb-16 px-6 md:px-12 max-w-[1800px] mx-auto w-full relative flex items-center"
       style={{ fontFamily: "var(--font-google-sans-flex)" }}
     >
-      <style dangerouslySetInnerHTML={{__html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .glass-card {
           position: relative;
           display: inline-flex;
@@ -336,14 +332,14 @@ export default function ContactClient() {
       `}} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-12 w-full pt-8">
-        
+
         {/* === COLUMN 1: BIO & SOCIAL LINKS === */}
         <motion.div variants={leftColumnVariants} className="flex flex-col justify-center gap-y-12 h-full">
           <div className="max-w-xl">
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-foreground tracking-tight leading-none mb-6">
               Let's <span className="font-lobster text-accent italic font-normal">Connect.</span>
             </h1>
-            
+
             <div className="space-y-6 text-foreground/80 text-lg md:text-xl font-medium leading-relaxed">
               <p>
                 I'm <strong className="text-foreground">Dario George</strong> — a full-stack web developer from Kerala, India, passionate about building modern web applications, AI-powered products, and exceptional digital experiences.
@@ -357,7 +353,7 @@ export default function ContactClient() {
             </div>
           </div>
 
-          <div className="pt-8 border-t border-foreground/10 flex flex-wrap gap-x-8 gap-y-10 lg:gap-x-12 perspective-[1000px]">
+          <div className="pt-8 mx-12 border-t border-foreground/10 flex flex-wrap gap-x-8 gap-y-10 lg:gap-x-12 perspective-[1000px]">
             <a href="https://www.linkedin.com/in/dariogeorge21/" target="_blank" rel="noreferrer" className="glass-card linkedin">
               <FaLinkedin className="glass-card-icon" />
               <span className="glass-card-name">LinkedIn</span>
@@ -374,7 +370,7 @@ export default function ContactClient() {
             </a>
 
             <a href="mailto:mail.dariogeorge@gmail.com" className="glass-card email">
-              <Mail className="glass-card-icon px-1" />
+              <FaMailBulk className="glass-card-icon" />
               <span className="glass-card-name">Email</span>
             </a>
           </div>
@@ -385,7 +381,7 @@ export default function ContactClient() {
           <span className="absolute -top-4 -right-4 text-foreground/20 font-mono text-xs hidden lg:block">+</span>
           <span className="absolute -bottom-4 -left-4 text-foreground/20 font-mono text-xs hidden lg:block">+</span>
 
-          <motion.div 
+          <motion.div
             ref={formRef}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
@@ -393,7 +389,7 @@ export default function ContactClient() {
             className="w-full max-w-lg bg-surface/5 backdrop-blur-xl border border-white/10 p-6 sm:p-10 md:p-12 relative overflow-hidden shadow-2xl will-change-transform rounded-sm"
           >
             {/* Dynamic Mouse Tracking Glow (GPU accelerated) */}
-            <motion.div 
+            <motion.div
               className="absolute pointer-events-none inset-0 z-0"
               style={{ background: glowPosition }}
             />
@@ -403,39 +399,39 @@ export default function ContactClient() {
                 Send a Message
               </h3>
 
-              <motion.form 
-                onSubmit={handleSubmit} 
+              <motion.form
+                onSubmit={handleSubmit}
                 className="flex flex-col gap-8"
                 animate={shakeKey > 0 ? { x: shakeKey % 2 === 0 ? [-3, 3, -1, 1, 0] : [3, -3, 1, -1, 0] } : { x: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <AnimatedInput 
-                  label="Name" 
-                  value={formData.name} 
+                <AnimatedInput
+                  label="Name"
+                  value={formData.name}
                   onChange={(e) => handleChange(e, 'name')}
                   maxLength={60}
                   isInvalid={touched.name && !isNameValid}
                   isValidField={touched.name && isNameValid}
                 />
-                <AnimatedInput 
-                  label="Email" 
+                <AnimatedInput
+                  label="Email"
                   type="email"
-                  value={formData.email} 
+                  value={formData.email}
                   onChange={(e) => handleChange(e, 'email')}
                   isInvalid={touched.email && !isEmailValid}
                   isValidField={touched.email && isEmailValid}
                 />
-                <AnimatedInput 
-                  label="Subject" 
-                  value={formData.subject} 
+                <AnimatedInput
+                  label="Subject"
+                  value={formData.subject}
                   onChange={(e) => handleChange(e, 'subject')}
                   maxLength={80}
                   isInvalid={touched.subject && !isSubjectValid}
                   isValidField={touched.subject && isSubjectValid}
                 />
-                <AnimatedInput 
-                  label="Description" 
-                  value={formData.description} 
+                <AnimatedInput
+                  label="Description"
+                  value={formData.description}
                   onChange={(e) => handleChange(e, 'description')}
                   isTextArea={true}
                   maxLength={500}
@@ -445,7 +441,7 @@ export default function ContactClient() {
 
                 <AnimatePresence>
                   {formStatus === "error" && (
-                    <motion.div 
+                    <motion.div
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}

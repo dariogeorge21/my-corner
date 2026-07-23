@@ -4,20 +4,28 @@
 
 @layer base {
   :root {
-    --background: #FAF9F6; /* Alabaster Cream */
-    --foreground: #2A1D17; /* Deep Espresso */
+    --background: #FAF9F6;
+    /* Alabaster Cream */
+    --foreground: #2A1D17;
+    /* Deep Espresso */
     --surface: rgba(250, 249, 246, 0.7);
-    --accent: #995F2F; /* Warm Brown */
-    --muted: #978F66; /* Sage Taupe */
+    --accent: #995F2F;
+    /* Warm Brown */
+    --muted: #978F66;
+    /* Sage Taupe */
     --border: rgba(42, 29, 23, 0.08);
   }
 
   .dark {
-    --background: #0C0A09; /* Obsidian */
-    --foreground: #E4D6A9; /* Warm Cream */
+    --background: #0C0A09;
+    /* Obsidian */
+    --foreground: #E4D6A9;
+    /* Warm Cream */
     --surface: rgba(20, 16, 14, 0.6);
-    --accent: #978F66; /* Sage Taupe */
-    --muted: #622B14; /* Rich Brown */
+    --accent: #978F66;
+    /* Sage Taupe */
+    --muted: #622B14;
+    /* Rich Brown */
     --border: rgba(228, 214, 169, 0.08);
   }
 }
@@ -26,10 +34,12 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground antialiased selection:bg-accent selection:text-white;
     font-feature-settings: "rlig" 1, "calt" 1;
-    touch-action: manipulation; /* Eliminates 300ms tap delay on mobile */
+    touch-action: manipulation;
+    /* Eliminates 300ms tap delay on mobile */
   }
 }
 
@@ -37,12 +47,15 @@
 html.lenis {
   height: auto;
 }
+
 .lenis.lenis-smooth {
   scroll-behavior: auto;
 }
+
 .lenis.lenis-smooth [data-lenis-prevent] {
   overscroll-behavior: contain;
 }
+
 .lenis.lenis-stopped {
   overflow: hidden;
 }
@@ -92,12 +105,13 @@ html.lenis {
   background: #fff;
   text-decoration: none;
   padding-left: 20px;
+  margin-bottom: 80px;
   /* Scale adapts per breakpoint — see below. Base is mobile-first 60% */
   transform: rotate(-30deg) skew(25deg) scale(0.6) translate(0, 0);
   transform-origin: center center;
   transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
-              box-shadow 0.5s cubic-bezier(0.23, 1, 0.32, 1),
-              background 0.5s ease;
+    box-shadow 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+    background 0.5s ease;
   box-shadow: -20px 20px 10px rgba(0, 0, 0, 0.5);
   cursor: pointer;
   /* Ensure the 3D pseudo-elements render correctly */
@@ -186,9 +200,11 @@ html.lenis {
 .glass-card.linkedin:hover {
   background: #0077b5;
 }
+
 .glass-card.linkedin:hover::before {
   background: #005a87;
 }
+
 .glass-card.linkedin:hover::after {
   background: #0099e0;
 }
@@ -197,9 +213,11 @@ html.lenis {
 .glass-card.github:hover {
   background: #333;
 }
+
 .glass-card.github:hover::before {
   background: #1a1a1a;
 }
+
 .glass-card.github:hover::after {
   background: #666;
 }
@@ -208,9 +226,11 @@ html.lenis {
 .glass-card.twitter:hover {
   background: #00aced;
 }
+
 .glass-card.twitter:hover::before {
   background: #097aa5;
 }
+
 .glass-card.twitter:hover::after {
   background: #53b9e0;
 }
@@ -219,9 +239,11 @@ html.lenis {
 .glass-card.instagram:hover {
   background: #e4405f;
 }
+
 .glass-card.instagram:hover::before {
   background: #d81c3f;
 }
+
 .glass-card.instagram:hover::after {
   background: #e46880;
 }
@@ -230,44 +252,101 @@ html.lenis {
 .glass-card.email:hover {
   background: #ea4335;
 }
+
 .glass-card.email:hover::before {
   background: #c5221f;
 }
+
 .glass-card.email:hover::after {
   background: #f28482;
 }
 
 /* ── Touch brand colors on :active ─────────────────────── */
 @media (pointer: coarse) {
-  .glass-card.linkedin:active { background: #0077b5 !important; }
-  .glass-card.linkedin:active::before { background: #005a87 !important; }
-  .glass-card.linkedin:active::after { background: #0099e0 !important; }
+  .glass-card.linkedin:active {
+    background: #0077b5 !important;
+  }
+
+  .glass-card.linkedin:active::before {
+    background: #005a87 !important;
+  }
+
+  .glass-card.linkedin:active::after {
+    background: #0099e0 !important;
+  }
+
   .glass-card.linkedin:active .glass-card-icon,
-  .glass-card.linkedin:active .glass-card-name { color: #fff !important; }
+  .glass-card.linkedin:active .glass-card-name {
+    color: #fff !important;
+  }
 
-  .glass-card.github:active { background: #333 !important; }
-  .glass-card.github:active::before { background: #1a1a1a !important; }
-  .glass-card.github:active::after { background: #666 !important; }
+  .glass-card.github:active {
+    background: #333 !important;
+  }
+
+  .glass-card.github:active::before {
+    background: #1a1a1a !important;
+  }
+
+  .glass-card.github:active::after {
+    background: #666 !important;
+  }
+
   .glass-card.github:active .glass-card-icon,
-  .glass-card.github:active .glass-card-name { color: #fff !important; }
+  .glass-card.github:active .glass-card-name {
+    color: #fff !important;
+  }
 
-  .glass-card.twitter:active { background: #00aced !important; }
-  .glass-card.twitter:active::before { background: #097aa5 !important; }
-  .glass-card.twitter:active::after { background: #53b9e0 !important; }
+  .glass-card.twitter:active {
+    background: #00aced !important;
+  }
+
+  .glass-card.twitter:active::before {
+    background: #097aa5 !important;
+  }
+
+  .glass-card.twitter:active::after {
+    background: #53b9e0 !important;
+  }
+
   .glass-card.twitter:active .glass-card-icon,
-  .glass-card.twitter:active .glass-card-name { color: #fff !important; }
+  .glass-card.twitter:active .glass-card-name {
+    color: #fff !important;
+  }
 
-  .glass-card.instagram:active { background: #e4405f !important; }
-  .glass-card.instagram:active::before { background: #d81c3f !important; }
-  .glass-card.instagram:active::after { background: #e46880 !important; }
+  .glass-card.instagram:active {
+    background: #e4405f !important;
+  }
+
+  .glass-card.instagram:active::before {
+    background: #d81c3f !important;
+  }
+
+  .glass-card.instagram:active::after {
+    background: #e46880 !important;
+  }
+
   .glass-card.instagram:active .glass-card-icon,
-  .glass-card.instagram:active .glass-card-name { color: #fff !important; }
+  .glass-card.instagram:active .glass-card-name {
+    color: #fff !important;
+  }
 
-  .glass-card.email:active { background: #ea4335 !important; }
-  .glass-card.email:active::before { background: #c5221f !important; }
-  .glass-card.email:active::after { background: #f28482 !important; }
+  .glass-card.email:active {
+    background: #ea4335 !important;
+  }
+
+  .glass-card.email:active::before {
+    background: #c5221f !important;
+  }
+
+  .glass-card.email:active::after {
+    background: #f28482 !important;
+  }
+
   .glass-card.email:active .glass-card-icon,
-  .glass-card.email:active .glass-card-name { color: #fff !important; }
+  .glass-card.email:active .glass-card-name {
+    color: #fff !important;
+  }
 }
 
 /* =========================================================
@@ -284,11 +363,13 @@ html.lenis {
   .glass-card {
     transform: rotate(-30deg) skew(25deg) scale(0.7) translate(0, 0);
   }
+
   @media (hover: hover) and (pointer: fine) {
     .glass-card:hover {
       transform: rotate(-30deg) skew(25deg) scale(0.7) translate(20px, -15px);
     }
   }
+
   @media (pointer: coarse) {
     .glass-card:active {
       transform: rotate(-30deg) skew(25deg) scale(0.7) translate(16px, -12px) !important;
@@ -301,11 +382,13 @@ html.lenis {
   .glass-card {
     transform: rotate(-30deg) skew(25deg) scale(0.85) translate(0, 0);
   }
+
   @media (hover: hover) and (pointer: fine) {
     .glass-card:hover {
       transform: rotate(-30deg) skew(25deg) scale(0.85) translate(20px, -15px);
     }
   }
+
   @media (pointer: coarse) {
     .glass-card:active {
       transform: rotate(-30deg) skew(25deg) scale(0.85) translate(16px, -12px) !important;
@@ -318,6 +401,7 @@ html.lenis {
   .glass-card {
     transform: rotate(-30deg) skew(25deg) scale(1) translate(0, 0);
   }
+
   @media (hover: hover) and (pointer: fine) {
     .glass-card:hover {
       transform: rotate(-30deg) skew(25deg) scale(1) translate(20px, -15px);
@@ -346,14 +430,16 @@ html.lenis {
   -webkit-overflow-scrolling: touch;
   /* Horizontal snap for premium feel */
   scroll-snap-type: x proximity;
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;
+  /* Firefox */
   /* Spacing between cards accounts for the isometric skew offset */
   column-gap: 0px;
   perspective: 1000px;
 }
 
 .glass-cards-rail::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
+  display: none;
+  /* Chrome/Safari */
 }
 
 /* Each card snaps individually */
@@ -381,10 +467,13 @@ html.lenis {
 
 /* ── Pulse-scale keyframe (used in contact section) ─────── */
 @keyframes pulse-scale {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1) translate(0, 0);
     filter: drop-shadow(0 0 0px rgba(96, 165, 250, 0));
   }
+
   50% {
     transform: scale(1.15) translate(3px, -3px);
     filter: drop-shadow(0 0 12px rgba(96, 165, 250, 0.8));

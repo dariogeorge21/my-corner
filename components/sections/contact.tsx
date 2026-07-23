@@ -18,48 +18,45 @@ const XSS_URL_REGEX = /(https?:\/\/[^\s]+|<[^>]*>)/i
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 // --- ANIMATED INPUT WITH LAYOUT SMOOTHING ---
-const AnimatedInput = ({ 
-  label, 
-  value, 
+const AnimatedInput = ({
+  label,
+  value,
   onChange,
-  isTextArea = false, 
+  isTextArea = false,
   isInvalid = false,
   isValidField = false,
-  ...props 
-}: { 
+  ...props
+}: {
   label: string
   value: string
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
   isTextArea?: boolean
   isInvalid?: boolean
   isValidField?: boolean
-  [key: string]: any 
+  [key: string]: any
 }) => {
   const [focused, setFocused] = useState(false)
   const active = focused || value.length > 0
   const inputRef = useRef<any>(null)
 
   return (
-    <motion.div 
-      className={`group relative flex flex-col justify-end min-h-[4rem] border-b pb-3 cursor-text transition-colors hover:border-foreground/30 ${
-        isInvalid ? 'border-red-500' : isValidField ? 'border-green-500' : 'border-foreground/10'
-      }`}
+    <motion.div
+      className={`group relative flex flex-col justify-end min-h-[4rem] border-b pb-3 cursor-text transition-colors hover:border-foreground/30 ${isInvalid ? 'border-red-500' : isValidField ? 'border-green-500' : 'border-foreground/10'
+        }`}
       onClick={() => inputRef.current?.focus()}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 300, damping: 24 }}
     >
       <div className="flex items-end gap-3 w-full">
-        <span className={`font-mono text-sm md:text-base uppercase tracking-widest transition-all duration-300 ${
-          isInvalid ? 'text-red-500' : isValidField ? 'text-green-500' : active ? 'text-accent' : 'text-foreground/60'
-        }`}>
+        <span className={`font-mono text-sm md:text-base uppercase tracking-widest transition-all duration-300 ${isInvalid ? 'text-red-500' : isValidField ? 'text-green-500' : active ? 'text-accent' : 'text-foreground/60'
+          }`}>
           {label}{active ? ':' : ''}
         </span>
-        
+
         {!active && (
-          <div className={`h-[2px] w-8 transition-opacity duration-300 group-hover:opacity-30 group-hover:animate-pulse ${
-            isInvalid ? 'bg-red-500' : isValidField ? 'bg-green-500' : 'bg-foreground/40'
-          }`} />
+          <div className={`h-[2px] w-8 transition-opacity duration-300 group-hover:opacity-30 group-hover:animate-pulse ${isInvalid ? 'bg-red-500' : isValidField ? 'bg-green-500' : 'bg-foreground/40'
+            }`} />
         )}
 
         {isTextArea ? (
@@ -69,9 +66,8 @@ const AnimatedInput = ({
             onChange={onChange}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            className={`bg-transparent outline-none flex-1 text-xl md:text-2xl transition-all duration-300 resize-none overflow-hidden h-8 md:h-10 leading-tight ${
-              isInvalid ? 'text-red-500' : isValidField ? 'text-green-500' : 'text-foreground'
-            } ${active ? 'opacity-100 w-full' : 'opacity-0 w-0'}`}
+            className={`bg-transparent outline-none flex-1 text-xl md:text-2xl transition-all duration-300 resize-none overflow-hidden h-8 md:h-10 leading-tight ${isInvalid ? 'text-red-500' : isValidField ? 'text-green-500' : 'text-foreground'
+              } ${active ? 'opacity-100 w-full' : 'opacity-0 w-0'}`}
             {...props}
           />
         ) : (
@@ -81,15 +77,14 @@ const AnimatedInput = ({
             onChange={onChange}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            className={`bg-transparent outline-none flex-1 text-xl md:text-2xl transition-all duration-300 h-8 md:h-10 leading-tight ${
-              isInvalid ? 'text-red-500' : isValidField ? 'text-green-500' : 'text-foreground'
-            } ${active ? 'opacity-100 w-full' : 'opacity-0 w-0'}`}
+            className={`bg-transparent outline-none flex-1 text-xl md:text-2xl transition-all duration-300 h-8 md:h-10 leading-tight ${isInvalid ? 'text-red-500' : isValidField ? 'text-green-500' : 'text-foreground'
+              } ${active ? 'opacity-100 w-full' : 'opacity-0 w-0'}`}
             {...props}
           />
         )}
       </div>
 
-      <motion.span 
+      <motion.span
         layoutId={`underline-${label}`}
         className={`absolute bottom-0 left-0 w-full h-[2px] origin-left ${isInvalid ? 'bg-red-500' : isValidField ? 'bg-green-500' : 'bg-accent'}`}
         initial={{ scaleX: 0 }}
@@ -303,9 +298,10 @@ export default function Contact() {
       className="py-16 sm:py-24 md:py-32 px-6 md:px-12 max-w-[1800px] mx-auto w-full relative"
       style={{ fontFamily: "var(--font-google-sans-flex)" }}
     >
-     
+
       {/* --- INJECTED 3D GLASSMORPHIC SOCIAL CARDS CSS --- */}
-      <style dangerouslySetInnerHTML={{__html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .glass-card {
           position: relative;
           display: inline-flex;
@@ -434,7 +430,7 @@ export default function Contact() {
         }
       `}} />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-8 mb-24 sm:mb-32">
-        
+
         {/* === COLUMN 1: INTERACTIVE TYPOGRAPHY (Staggered words) === */}
         <motion.div variants={leftColumnVariants} className="flex flex-col justify-center gap-y-8">
           <h2 className="flex flex-col gap-y-2 font-bold text-foreground tracking-tight leading-tight">
@@ -462,8 +458,8 @@ export default function Contact() {
           </h2>
           <div className="mt-12 pt-8 border-t border-foreground/20">
             <p className="text-foreground/60 font-mono text-xs tracking-widest uppercase mb-3">Contact us</p>
-            <a 
-              href="mailto:contact@dariogeorge.in" 
+            <a
+              href="mailto:contact@dariogeorge.in"
               className="group relative inline-flex items-center text-foreground text-2xl md:text-4xl font-bold pb-2 overflow-hidden"
             >
               <span className="absolute left-0 bottom-0 w-full h-[2px] bg-foreground/20" />
@@ -488,7 +484,7 @@ export default function Contact() {
           <span className="absolute -top-4 -right-4 text-foreground/20 font-mono text-xs hidden lg:block">+</span>
           <span className="absolute -bottom-4 -left-4 text-foreground/20 font-mono text-xs hidden lg:block">+</span>
 
-          <motion.div 
+          <motion.div
             ref={formRef}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
@@ -496,7 +492,7 @@ export default function Contact() {
             className="w-full max-w-lg bg-surface/5 backdrop-blur-xl border border-white/10 p-5 sm:p-8 md:p-14 relative overflow-hidden shadow-2xl will-change-transform"
           >
             {/* Dynamic Mouse Tracking Glow (GPU accelerated) */}
-            <motion.div 
+            <motion.div
               className="absolute pointer-events-none inset-0 z-0"
               style={{ background: glowPosition }}
             />
@@ -506,39 +502,39 @@ export default function Contact() {
                 CONTACT
               </h3>
 
-              <motion.form 
-                onSubmit={handleSubmit} 
+              <motion.form
+                onSubmit={handleSubmit}
                 className="flex flex-col gap-10"
                 animate={shakeKey > 0 ? { x: shakeKey % 2 === 0 ? [-3, 3, -1, 1, 0] : [3, -3, 1, -1, 0] } : { x: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <AnimatedInput 
-                  label="Name" 
-                  value={formData.name} 
+                <AnimatedInput
+                  label="Name"
+                  value={formData.name}
                   onChange={(e) => handleChange(e, 'name')}
                   maxLength={30}
                   isInvalid={touched.name && !isNameValid}
                   isValidField={touched.name && isNameValid}
                 />
-                <AnimatedInput 
-                  label="Email" 
+                <AnimatedInput
+                  label="Email"
                   type="email"
-                  value={formData.email} 
+                  value={formData.email}
                   onChange={(e) => handleChange(e, 'email')}
                   isInvalid={touched.email && !isEmailValid}
                   isValidField={touched.email && isEmailValid}
                 />
-                <AnimatedInput 
-                  label="Subject" 
-                  value={formData.subject} 
+                <AnimatedInput
+                  label="Subject"
+                  value={formData.subject}
                   onChange={(e) => handleChange(e, 'subject')}
                   maxLength={30}
                   isInvalid={touched.subject && !isSubjectValid}
                   isValidField={touched.subject && isSubjectValid}
                 />
-                <AnimatedInput 
-                  label="Description" 
-                  value={formData.description} 
+                <AnimatedInput
+                  label="Description"
+                  value={formData.description}
                   onChange={(e) => handleChange(e, 'description')}
                   isTextArea={true}
                   maxLength={100}
@@ -548,7 +544,7 @@ export default function Contact() {
 
                 <AnimatePresence>
                   {formStatus === "error" && (
-                    <motion.div 
+                    <motion.div
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
@@ -604,7 +600,7 @@ export default function Contact() {
       </div>
 
       {/* === ROW 2: 3D PHYSICS SOCIAL CARDS (Staggered) === */}
-      <motion.div 
+      <motion.div
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -612,12 +608,12 @@ export default function Contact() {
         className="w-full border-t border-foreground/10 pt-24 pb-12 mt-12 relative"
       >
         <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-foreground/20 font-mono text-xs">+</span>
-        
+
         <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-foreground/20 font-mono text-xs">+</span>
-        
+
         {/* Social cards: flex-col on mobile (flat via globals.css @media), flex-wrap on desktop */}
-        <div className="flex flex-col md:flex-row md:flex-wrap md:justify-between items-stretch md:items-center gap-3 md:gap-12 max-w-9xl mx-auto px-4 md:px-0" style={{ perspective: "1200px" }}>
-          
+        <div className="flex flex-col md:flex-row md:flex-wrap md:justify-between items-stretch md:items-center gap-3 md:gap-8 max-w-9xl mx-12 px-4 md:px-0 sm:my-32" style={{ perspective: "1200px" }}>
+
           <a href="https://linkedin.com/in/dariogeorge21" target="_blank" rel="noreferrer" className="glass-card linkedin">
             <FaLinkedin className="glass-card-icon" />
             <span className="glass-card-name">LinkedIn</span>
