@@ -896,7 +896,7 @@ export default function AboutPage() {
                       ) : formStatus === "whatsapp" ? (
                         <motion.div key="whatsapp" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
                           className="text-yellow-400 font-mono uppercase tracking-widest text-xs flex items-center gap-3 px-6 py-4 border border-yellow-400/30 bg-yellow-400/10 w-full" role="status">
-                          ↗ Opening WhatsApp fallback…
+                          ↗ Opening WhatsApp
                         </motion.div>
                       ) : (
                         <motion.div key="form-footer" className="flex items-center justify-between w-full gap-4">

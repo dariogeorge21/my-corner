@@ -449,7 +449,7 @@ function ServiceModal({ isOpen, onClose, defaultServiceType }: ServiceModalProps
                       role="alert"
                       aria-live="polite"
                     >
-                      ↗ Opening WhatsApp fallback…
+                      ↗ Opening WhatsApp
                     </motion.div>
                   )}
                 </AnimatePresence>
