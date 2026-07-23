@@ -67,8 +67,8 @@ function buildEmailHtml(data: z.infer<typeof ContactFormSchema>): string {
     data.source === "services"
       ? `<span style="background:#7c3aed;color:#fff;padding:2px 10px;border-radius:999px;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Services Page</span>`
       : data.source === "about"
-      ? `<span style="background:#059669;color:#fff;padding:2px 10px;border-radius:999px;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">About Page</span>`
-      : `<span style="background:#0284c7;color:#fff;padding:2px 10px;border-radius:999px;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Contact Form</span>`
+        ? `<span style="background:#059669;color:#fff;padding:2px 10px;border-radius:999px;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">About Page</span>`
+        : `<span style="background:#0284c7;color:#fff;padding:2px 10px;border-radius:999px;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Contact Form</span>`
 
   return `
     <div style="font-family:'Segoe UI',Arial,sans-serif;max-width:620px;margin:0 auto;background:#0d0d0d;border-radius:12px;overflow:hidden;border:1px solid #222;">
@@ -149,8 +149,8 @@ export async function submitContact(formData: ContactFormData): Promise<ContactR
     const resend = new Resend(apiKey)
 
     const { error } = await resend.emails.send({
-      from: "onboarding@resend.dev",
-      to: "dariogeorge21.kerala@gmail.com",
+      from: "My Corner <noreply@dariogeorge.in>",
+      to: "mail.dariogeorge@gmail.com",
       replyTo: email,
       subject: `[My Corner] New Inquiry: ${subject}`,
       html: buildEmailHtml(parsed.data),
@@ -170,11 +170,11 @@ export async function submitContact(formData: ContactFormData): Promise<ContactR
     return { ok: true, channel: "email" }
   } catch (err) {
     console.error("[submitContact] Unexpected error:", err)
-    return { 
-      ok: true, 
-      channel: "whatsapp", 
+    return {
+      ok: true,
+      channel: "whatsapp",
       whatsappUrl: generateWhatsAppLink(parsed.data),
-      warning: "A critical network failure occurred. Opening WhatsApp as a fallback." 
+      warning: "A critical network failure occurred. Opening WhatsApp as a fallback."
     }
   }
 }

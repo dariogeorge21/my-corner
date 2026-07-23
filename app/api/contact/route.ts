@@ -156,7 +156,7 @@ export async function POST(request: NextRequest) {
       from: "My Corner <noreply@dariogeorge.in>",
       to: "dariogeorge21@gmail.com",
       replyTo: email,
-      subject: `[My Corner] New Inquiry: ${subject}`,
+      subject: `[Domain] New Inquiry: ${subject}`,
       html: buildEmailHtml(parsed.data),
     })
 
