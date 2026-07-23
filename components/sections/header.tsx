@@ -6,7 +6,9 @@ import { useState, useEffect } from "react"
 import { useTheme } from "next-themes"
 import { Moon, Sun } from "lucide-react"
 import Magnetic from "../magnetic" // Adjust path as needed
-import Shuffle from '../Shuffle' // Your provided component
+import dynamic from "next/dynamic"
+
+const Shuffle = dynamic(() => import('../Shuffle'), { ssr: false })
 
 export default function Header() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -116,7 +118,7 @@ export default function Header() {
         </div>
 
         {/* CENTER: Name with Shuffle Component */}
-        <div className="pointer-events-auto font-sans tracking-tight text-xl hidden md:block font-medium" style={{ fontFamily: "var(--font-agbalumo)" }}>
+        <Link href="/" className="pointer-events-auto font-sans tracking-tight text-xl hidden md:block font-medium" style={{ fontFamily: "var(--font-agbalumo)" }}>
           <Shuffle
             text="Dario George"
             shuffleDirection="right"
@@ -132,14 +134,14 @@ export default function Header() {
             loop={false}
             loopDelay={4}
           />
-        </div>
+        </Link>
 
         {/* RIGHT: Theme Toggle + Connect Now Link */}
         <div className="pointer-events-auto flex items-center gap-4 md:gap-6">
           <Magnetic>
             <Link
-              href="#contact"
-              onClick={handleNavClick("#contact")}
+              href="/#contact"
+              onClick={handleNavClick("/#contact")}
               className="group relative px-4 py-2 font-sans font-medium text-sm tracking-wide text-foreground"
             >
               Connect Now
