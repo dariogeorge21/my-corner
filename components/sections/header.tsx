@@ -32,14 +32,22 @@ export default function Header() {
     window.history.pushState(null, "", hash)
   }
 
-  const handleNavClick = (href: string, closeSidebar?: boolean) => (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!href.startsWith("#")) return
+  const handleNavClick =
+    (href: string, closeSidebar = false) =>
+      (e: React.MouseEvent<HTMLAnchorElement>) => {
+        if (closeSidebar) {
+          setIsSidebarOpen(false);
+        }
 
-    e.preventDefault()
-    if (closeSidebar) setIsSidebarOpen(false)
-    window.setTimeout(() => scrollToHash(href), closeSidebar ? 50 : 0)
-  }
+        // Smooth scrolling for hash links
+        if (href.startsWith("#")) {
+          e.preventDefault();
 
+          window.setTimeout(() => {
+            scrollToHash(href);
+          }, closeSidebar ? 250 : 0);
+        }
+      };
   // Global mouse tracker for the whole-nav parallax and the email custom cursor
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
