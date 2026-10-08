@@ -12,6 +12,7 @@ import { Providers } from "@/components/providers";
 import Header from "@/components/sections/header";
 import Footer from "@/components/sections/footer";
 import SplashCursor from "@/components/SplashCursor";
+import StickySocialDock from "@/components/ui/sticky-social-dock";
 import { Analytics } from "@vercel/analytics/next";
 
 // ─── Fonts ────────────────────────────────────────────────────────────────────
@@ -439,6 +440,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <StickySocialDock />
         </Providers>
       </body>
     </html>
