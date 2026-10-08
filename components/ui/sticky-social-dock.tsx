@@ -148,6 +148,7 @@ export default function StickySocialDock() {
   return (
     <aside
       aria-label="Quick contact & social navigation"
+      style={{ fontFamily: "var(--font-google-sans-flex), sans-serif" }}
       className="fixed bottom-6 right-5 md:bottom-8 md:right-8 z-50 flex flex-col items-end gap-3 pointer-events-auto select-none"
     >
       {/* ─── 3D APPLE GLASS SPHERES (Telegram, WhatsApp, Email) ─── */}
@@ -172,7 +173,7 @@ export default function StickySocialDock() {
                     animate={{ opacity: 1, x: 0, scale: 1 }}
                     exit={{ opacity: 0, x: 8, scale: 0.94 }}
                     transition={{ type: "spring", stiffness: 450, damping: 28 }}
-                    className="absolute right-full mr-3.5 px-3.5 py-1.5 rounded-full pointer-events-none whitespace-nowrap shadow-xl backdrop-blur-xl bg-white/90 dark:bg-stone-900/90 border border-white/90 dark:border-white/15 text-xs md:text-sm font-mono tracking-wider text-foreground"
+                    className="absolute right-full mr-3.5 px-3.5 py-1.5 rounded-full pointer-events-none whitespace-nowrap shadow-xl backdrop-blur-xl bg-white/90 dark:bg-stone-900/90 border border-white/90 dark:border-white/15 text-xs md:text-sm font-medium tracking-wide text-foreground"
                   >
                     <RollingText
                       text={item.name}
@@ -230,7 +231,7 @@ export default function StickySocialDock() {
           </div>
 
           {/* Rolling Text Reappear inside the Pill */}
-          <span className="font-mono text-xs md:text-sm font-semibold tracking-wide text-foreground/90 group-hover:text-foreground">
+          <span className="text-xs md:text-sm font-medium tracking-wide text-foreground/90 group-hover:text-foreground">
             <RollingText
               text={directCallAction.name}
               hoverText={directCallAction.actionText}
