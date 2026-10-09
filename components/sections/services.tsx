@@ -14,6 +14,7 @@ interface Service {
   techTags: string[]
   details: string
   gradient: string // for the portal background
+  price: string
 }
 
 const services: Service[] = [
@@ -25,6 +26,7 @@ const services: Service[] = [
     techTags: ["Next.js", "React", "Tailwind", "Framer Motion", "Vite", "ShadCN/UI", " Docker"],
     details: "From high-performance corporate websites to full‑stack web applications, I build scalable, accessible, and visually striking digital experiences.",
     gradient: "from-blue-500/20 to-cyan-500/20",
+    price: "₹500/hr · quote based on project size",
   },
   {
     id: "02",
@@ -34,15 +36,27 @@ const services: Service[] = [
     techTags: ["Markdown", "Reports", "PDF", "Documentation"],
     details: "I create clear, structured, and professional documentation for software, hardware, and business processes, ensuring your information is accessible and actionable.",
     gradient: "from-purple-500/20 to-pink-500/20",
+    price: "₹50/hr",
   },
   {
     id: "03",
+    title: "Posters for Events",
+    description: "Posters for events, programs, college fests and announcements",
+    location: "PAN-INDIA",
+    techTags: ["Print-ready", "Social media", "Branding"],
+    details: "Eye-catching posters for events and programs, delivered print-ready and in social-media sizes.",
+    gradient: "from-rose-500/20 to-red-500/20",
+    price: "₹100/hr",
+  },
+  {
+    id: "04",
     title: "Hardware Support",
     description: "PC building, upgrades, repair, networking",
     location: "DELHI NCR ONLY",
     techTags: ["Diagnostics", "Assembly", "Optimization", "Consultation", "Customisation"],
     details: "On‑site hardware services in Delhi – from custom PC builds to network troubleshooting and component upgrades.",
     gradient: "from-amber-500/20 to-orange-500/20",
+    price: "Contact for a quote",
   },
 ]
 
@@ -90,17 +104,14 @@ const ServiceRow = ({ service, index, isActive, onHover, onFocus }: ServiceRowPr
           </span>
           <div>
             <h3
-              className={`text-xl sm:text-2xl md:text-5xl font-bold tracking-tight transition-colors duration-300 ${isActive ? "text-foreground" : "text-foreground/40 group-hover:text-foreground/80"
+              className={`text-xl sm:text-2xl md:text-5xl font-bold tracking-tight transition-colors duration-300 ${isActive ? "text-foreground" : "text-foreground/90"
                 }`}
             >
               {service.title}
             </h3>
-            {/* Desktop only description (inline) */}
-            <div className="hidden md:block mt-2">
-              <p className="font-mono text-xs uppercase tracking-wider text-foreground/50">
-                {service.description}
-              </p>
-            </div>
+            {/* Description + price: always visible (no hover-only info) */}
+            <p className="mt-2 text-sm text-foreground/70">{service.description}</p>
+            <p className="mt-2 text-sm font-semibold text-accent">{service.price}</p>
           </div>
         </div>
 
