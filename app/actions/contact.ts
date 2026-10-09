@@ -6,11 +6,11 @@ import { Resend } from "resend"
 
 // ─── Validation schema (mirrors the API route) ───────────────────────────────
 const ContactFormSchema = z.object({
-  name: z.string().min(5).max(60),
+  name: z.string().min(2).max(60),
   email: z.string().email().max(254),
   phone: z.string().optional(),
   subject: z.string().min(2).max(80),
-  description: z.string().min(10).max(500),
+  description: z.string().min(10).max(1000),
   source: z.enum(["landing", "services", "about"]).optional().default("landing"),
 })
 
