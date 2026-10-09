@@ -349,7 +349,7 @@ export default function Footer() {
               external
             />
             <MagneticLink
-              href="mailto:edu.dariogeorge21@gmail.com"
+              href="mailto:mail.dariogeorge@gmail.com"
               label={
                 <div className="flex items-center gap-2">
                   <Mail size={16} />
