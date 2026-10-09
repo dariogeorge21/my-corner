@@ -4,6 +4,10 @@
 
 @layer base {
   :root {
+    --font-mono: var(--font-google-sans-flex), ui-sans-serif, system-ui, sans-serif;
+    --font-lobster: var(--font-google-sans-flex), ui-sans-serif, system-ui, sans-serif;
+    --font-funnel-display: var(--font-google-sans-flex), ui-sans-serif, system-ui, sans-serif;
+    --font-agbalumo: var(--font-google-sans-flex), ui-sans-serif, system-ui, sans-serif;
     --background: #FAF9F6;
     /* Alabaster Cream */
     --foreground: #2A1D17;
@@ -35,7 +39,13 @@
     @apply border-border;
   }
 
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
   body {
+    font-family: var(--font-google-sans-flex), ui-sans-serif, system-ui, sans-serif;
     @apply bg-background text-foreground antialiased selection:bg-accent selection:text-white;
     font-feature-settings: "rlig" 1, "calt" 1;
     touch-action: manipulation;
@@ -586,4 +596,58 @@ html.lenis {
     0 4px 10px -2px rgba(0, 0, 0, 0.35),
     inset 0 1.5px 3px rgba(255, 255, 255, 0.28),
     inset 0 -2px 4px rgba(0, 0, 0, 0.38);
+}
+/* =========================================================
+   REDUCED MOTION — respect user preference everywhere
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =========================================================
+   SEND BUTTON — "paper plane flight" loading state
+   ========================================================= */
+@keyframes send-sheen {
+  0% { transform: translateX(-120%) skewX(-20deg); }
+  100% { transform: translateX(260%) skewX(-20deg); }
+}
+@keyframes send-orbit {
+  to { transform: rotate(360deg); }
+}
+@keyframes send-trail {
+  0% { transform: translateX(-30px); opacity: 0; }
+  40% { opacity: 1; }
+  100% { transform: translateX(30px); opacity: 0; }
+}
+.send-btn-loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+  animation: send-sheen 1.1s ease-in-out infinite;
+  pointer-events: none;
+}
+.send-orbit {
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  animation: send-orbit 0.8s linear infinite;
+}
+.send-trail-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: send-trail 1s ease-in-out infinite;
 }

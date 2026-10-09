@@ -17,6 +17,10 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["var(--font-google-sans-flex)", "ui-sans-serif", "system-ui", "sans-serif"],
+        mono: ["var(--font-google-sans-flex)", "ui-sans-serif", "system-ui", "sans-serif"],
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
