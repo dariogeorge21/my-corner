@@ -1,41 +1,16 @@
 import type { Metadata } from "next";
-import {
-  Inter,
-  JetBrains_Mono,
-  Agbalumo,
-  Funnel_Display,
-  Lobster,
-  Google_Sans_Flex,
-} from "next/font/google";
+import { Google_Sans_Flex } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import Header from "@/components/sections/header";
 import Footer from "@/components/sections/footer";
-import SplashCursor from "@/components/SplashCursor";
+import DesktopEffects from "@/components/desktop-effects";
 import StickySocialDock from "@/components/ui/sticky-social-dock";
 import { Analytics } from "@vercel/analytics/next";
 
 // ─── Fonts ────────────────────────────────────────────────────────────────────
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-});
-const agbalumo = Agbalumo({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-agbalumo",
-});
-const funnelDisplay = Funnel_Display({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-funnel-display",
-});
-const lobster = Lobster({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-lobster",
-});
+// One family site-wide (Google Sans Flex). Legacy variables (--font-mono,
+// --font-lobster, --font-funnel-display, ...) are aliased to it in globals.css.
 const googleSansFlex = Google_Sans_Flex({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800"],
@@ -417,22 +392,26 @@ export default function RootLayout({
     <html
       lang="en-IN"
       suppressHydrationWarning
-      className={`${inter.variable} ${jetbrainsMono.variable} ${agbalumo.variable} ${funnelDisplay.variable} ${lobster.variable} ${googleSansFlex.variable}`}
+      className={googleSansFlex.variable}
     >
       <head>
-        <Analytics />
         <meta name="apple-mobile-web-app-title" content="Dario" />
         {/* Geographic meta tags for local SEO */}
         <meta name="geo.region" content="IN-DL" />
         <meta name="geo.placename" content="Delhi, India" />
-        <meta name="geo.region" content="IN-KL" />
         {/* Theme color for browser chrome */}
         <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
         <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
         <StructuredData />
       </head>
       <body className="font-sans min-h-screen relative overflow-x-hidden">
-        <SplashCursor />
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:bg-foreground focus:text-background focus:px-4 focus:py-2 focus:rounded-md"
+        >
+          Skip to main content
+        </a>
+        <DesktopEffects />
         <div className="ambient-glow" />
         <Providers attribute="class" enableSystem disableTransitionOnChange>
           <Header />
@@ -442,6 +421,7 @@ export default function RootLayout({
           <Footer />
           <StickySocialDock />
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
