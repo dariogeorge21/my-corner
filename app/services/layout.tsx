@@ -2,30 +2,27 @@ import type { Metadata } from "next"
 
 // ─── Services Route Metadata ──────────────────────────────────────────────────
 export const metadata: Metadata = {
-  title:
-    "Services — Web Development, Software & Hardware Support, Documentation",
+  title: "Services & Pricing | Dario George – Web Apps, Docs, Event Posters & PC Support",
   description:
-    "Explore Dario George's professional services: custom website development across India, antivirus & Microsoft software support, PC hardware delivery, and professional digital documentation.",
+    "Explore services by Dario George: Website & Web App development (₹500/hr), Technical Documentation & Reports (₹50/hr), Posters for Events & Programs (₹100/hr), and PC Hardware Support across Delhi & Kerala. Request an upfront quote today.",
   alternates: {
     canonical: "https://dariogeorge.in/services",
   },
   openGraph: {
-    title:
-      "Services | Dario George — Web Dev, Hardware Support & Documentation",
+    title: "Services & Pricing | Dario George – Web Dev, Docs, Posters & Hardware",
     description:
-      "Custom websites, software & hardware support, and professional documentation — delivered pan-India by Dario George, freelance web developer.",
+      "Transparent hourly rates: Website Development (₹500/hr), Documentation (₹50/hr), Event Posters (₹100/hr), and PC Hardware support across India.",
     url: "https://dariogeorge.in/services",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Services | Dario George",
+    title: "Services & Pricing | Dario George",
     description:
-      "Web development, software & hardware support, and documentation services — pan-India.",
+      "Custom websites, technical documentation, event posters, and PC hardware support across India.",
   },
 }
 
-// ─── Services Layout ──────────────────────────────────────────────────────────
 export default function ServicesLayout({
   children,
 }: {
