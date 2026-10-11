@@ -95,7 +95,7 @@ export default function AboutPage() {
 
           <div className="mt-8 flex flex-wrap items-center gap-4 text-sm text-foreground/70">
             <span className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-foreground/15 bg-surface/30">
-              <MapPin size={14} className="text-accent" aria-hidden /> Delhi NCR &amp; Kerala, India
+              <MapPin size={14} className="text-accent" aria-hidden /> Delhi NCR &amp; Kerala (Bases of Operation)
             </span>
             <span className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-foreground/15 bg-surface/30">
               <Terminal size={14} className="text-accent" aria-hidden /> Next.js · TypeScript · Supabase
@@ -137,7 +137,7 @@ export default function AboutPage() {
               An architectural approach to code and design.
             </h2>
             <p className="mt-5 text-base text-foreground/75 leading-relaxed">
-              Based out of Delhi and Palai, Kerala, I work with entrepreneurs, institutions, and businesses across India.
+              Operating across twin bases of operation in <strong>Delhi NCR</strong> (serving Laxmi Nagar, Gurugram, Noida, Nehru Place, and NCR) and <strong>Kerala</strong> (active in Palai, Thodupuzha, Kottayam, Muvattupuzha, Kothamangalam, and Idukki), I work with entrepreneurs, institutions, and businesses across India.
               Whether building an institutional bus pass platform, a collaborative SaaS workspace, or assembling a
               workstation, I treat every project with end-to-end craftsmanship.
             </p>

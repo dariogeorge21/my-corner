@@ -365,7 +365,7 @@ export default function ServicesPage() {
               PC Hardware Support &amp; Custom Builds
             </h2>
             <div className="mt-4 inline-block px-3.5 py-1.5 rounded-full bg-accent/15 text-accent font-mono text-xs font-semibold">
-              Rate: Custom Quote · On-site Delhi NCR &amp; Pan-India parts
+              Rate: Custom Quote · On-site Delhi NCR (Laxmi Nagar, Gurugram, Noida, Nehru Place, NCR) &amp; Pan-India parts
             </div>
             <p className="mt-4 text-base text-foreground/75 leading-relaxed">
               Custom desktop assembly for content creators, developers, and gamers. Hardware diagnostics, component upgrades (NVMe SSD, RAM, GPU), thermal paste reapplications, and genuine hardware supply.

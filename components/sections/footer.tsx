@@ -6,6 +6,7 @@ import Link from "next/link"
 import { ArrowUpRight, MapPin, Mail } from "lucide-react"
 import { FaInstagram, FaTwitter, FaLinkedin, FaGithub } from "react-icons/fa"
 import CircularText from "../CircularText"
+import { BASE_OF_OPERATIONS } from "@/lib/site"
 
 // --- MAGNETIC LINK COMPONENT (Physics-based pull) ---
 const MagneticLink = ({
@@ -217,39 +218,100 @@ export default function Footer() {
         </div>
 
         {/* --- SECTION 2: Location & Socials --- */}
-        <div className="flex w-full min-w-0 flex-col md:flex-row justify-between items-start md:items-center gap-12 border-b border-foreground/10 pb-16 relative">
+        <div className="flex w-full min-w-0 flex-col lg:flex-row justify-between items-start gap-12 border-b border-foreground/10 pb-16 relative">
           <motion.div variants={lineVariants} className="absolute bottom-0 right-0 w-full h-[1px] bg-foreground/20 origin-right" />
           <div className="absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2 text-foreground/20 font-mono text-xs">+</div>
 
-          <motion.div variants={navItemVariants} className="flex w-full min-w-0 flex-col gap-4 md:w-1/2">
-            <span className="text-xs text-foreground/40 uppercase tracking-widest font-mono mb-2">[ BASE OF OPERATIONS ]</span>
-            <div className="flex w-full flex-wrap items-center gap-6 min-w-0">
-              <div className="flex items-center gap-2 text-foreground/60">
-                <MapPin size={18} />
-                <span className="uppercase text-sm tracking-widest font-medium">Location:</span>
+          <motion.div variants={navItemVariants} className="flex w-full min-w-0 flex-col gap-6 lg:max-w-3xl">
+            <div className="flex flex-col gap-2">
+              <span className="text-xs text-foreground/40 uppercase tracking-widest font-mono mb-1">[ BASE OF OPERATIONS ]</span>
+              <div className="flex w-full flex-wrap items-center gap-4 min-w-0">
+                <div className="flex items-center gap-2 text-foreground/60">
+                  <MapPin size={18} className="text-accent" />
+                  <span className="uppercase text-sm tracking-widest font-medium">Primary Hubs:</span>
+                </div>
+                <MagneticLink
+                  href="https://www.google.com/maps/search/?api=1&query=New+Delhi"
+                  label={<span className="font-semibold text-foreground tracking-wide">NEW DELHI</span>}
+                  tooltipText="Explore New Delhi on Maps"
+                  setHoverState={setHoverState}
+                  external
+                />
+                <span className="text-foreground/20 font-mono">/</span>
+                <MagneticLink
+                  href="https://www.google.com/maps/search/?api=1&query=Kerala"
+                  label={<span className="font-semibold text-foreground tracking-wide">KERALA</span>}
+                  tooltipText="Explore Kerala on Maps"
+                  setHoverState={setHoverState}
+                  external
+                />
               </div>
-              <MagneticLink
-                href="https://www.google.com/maps/search/?api=1&query=New+Delhi"
-                label="New Delhi"
-                tooltipText="View on Maps"
-                setHoverState={setHoverState}
-                external
-              />
-              <span className="text-foreground/20">/</span>
-              <MagneticLink
-                href="https://www.google.com/maps/search/?api=1&query=Kerala"
-                label="Kerala"
-                tooltipText="View on Maps"
-                setHoverState={setHoverState}
-                external
-              />
+            </div>
+
+            {/* Nearest Locations / Regional Coverage */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-3 border-t border-foreground/10 text-xs font-mono">
+              {/* Kerala Hub */}
+              <div className="flex flex-col gap-2.5 rounded-xl border border-foreground/10 bg-surface/20 p-4 backdrop-blur-xs">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 text-foreground/85 font-bold uppercase tracking-wider text-xs">
+                    <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+                    <span>In KERALA</span>
+                  </div>
+                  <span className="text-[10px] text-foreground/40 uppercase tracking-widest">Nearest Hubs</span>
+                </div>
+                <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-foreground/75">
+                  {BASE_OF_OPERATIONS.kerala.nearby.map((loc, idx) => (
+                    <span key={loc.name} className="inline-flex items-center gap-2.5">
+                      <MagneticLink
+                        href={`https://www.google.com/maps/search/?api=1&query=${loc.query}`}
+                        label={loc.name}
+                        tooltipText={`${loc.name} · ${loc.region}`}
+                        setHoverState={setHoverState}
+                        external
+                        className="hover:text-accent transition-colors"
+                      />
+                      {idx < BASE_OF_OPERATIONS.kerala.nearby.length - 1 && (
+                        <span className="text-foreground/20">·</span>
+                      )}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Delhi Hub */}
+              <div className="flex flex-col gap-2.5 rounded-xl border border-foreground/10 bg-surface/20 p-4 backdrop-blur-xs">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 text-foreground/85 font-bold uppercase tracking-wider text-xs">
+                    <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+                    <span>In DELHI</span>
+                  </div>
+                  <span className="text-[10px] text-foreground/40 uppercase tracking-widest">Nearest Hubs</span>
+                </div>
+                <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-foreground/75">
+                  {BASE_OF_OPERATIONS.delhi.nearby.map((loc, idx) => (
+                    <span key={loc.name} className="inline-flex items-center gap-2.5">
+                      <MagneticLink
+                        href={`https://www.google.com/maps/search/?api=1&query=${loc.query}`}
+                        label={loc.name}
+                        tooltipText={`${loc.name} · ${loc.region}`}
+                        setHoverState={setHoverState}
+                        external
+                        className="hover:text-accent transition-colors"
+                      />
+                      {idx < BASE_OF_OPERATIONS.delhi.nearby.length - 1 && (
+                        <span className="text-foreground/20">·</span>
+                      )}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
           </motion.div>
 
-          <motion.div variants={navItemVariants} className="flex w-full min-w-0 flex-col gap-4 md:w-1/2 md:items-end">
+          <motion.div variants={navItemVariants} className="flex w-full min-w-0 flex-col gap-4 lg:w-auto lg:items-end shrink-0">
             <span className="text-xs text-foreground/40 uppercase tracking-widest font-mono mb-2">[ DIGITAL PRESENCE ]</span>
-            <div className="flex w-full flex-wrap items-center gap-8 md:justify-end">
-              <span className="uppercase text-sm tracking-widest font-medium text-foreground/60 hidden md:block">Follow:</span>
+            <div className="flex w-full flex-wrap items-center gap-8 lg:justify-end">
+              <span className="uppercase text-sm tracking-widest font-medium text-foreground/60 hidden lg:block">Follow:</span>
               <MagneticLink
                 href="https://linkedin.com/in/dariogeorge21"
                 label={<FaLinkedin size={20} />}

@@ -53,12 +53,23 @@ export const metadata: Metadata = {
     // Primary
     "website developer Delhi",
     "web developer Delhi",
-    // Related
+    // Related & Localities - Delhi NCR
     "website developer Kerala",
     "web app developer India",
     "Next.js developer India",
     "React developer freelance",
     "PC repair Delhi NCR",
+    "Laxmi Nagar website developer",
+    "Gurugram web developer",
+    "Noida website developer",
+    "Nehru Place PC repair",
+    // Related & Localities - Kerala
+    "Palai website developer",
+    "Thodupuzha web developer",
+    "Kottayam website developer",
+    "Muvattupuzha website developer",
+    "Kothamangalam web developer",
+    "Idukki website developer",
     // Semantic
     "custom website development",
     "scalable web applications",
@@ -200,9 +211,19 @@ function StructuredData() {
     founder: { "@id": `${BASE_URL}/#person` },
     areaServed: [
       { "@type": "City", name: "Delhi" },
+      { "@type": "City", name: "New Delhi" },
+      { "@type": "City", name: "Laxmi Nagar" },
+      { "@type": "City", name: "Gurugram" },
       { "@type": "City", name: "Noida" },
-      { "@type": "City", name: "Gurgaon" },
+      { "@type": "City", name: "Nehru Place" },
+      { "@type": "AdministrativeArea", name: "Delhi NCR" },
       { "@type": "State", name: "Kerala" },
+      { "@type": "City", name: "Palai" },
+      { "@type": "City", name: "Thodupuzha" },
+      { "@type": "City", name: "Kottayam" },
+      { "@type": "City", name: "Muvattupuzha" },
+      { "@type": "City", name: "Kothamangalam" },
+      { "@type": "AdministrativeArea", name: "Idukki" },
       { "@type": "Country", name: "India" },
     ],
     serviceType: [

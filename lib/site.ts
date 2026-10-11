@@ -25,6 +25,37 @@ export const NAV_LINKS = [
   { label: "Contact", href: "/contact" },
 ] as const
 
+export const BASE_OF_OPERATIONS = {
+  kerala: {
+    hub: "KERALA",
+    displayName: "Kerala",
+    query: "Kerala",
+    coverageTitle: "Kerala & Nearest Locations",
+    nearby: [
+      { name: "PALAI", query: "Palai+Kerala", region: "Kerala" },
+      { name: "THODUPUZHA", query: "Thodupuzha+Kerala", region: "Kerala" },
+      { name: "KOTTAYAM", query: "Kottayam+Kerala", region: "Kerala" },
+      { name: "MUVATTUPUZHA", query: "Muvattupuzha+Kerala", region: "Kerala" },
+      { name: "KOTHAMANGALAM", query: "Kothamangalam+Kerala", region: "Kerala" },
+      { name: "IDUKKI", query: "Idukki+Kerala", region: "Kerala" },
+    ],
+  },
+  delhi: {
+    hub: "NEW DELHI",
+    displayName: "New Delhi",
+    query: "New+Delhi",
+    coverageTitle: "Delhi NCR & Nearest Locations",
+    nearby: [
+      { name: "LAXMI NAGAR", query: "Laxmi+Nagar+Delhi", region: "Delhi" },
+      { name: "GURUGRAM", query: "Gurugram+Haryana", region: "NCR" },
+      { name: "NOIDA", query: "Noida+Uttar+Pradesh", region: "NCR" },
+      { name: "NEHRU PLACE", query: "Nehru+Place+Delhi", region: "Delhi" },
+      { name: "NCR", query: "Delhi+NCR", region: "National Capital Region" },
+    ],
+  },
+} as const
+
+
 export interface ServiceDetail {
   id: string
   title: string
@@ -165,7 +196,7 @@ export const SERVICES: ServiceDetail[] = [
     rateUnit: "based on requirements",
     description:
       "On-site hardware troubleshooting, diagnostics, component upgrades, bespoke PC building, performance tuning, and genuine hardware supply.",
-    location: "Delhi NCR on-site · Pan-India component shipping",
+    location: "Delhi NCR on-site (Laxmi Nagar, Gurugram, Noida, Nehru Place, NCR) · Pan-India component shipping",
     deliverables: [
       "Custom PC Builds for Gaming, Workstations & AI",
       "Component Diagnostics & Hardware Repair",

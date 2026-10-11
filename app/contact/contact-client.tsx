@@ -59,9 +59,21 @@ export default function ContactClient() {
                 <ShieldCheck size={16} className="text-accent shrink-0" />
                 <span>No spam, no sales pressure — direct discussion with developer</span>
               </div>
-              <div className="flex items-center gap-2.5">
-                <MapPin size={16} className="text-accent shrink-0" />
-                <span>Delhi NCR (on-site hardware) &amp; Kerala · Pan-India remote delivery</span>
+              <div className="flex items-start gap-2.5">
+                <MapPin size={16} className="text-accent shrink-0 mt-0.5" />
+                <div className="flex flex-col gap-1 text-xs">
+                  <span className="font-semibold text-foreground">
+                    Base of Operations: New Delhi &amp; Kerala · Pan-India Remote Delivery
+                  </span>
+                  <div className="text-foreground/70 leading-relaxed space-y-0.5">
+                    <p>
+                      <strong className="text-foreground font-medium">In Delhi:</strong> Laxmi Nagar, Gurugram, Noida, Nehru Place, NCR (on-site hardware support).
+                    </p>
+                    <p>
+                      <strong className="text-foreground font-medium">In Kerala:</strong> Palai, Thodupuzha, Kottayam, Muvattupuzha, Kothamangalam, Idukki.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
 
