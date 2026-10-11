@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef } from "react"
+import { useLenis } from "lenis/react"
 import { motion } from "framer-motion"
 import {
   ArrowRight,
@@ -32,12 +33,27 @@ const SERVICE_ICONS: Record<string, React.ReactNode> = {
 export default function ServicesPage() {
   const [selectedService, setSelectedService] = useState<string>(SERVICES[0].shortTitle)
   const formSectionRef = useRef<HTMLDivElement>(null)
+  const lenis = useLenis()
 
   const scrollToQuote = (serviceTitle: string) => {
     setSelectedService(serviceTitle)
-    if (formSectionRef.current) {
+    if (lenis && formSectionRef.current) {
+      lenis.scrollTo(formSectionRef.current)
+    } else if (formSectionRef.current) {
       formSectionRef.current.scrollIntoView({ behavior: "smooth", block: "start" })
     }
+  }
+
+  const scrollToServices = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
+    e.preventDefault()
+    if (lenis) {
+      lenis.scrollTo("#service-grid")
+    } else {
+      const element = document.getElementById("service-grid")
+      element?.scrollIntoView({ behavior: "smooth", block: "start" })
+    }
+    window.history.pushState(null, "", "#service-grid")
   }
 
   const webService = SERVICES.find((s) => s.id === "web-dev")!
@@ -73,6 +89,7 @@ export default function ServicesPage() {
             </button>
             <a
               href="#service-grid"
+              onClick={scrollToServices}
               className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-full border border-foreground/20 px-7 text-sm font-medium text-foreground hover:bg-foreground/5 transition-colors"
             >
               Browse 4 Services <ChevronDown size={16} aria-hidden />
