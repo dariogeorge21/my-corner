@@ -228,7 +228,7 @@ export default function Footer() {
               <div className="flex w-full flex-wrap items-center gap-4 min-w-0">
                 <div className="flex items-center gap-2 text-foreground/60">
                   <MapPin size={18} className="text-accent" />
-                  <span className="uppercase text-sm tracking-widest font-medium">Primary Hubs:</span>
+                  <span className="uppercase text-sm tracking-widest font-medium">Primary Locations:</span>
                 </div>
                 <MagneticLink
                   href="https://www.google.com/maps/search/?api=1&query=New+Delhi"
@@ -250,14 +250,14 @@ export default function Footer() {
 
             {/* Nearest Locations / Regional Coverage */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-3 border-t border-foreground/10 text-xs font-mono">
-              {/* Kerala Hub */}
+              {/* Kerala Location */}
               <div className="flex flex-col gap-2.5 rounded-xl border border-foreground/10 bg-surface/20 p-4 backdrop-blur-xs">
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2 text-foreground/85 font-bold uppercase tracking-wider text-xs">
                     <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
                     <span>In KERALA</span>
                   </div>
-                  <span className="text-[10px] text-foreground/40 uppercase tracking-widest">Nearest Hubs</span>
+                  <span className="text-[10px] text-foreground/40 uppercase tracking-widest">Nearest Locations</span>
                 </div>
                 <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-foreground/75">
                   {BASE_OF_OPERATIONS.kerala.nearby.map((loc, idx) => (
@@ -278,14 +278,14 @@ export default function Footer() {
                 </div>
               </div>
 
-              {/* Delhi Hub */}
+              {/* Delhi Location */}
               <div className="flex flex-col gap-2.5 rounded-xl border border-foreground/10 bg-surface/20 p-4 backdrop-blur-xs">
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2 text-foreground/85 font-bold uppercase tracking-wider text-xs">
                     <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
                     <span>In DELHI</span>
                   </div>
-                  <span className="text-[10px] text-foreground/40 uppercase tracking-widest">Nearest Hubs</span>
+                  <span className="text-[10px] text-foreground/40 uppercase tracking-widest">Nearest Locations</span>
                 </div>
                 <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-foreground/75">
                   {BASE_OF_OPERATIONS.delhi.nearby.map((loc, idx) => (
