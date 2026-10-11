@@ -398,8 +398,9 @@ export default function ServicesPage() {
       <section
         ref={formSectionRef}
         id="request-quote"
-        className="px-5 py-20 md:px-12 md:py-28 border-t border-foreground/10 bg-foreground/[0.02] max-w-[1600px] mx-auto scroll-mt-20"
+        className="relative px-5 py-20 md:px-12 md:py-28 border-t border-foreground/10 bg-foreground/[0.02] max-w-[1600px] mx-auto scroll-mt-20"
       >
+        <span id="contact" className="absolute -top-20 pointer-events-none" aria-hidden />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           <div className="lg:col-span-5 flex flex-col gap-8">
             <div>

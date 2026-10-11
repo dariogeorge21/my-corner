@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useMemo, useRef, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
+import { useLenis } from "lenis/react"
 import { ArrowRight, CheckCircle2, DollarSign, Mail, MessageCircle, Palette, Phone, Sparkles, Tag } from "lucide-react"
 import { submitContact } from "@/app/actions/contact"
 import { SERVICES, SERVICE_OPTIONS, SITE, TIMELINE_OPTIONS, type ServiceDetail } from "@/lib/site"
@@ -152,6 +153,32 @@ export default function ContactForm({
   const [whatsappUrl, setWhatsappUrl] = useState("")
   const [restored, setRestored] = useState(false)
   const formRef = useRef<HTMLFormElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const lenis = useLenis()
+
+  // Scroll to the contact section starting on successful submission
+  useEffect(() => {
+    if (status === "success" || status === "whatsapp") {
+      const timer = setTimeout(() => {
+        const targetSection =
+          (source === "services"
+            ? document.getElementById("request-quote") || document.getElementById("contact")
+            : document.getElementById("contact") || document.getElementById("request-quote")) ||
+          containerRef.current?.closest("section")
+
+        if (targetSection) {
+          if (lenis) {
+            const selector = targetSection.id ? `#${targetSection.id}` : targetSection
+            lenis.scrollTo(selector)
+          } else {
+            targetSection.scrollIntoView({ behavior: "smooth", block: "start" })
+          }
+        }
+      }, 60)
+
+      return () => clearTimeout(timer)
+    }
+  }, [status, lenis, source])
 
   // Current service detail
   const currentServiceDetail: ServiceDetail | undefined = useMemo(() => {
@@ -295,48 +322,46 @@ export default function ContactForm({
     }
   }
 
-  if (status === "success" || status === "whatsapp") {
-    return (
-      <motion.div
-        role="status"
-        initial={{ opacity: 0, scale: 0.98 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="rounded-2xl border border-green-500/30 bg-green-500/10 p-8 text-center"
-      >
-        <CheckCircle2 className="mx-auto mb-4 text-green-600 dark:text-green-400" size={44} aria-hidden />
-        <h3 className="text-2xl font-semibold text-foreground">
-          {status === "success" ? "Inquiry Sent Successfully!" : "Almost Done — One More Tap"}
-        </h3>
-        <p className="mt-2 text-foreground/80 max-w-md mx-auto">
-          {status === "success"
-            ? "I've received your project details, formats, and pricing parameters. I will respond to your email within 24 hours with a comprehensive quote."
-            : "Email gateway is temporarily busy. Tap below to transmit your project scope directly to my WhatsApp."}
-        </p>
-        <div className="mt-6 flex flex-col sm:flex-row justify-center gap-3">
-          {status === "whatsapp" && (
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-foreground px-6 font-semibold text-background"
-            >
-              <MessageCircle size={18} aria-hidden /> Continue on WhatsApp
-            </a>
-          )}
-          <button
-            type="button"
-            onClick={() => setStatus("idle")}
-            className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-foreground/30 px-6 font-medium text-foreground hover:bg-foreground/5 transition-colors"
-          >
-            Submit Another Request
-          </button>
-        </div>
-      </motion.div>
-    )
-  }
-
   return (
-    <form ref={formRef} onSubmit={handleSubmit} noValidate aria-busy={submitting} className="flex flex-col gap-6">
+    <div ref={containerRef} className="w-full">
+      {status === "success" || status === "whatsapp" ? (
+        <motion.div
+          role="status"
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="rounded-2xl border border-green-500/30 bg-green-500/10 p-8 text-center"
+        >
+          <CheckCircle2 className="mx-auto mb-4 text-green-600 dark:text-green-400" size={44} aria-hidden />
+          <h3 className="text-2xl font-semibold text-foreground">
+            {status === "success" ? "Inquiry Sent Successfully!" : "Almost Done — One More Tap"}
+          </h3>
+          <p className="mt-2 text-foreground/80 max-w-md mx-auto">
+            {status === "success"
+              ? "I've received your project details, formats, and pricing parameters. I will respond to your email within 24 hours with a comprehensive quote."
+              : "Email gateway is temporarily busy. Tap below to transmit your project scope directly to my WhatsApp."}
+          </p>
+          <div className="mt-6 flex flex-col sm:flex-row justify-center gap-3">
+            {status === "whatsapp" && (
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-foreground px-6 font-semibold text-background"
+              >
+                <MessageCircle size={18} aria-hidden /> Continue on WhatsApp
+              </a>
+            )}
+            <button
+              type="button"
+              onClick={() => setStatus("idle")}
+              className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-foreground/30 px-6 font-medium text-foreground hover:bg-foreground/5 transition-colors"
+            >
+              Submit Another Request
+            </button>
+          </div>
+        </motion.div>
+      ) : (
+        <form ref={formRef} onSubmit={handleSubmit} noValidate aria-busy={submitting} className="flex flex-col gap-6">
       {restored && (
         <p className="rounded-lg border border-accent/30 bg-accent/10 px-4 py-2.5 text-sm text-foreground/80 flex items-center justify-between" role="status">
           <span>Welcome back — restored your unsent draft.</span>
@@ -685,7 +710,9 @@ export default function ContactForm({
           {SITE.email}
         </a>
       </p>
-    </form>
+        </form>
+      )}
+    </div>
   )
 }
 
